@@ -7,7 +7,7 @@ import { Button } from "@/components/common";
 import { useWorkoutStore } from "@/data/stores/workout";
 import { ExerciseInput } from "@/components";
 
-export default function Page() {
+export default function WorkoutPage() {
   const { addExercise, exercises } = useWorkoutStore();
 
   const [name, setName] = React.useState("");
