@@ -6,6 +6,7 @@ import { Button } from "@/components/common";
 
 import { useWorkoutStore } from "@/data/stores/workout";
 import { ExerciseInput } from "@/components";
+import Link from "next/link";
 
 export default function WorkoutPage() {
   const { addExercise, exercises } = useWorkoutStore();
@@ -20,16 +21,20 @@ export default function WorkoutPage() {
       setName("");
     }
   };
-  const day = new Date().toLocaleString();
 
   return (
     <div className="bg-background w-full px-4">
-      <h2 className="mt-4 text-4xl tracking-wider">Workout: {`${day}`}</h2>
-      <div className="flex flex-col gap-1 my-4">
-        {exercises.map((exercise, i) => (
-          <ExerciseInput key={i} exercise={exercise} />
-        ))}
+      <div className="mt-4 flex justify-between items-center">
+        <h2 className="text-4xl tracking-wider">Workout</h2>
+        <div>
+          <Link href="/dashboard">View on Dashboard</Link>
+        </div>
       </div>
+      <div className="flex flex-col gap-1 my-4"></div>
+      {exercises.map((exercise, i) => (
+        <ExerciseInput key={i} exercise={exercise} />
+      ))}
+
       <div className="flex flex-row justify-end gap-4">
         <input
           type="text"
