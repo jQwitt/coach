@@ -1,9 +1,9 @@
-import Link from "next/link";
+import Dashboard from "@/app/dashboard/page";
 
 export default function Home() {
   return (
     <div>
-      <Link href="/log-workout/lifting">Log a workout!</Link>
+      <Dashboard />
     </div>
   );
 }
