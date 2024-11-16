@@ -149,7 +149,7 @@ export default function SignInPage() {
                 {"Continue Training!"}
               </Button>
               <div className="flex flex-col items-center gap-4 mt-5">
-                <Link href="/reset-password">
+                <Link href="/auth/reset-password">
                   <p className="link text-xs">{"Having trouble signing in?"}</p>
                 </Link>
                 <Link href="/auth/sign-up">

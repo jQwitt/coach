@@ -13,10 +13,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { createUser } from "@/app/actions";
 
 export default function SignUpPage() {
   const [emailData, setEmailData] = React.useState("");
   const [passwordData, setPasswordData] = React.useState("");
+  const [firstNameData, setFirstNameData] = React.useState("");
+  const [lastNameData, setLastNameData] = React.useState("");
   const [pendingVerification, setPendingVerification] = React.useState(false);
   const [verificationCode, setVerificationCode] = React.useState("");
 
@@ -68,7 +71,14 @@ export default function SignUpPage() {
           return;
         }
 
-        if (verificationResult.status === "complete") {
+        if (verificationResult.status === "complete" && signUp.createdUserId) {
+          await createUser({
+            authId: signUp.createdUserId,
+            email: emailData,
+            firstName: firstNameData,
+            lastName: lastNameData,
+          });
+
           await setActive({
             session: verificationResult.createdSessionId,
             redirectUrl: "/dashboard",
@@ -142,11 +152,21 @@ export default function SignUpPage() {
                 <div className="flex gap-4">
                   <div>
                     <Label htmlFor="firstName">First name</Label>
-                    <Input id="firstName" name="firstName" />
+                    <Input
+                      id="firstName"
+                      name="firstName"
+                      value={firstNameData}
+                      onChange={(e) => setFirstNameData(e.target.value)}
+                    />
                   </div>
                   <div>
                     <Label htmlFor="lastName">Last name</Label>
-                    <Input id="lastName" name="lastName" />
+                    <Input
+                      id="lastName"
+                      name="lastName"
+                      value={lastNameData}
+                      onChange={(e) => setLastNameData(e.target.value)}
+                    />
                   </div>
                 </div>
               </div>

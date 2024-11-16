@@ -1,25 +1,14 @@
 import "@/lib/config";
 import { drizzle } from "drizzle-orm/vercel-postgres";
 import { sql } from "@vercel/postgres";
-import { currentUser } from "@clerk/nextjs/server";
 
 import * as schema from "./schema";
 
-export const db = drizzle(sql, { schema });
+const db = drizzle(sql, { schema });
 
-export const getTestUser = async () => {
-  return db.query.usersTable.findFirst({ with: { id: 1 } });
-};
-
-export default async function getCurrentUser() {
-  const clerkUser = await currentUser();
-
-  if (!clerkUser || !clerkUser.id) {
-    return null;
-  }
-
+export const getUserByAuthId = async ({ authId }: { authId: string }) => {
   const foundUser = await db.query.usersTable.findFirst({
-    where: (users, { eq }) => eq(users.authId, clerkUser.id),
+    where: (users, { eq }) => eq(users.authId, authId),
   });
 
   if (!foundUser) {
@@ -27,4 +16,29 @@ export default async function getCurrentUser() {
   }
 
   return foundUser;
-}
+};
+
+export const insertUser = async ({
+  authId,
+  email,
+  firstName,
+  lastName,
+}: {
+  authId: string;
+  email: string;
+  firstName: string;
+  lastName: string | null;
+}) => {
+  const result = await db.insert(schema.usersTable).values({
+    authId,
+    email,
+    firstName,
+    lastName,
+  });
+
+  if (!result.rows.length) {
+    console.log("error creating user!");
+  }
+
+  return null;
+};
