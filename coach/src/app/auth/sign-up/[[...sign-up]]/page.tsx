@@ -160,7 +160,7 @@ export default function SignUpPage() {
                 {"Start training!"}
               </Button>
               <div className="flex justify-center mt-5">
-                <Link href="/sign-in">
+                <Link href="/auth/sign-in">
                   <p className="link text-xs">{"Already have an account?"}</p>
                 </Link>
               </div>

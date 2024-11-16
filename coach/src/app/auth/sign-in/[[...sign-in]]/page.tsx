@@ -1,5 +1,165 @@
-import { SignIn } from "@clerk/nextjs";
+"use client";
 
-export default function Page() {
-  return <SignIn />;
+import * as React from "react";
+import Link from "next/link";
+import { useSignIn } from "@clerk/nextjs";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+
+export default function SignInPage() {
+  const [emailData, setEmailData] = React.useState("");
+  const [passwordData, setPasswordData] = React.useState("");
+  const [pendingVerification, setPendingVerification] = React.useState(false);
+  const [verificationCode, setVerificationCode] = React.useState("");
+
+  const { signIn, isLoaded, setActive } = useSignIn();
+
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!isLoaded) {
+      return;
+    }
+
+    if (signIn) {
+      try {
+        await signIn.create({
+          identifier: emailData,
+          password: passwordData,
+        });
+
+        if (signIn.identifier) {
+          setPendingVerification(true);
+
+          await signIn.prepareFirstFactor({
+            strategy: "email_code",
+            emailAddressId: emailData,
+          });
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    } else {
+      console.warn("clerk: signUp is undefined");
+    }
+  };
+
+  const onProcessVerify = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!isLoaded) {
+      return;
+    }
+
+    if (signIn) {
+      try {
+        const verificationResult = await signIn.attemptFirstFactor({
+          strategy: "email_code",
+          code: verificationCode,
+        });
+
+        if (verificationResult.status !== "complete") {
+          console.log("failed to verify email address");
+          console.log(verificationResult);
+          console.log(signIn);
+          return;
+        }
+
+        if (verificationResult.status === "complete") {
+          await setActive({
+            session: verificationResult.createdSessionId,
+            redirectUrl: "/dashboard",
+          });
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    } else {
+      console.warn("clerk: signUp is undefined");
+    }
+  };
+
+  return (
+    <Card className="w-full max-w-md h-[70vh]">
+      <CardHeader className="border-b-2">
+        <CardTitle className="text-2xl">
+          <h1>Sign In</h1>
+        </CardTitle>
+        <CardDescription>{"Good to see you again!"}</CardDescription>
+      </CardHeader>
+      <CardContent className="py-5">
+        {pendingVerification ? (
+          <form onSubmit={onProcessVerify}>
+            <Label htmlFor="email">Verification Code</Label>
+            <Input
+              id="code"
+              name="code"
+              type="text"
+              inputMode="numeric"
+              placeholder="XXXXXX"
+              value={verificationCode}
+              onChange={(e) => setVerificationCode(e.target.value)}
+            />
+            <div className="my-5">
+              <Button className="w-full" type="submit">
+                {"Verify"}
+              </Button>
+            </div>
+          </form>
+        ) : (
+          <form
+            className="flex flex-col justify-between gap-10"
+            onSubmit={onSubmit}
+          >
+            <div>
+              <div>
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="coach.me@gmail.com"
+                  value={emailData}
+                  onChange={(e) => setEmailData(e.target.value)}
+                />
+              </div>
+              <div className="my-3">
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
+                  name="password"
+                  type="password"
+                  value={passwordData}
+                  onChange={(e) => setPasswordData(e.target.value)}
+                />
+              </div>
+            </div>
+            <div>
+              <Button
+                className="w-full"
+                type="submit"
+                disabled={pendingVerification}
+              >
+                {"Continue Training!"}
+              </Button>
+              <div className="flex flex-col items-center gap-4 mt-5">
+                <Link href="/reset-password">
+                  <p className="link text-xs">{"Having trouble signing in?"}</p>
+                </Link>
+                <Link href="/auth/sign-up">
+                  <p className="link text-xs">{"Don't have an account?"}</p>
+                </Link>
+              </div>
+            </div>
+          </form>
+        )}
+      </CardContent>
+    </Card>
+  );
 }
