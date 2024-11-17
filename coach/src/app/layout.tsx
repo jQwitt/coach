@@ -3,6 +3,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 
 import { base } from "./fonts";
 import "./globals.css";
+import { Navbar } from "@/components/navbar";
 
 export const metadata: Metadata = {
   title: "Coach.me",
@@ -31,7 +32,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <ClerkProvider>
-        <body className={`${base.className}`}>{children}</body>
+        <body className={`${base.className}`}>
+          <header>
+            <Navbar />
+          </header>
+          {children}
+        </body>
       </ClerkProvider>
     </html>
   );

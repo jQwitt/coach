@@ -1,5 +1,3 @@
-import { Navbar } from "@/components/navbar";
-
 export default function DashboardLayout({
   children,
 }: Readonly<{
@@ -7,9 +5,6 @@ export default function DashboardLayout({
 }>) {
   return (
     <div>
-      <header>
-        <Navbar />
-      </header>
       <div>{children}</div>
     </div>
   );
