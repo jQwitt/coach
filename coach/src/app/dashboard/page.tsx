@@ -15,6 +15,8 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { redirect } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
 // Mock data for the chartsn
 const heartRateData = [
@@ -51,6 +53,9 @@ export default function Dashboard() {
     <div className="min-h-screen bg-background text-foreground">
       <main className="p-4 space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <Button onClick={() => redirect("log-workout/lifting")}>
+            Log a workout!
+          </Button>
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Heart Rate</CardTitle>
