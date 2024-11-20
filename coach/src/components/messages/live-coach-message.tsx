@@ -25,10 +25,9 @@ export default function LiveCoachMessage({
           const props = {
             text,
             ear: i === messages.length - 1,
-            key: `message-${i}`,
-          } satisfies MessageProps & { key: string };
+          } satisfies MessageProps;
 
-          return <Message {...props} />;
+          return <Message {...props} key={`coach-live-message-${i}`} />;
         })}
       </div>
     </div>
