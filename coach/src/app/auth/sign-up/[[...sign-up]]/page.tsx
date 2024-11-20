@@ -61,7 +61,7 @@ export default function SignUpPage() {
         const verificationResult = await signUp.attemptEmailAddressVerification(
           {
             code: verificationCode,
-          }
+          },
         );
 
         if (verificationResult.status !== "complete") {

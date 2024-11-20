@@ -67,7 +67,7 @@ export function Navbar() {
       <div
         className={`${cn(
           "sm:hidden",
-          mobileMenuOpen ? "block" : "hidden"
+          mobileMenuOpen ? "block" : "hidden",
         )} relative z-50 bg-background border-b`}
       >
         <div className="pt-2 pb-3 space-y-1">

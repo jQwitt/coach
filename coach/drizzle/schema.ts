@@ -12,5 +12,5 @@ export const users = pgTable(
     return {
       usersEmailUnique: unique("Users_email_unique").on(table.email),
     };
-  }
+  },
 );

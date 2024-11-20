@@ -48,7 +48,7 @@ export default function LogWorkoutLifting() {
   const totalWorkouts = workouts.length;
   const totalExercises = workouts.reduce(
     (sum, workout) => sum + workout.exercises.length,
-    0
+    0,
   );
 
   return (
@@ -104,7 +104,7 @@ function WorkoutForm({
   const handleExerciseChange = (
     index: number,
     field: keyof Exercise,
-    value: string | number
+    value: string | number,
   ) => {
     const updatedExercises = exercises.map((exercise, i) => {
       if (i === index) {
