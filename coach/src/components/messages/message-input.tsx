@@ -24,7 +24,11 @@ export default function MessageInput({ actions }: MessageInputProps) {
       </div>
       <div className="mt-3 flex gap-2">
         {actions?.map((action) => (
-          <Button variant="outline" className="border rounded-full">
+          <Button
+            variant="outline"
+            className="border rounded-full"
+            key={`user-input-action-${action}`}
+          >
             {action}
           </Button>
         ))}
