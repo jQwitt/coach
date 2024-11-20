@@ -1,11 +1,3 @@
-export default function coachLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  return (
-    <div>
-      <div>{children}</div>
-    </div>
-  );
-}
+import NavBarLayout from "@/components/layouts/nav-bar-layout";
+
+export default NavBarLayout;

@@ -3,7 +3,6 @@ import { ClerkProvider } from "@clerk/nextjs";
 
 import { base } from "./fonts";
 import "./globals.css";
-import { Navbar } from "@/components/navbar";
 
 export const metadata: Metadata = {
   title: "Coach.me",
@@ -24,7 +23,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -32,14 +31,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <ClerkProvider>
-        <body className={`${base.className}`}>
-          <header>
-            <Navbar />
-          </header>
-          <main className="min-h-screen bg-background text-foreground  py-20">
-            {children}
-          </main>
-        </body>
+        <body className={`${base.className}`}>{children}</body>
       </ClerkProvider>
     </html>
   );

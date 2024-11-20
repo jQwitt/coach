@@ -1,16 +1,10 @@
-import { redirect } from "next/navigation";
 import { getCurrentUser } from "../actions";
 import { heading } from "../fonts";
 import LiveCoachMessage from "@/components/messages/live-coach-message";
 import MessageInput from "@/components/messages/message-input";
 
 export default async function LiveCoachPage() {
-  const user = await getCurrentUser();
-  if (!user) {
-    redirect("/sign-in");
-  }
-
-  const { firstName } = user;
+  const { firstName } = await getCurrentUser();
 
   return (
     <div className="space-y-4 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-20">
