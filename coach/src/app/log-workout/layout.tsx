@@ -1,4 +1,4 @@
-export default function DashboardLayout({
+export default function coachLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

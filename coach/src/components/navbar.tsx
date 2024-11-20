@@ -4,14 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useMediaQuery } from "react-responsive";
-import {
-  Menu,
-  X,
-  LayoutDashboard,
-  BarChart2,
-  Settings,
-  User,
-} from "lucide-react";
+import { Menu, X, LayoutDashboard, BarChart2, User } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -23,7 +16,7 @@ export function Navbar() {
   const isDesktop = useMediaQuery({ query: "(min-width: 768px)" });
 
   const navItems = [
-    { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+    { name: "Live Coach", href: "/coach", icon: LayoutDashboard },
     { name: "Analytics", href: "/analytics", icon: BarChart2 },
     { name: "Profile", href: "/profile", icon: User },
   ];
@@ -38,7 +31,7 @@ export function Navbar() {
               alt="dumbbell logo"
               height={24}
               width={24}
-              onClick={() => redirect("/dashboard")}
+              onClick={() => redirect("/coach")}
             />
           </div>
           {isDesktop && (

@@ -1,9 +1,9 @@
-import Dashboard from "@/app/dashboard/page";
+import LiveCoach from "@/app/live-coach/page";
 
 export default function Home() {
   return (
     <div>
-      <Dashboard />
+      <LiveCoach />
     </div>
   );
 }

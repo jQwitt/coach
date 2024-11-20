@@ -81,7 +81,7 @@ export default function SignUpPage() {
 
           await setActive({
             session: verificationResult.createdSessionId,
-            redirectUrl: "/dashboard",
+            redirectUrl: "/coach",
           });
         }
       } catch (e) {
