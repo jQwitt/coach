@@ -1,3 +1,5 @@
+"use client";
+
 import { Bar, BarChart, Line, LineChart, ResponsiveContainer } from "recharts";
 import { Heart, Moon } from "lucide-react";
 
@@ -13,6 +15,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { heading } from "../fonts";
 
 // Mock data for the chartsn
 const heartRateData = [
@@ -47,7 +50,9 @@ const sleepData = [
 export default function Analytics() {
   return (
     <div>
-      <h1>Analytics</h1>
+      <h3 className={`${heading.className} text-6xl text-primary m-4`}>
+        Anaylitics
+      </h3>
 
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

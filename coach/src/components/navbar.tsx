@@ -13,16 +13,16 @@ import DumbellLogo from "../../public/images/dumbbell_black.png";
 import { redirect } from "next/navigation";
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
-  const isDesktop = useMediaQuery({ query: "(min-width: 768px)" });
+  const isDesktop = useMediaQuery({ query: "(min-width: 640px)" });
 
   const navItems = [
-    { name: "Live Coach", href: "/coach", icon: LayoutDashboard },
+    { name: "Live Coach", href: "/live-coach", icon: LayoutDashboard },
     { name: "Analytics", href: "/analytics", icon: BarChart2 },
     { name: "Profile", href: "/profile", icon: User },
   ];
 
   return (
-    <nav className="bg-background border-b">
+    <nav className="fixed top-0 left-0 w-full bg-background border-b z-40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex-shrink-0 flex items-center">
@@ -64,12 +64,18 @@ export function Navbar() {
           </div>
         </div>
       </div>
-      <div className={cn("sm:hidden", mobileMenuOpen ? "block" : "hidden")}>
+      <div
+        className={`${cn(
+          "sm:hidden",
+          mobileMenuOpen ? "block" : "hidden"
+        )} relative z-50 bg-background border-b`}
+      >
         <div className="pt-2 pb-3 space-y-1">
           {navItems.map((item) => (
             <Link
               key={item.name}
               href={item.href}
+              onClickCapture={() => setMobileMenuOpen(false)}
               className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-muted-foreground hover:text-foreground hover:bg-accent hover:border-foreground transition duration-150 ease-in-out"
             >
               <div className="flex items-center">

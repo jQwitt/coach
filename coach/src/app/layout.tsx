@@ -36,7 +36,9 @@ export default function RootLayout({
           <header>
             <Navbar />
           </header>
-          {children}
+          <main className="min-h-screen bg-background text-foreground  py-20">
+            {children}
+          </main>
         </body>
       </ClerkProvider>
     </html>

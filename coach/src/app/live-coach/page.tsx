@@ -1,32 +1,28 @@
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { getCurrentUser } from "../actions";
 import { heading } from "../fonts";
+import LiveCoachMessage from "@/components/messages/live-coach-message";
+import MessageInput from "@/components/messages/message-input";
 
 export default async function LiveCoachPage() {
   const { firstName } = await getCurrentUser();
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <main className="p-4 space-y-4">
-        <Card>
-          <CardHeader>
-            <h3 className={`${heading.className} text-6xl text-primary`}>
-              Welcome back
-            </h3>
-          </CardHeader>
-          <CardContent>
-            <p>
-              It's good to see you again,
-              <span className="font-bold"> {firstName}</span> - lets get back to
-              training!
-            </p>
-          </CardContent>
-        </Card>
-
-        {/* <Button onClick={() => redirect("log-workout/lifting")}>
-            Log a workout!
-          </Button> */}
-      </main>
+    <div className="space-y-4 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-20">
+      <h3 className={`${heading.className} text-6xl text-primary m-4`}>
+        Welcome back {firstName}
+      </h3>
+      <div className="flex flex-col gap-1 items-start">
+        <LiveCoachMessage
+          messages={[
+            "It's good to see you again - lets get back to training!",
+            "What would you like to work on today?",
+          ]}
+          showAvatar
+        />
+      </div>
+      <div className="fixed bottom-5 w-full max-w-3xl pr-10">
+        <MessageInput actions={["Start workout", "View analytics"]} />
+      </div>
     </div>
   );
 }
