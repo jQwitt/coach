@@ -7,7 +7,7 @@ export default async function LiveCoachPage() {
   const { firstName } = await getCurrentUser();
 
   return (
-    <div className="space-y-4 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-20">
+    <div>
       <h3 className={`${heading.className} text-6xl text-primary m-4`}>
         Welcome back {firstName}
       </h3>
