@@ -36,7 +36,7 @@ export default function SignInPage() {
         if (signIn.createdSessionId) {
           setActive({
             session: signIn.createdSessionId,
-            redirectUrl: "/live-coach",
+            redirectUrl: "/dashboard",
           });
         }
       } catch (e) {

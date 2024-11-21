@@ -4,19 +4,28 @@ import * as React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useMediaQuery } from "react-responsive";
-import { Menu, X, LayoutDashboard, BarChart2, User } from "lucide-react";
+import {
+  Menu,
+  X,
+  LayoutDashboard,
+  BarChart2,
+  User,
+  Rocket,
+} from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
-import DumbellLogo from "../../public/images/dumbbell_black.png";
+import DumbellLogo from "../../../public/images/dumbbell_black.png";
 import { redirect } from "next/navigation";
+
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
   const isDesktop = useMediaQuery({ query: "(min-width: 640px)" });
 
   const navItems = [
-    { name: "Live Coach", href: "/live-coach", icon: LayoutDashboard },
+    { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+    { name: "Live Coach", href: "/live-coach", icon: Rocket },
     { name: "Analytics", href: "/analytics", icon: BarChart2 },
     { name: "Profile", href: "/profile", icon: User },
   ];
@@ -31,7 +40,7 @@ export function Navbar() {
               alt="dumbbell logo"
               height={24}
               width={24}
-              onClick={() => redirect("/coach")}
+              onClick={() => redirect("/dashboard")}
             />
           </div>
           {isDesktop && (
@@ -67,7 +76,7 @@ export function Navbar() {
       <div
         className={`${cn(
           "sm:hidden",
-          mobileMenuOpen ? "block" : "hidden",
+          mobileMenuOpen ? "block" : "hidden"
         )} relative z-50 bg-background border-b`}
       >
         <div className="pt-2 pb-3 space-y-1">

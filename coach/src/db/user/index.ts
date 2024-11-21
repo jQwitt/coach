@@ -2,7 +2,8 @@ import "@/lib/config";
 import { drizzle } from "drizzle-orm/vercel-postgres";
 import { sql } from "@vercel/postgres";
 
-import * as schema from "./schema";
+import * as schema from "../schema";
+import { eq } from "drizzle-orm";
 
 const db = drizzle(sql, { schema });
 
@@ -12,6 +13,7 @@ export const getUserByAuthId = async ({ authId }: { authId: string }) => {
   });
 
   if (!foundUser) {
+    console.log("user not found!");
     return null;
   }
 
@@ -38,7 +40,24 @@ export const insertUser = async ({
 
   if (!result.rows.length) {
     console.log("error creating user!");
+    return false;
   }
 
-  return null;
+  return true;
+};
+
+export const deleteUser = async ({ authId }: { authId: string }) => {
+  const result = await db
+    .delete(schema.usersTable)
+    .where(eq(schema.usersTable.authId, authId))
+    .returning();
+
+  console.log(result);
+
+  if (!result) {
+    console.log("error deleting user!");
+    return false;
+  }
+
+  return true;
 };
