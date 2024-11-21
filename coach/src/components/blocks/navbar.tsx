@@ -8,6 +8,7 @@ import {
   Menu,
   X,
   LayoutDashboard,
+  ClipboardCheck,
   BarChart2,
   User,
   Rocket,
@@ -24,8 +25,9 @@ export function Navbar() {
   const isDesktop = useMediaQuery({ query: "(min-width: 640px)" });
 
   const navItems = [
-    { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     { name: "Live Coach", href: "/live-coach", icon: Rocket },
+    { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+    { name: "Log Workout", href: "/log-workout/lifting", icon: ClipboardCheck },
     { name: "Analytics", href: "/analytics", icon: BarChart2 },
     { name: "Profile", href: "/profile", icon: User },
   ];
