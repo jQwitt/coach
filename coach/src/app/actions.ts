@@ -1,7 +1,7 @@
 "use server";
 
 import { User } from "@/lib/types";
-import { insertUser, getUserByAuthId, deleteUser } from "@/db/user";
+import { insertUser, getUserByAuthId, deleteUser } from "@/db/users";
 import { clerkClient, currentUser } from "@clerk/nextjs/server";
 
 export const createUser = async ({

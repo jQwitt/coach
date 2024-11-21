@@ -1,7 +1,7 @@
 import "dotenv/config";
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/vercel-postgres";
-import { usersTable } from "./schema";
+import { usersTable } from "./_/schema";
 
 async function main() {
   const db = drizzle();

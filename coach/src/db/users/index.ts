@@ -1,11 +1,7 @@
-import "@/lib/config";
-import { drizzle } from "drizzle-orm/vercel-postgres";
-import { sql } from "@vercel/postgres";
-
-import * as schema from "../schema";
 import { eq } from "drizzle-orm";
 
-const db = drizzle(sql, { schema });
+import db from "..";
+import schema from "../schema";
 
 export const getUserByAuthId = async ({ authId }: { authId: string }) => {
   const foundUser = await db.query.usersTable.findFirst({
