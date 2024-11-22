@@ -18,3 +18,10 @@ export type ExerciseSetMetadata = {
   toFailure?: boolean;
   unilateral?: boolean;
 };
+
+export type WorkoutLiftingData = Omit<
+  WorkoutLifting,
+  "id" | "userId" | "date" | "exercises"
+> & {
+  exercises: Exercise[];
+};
