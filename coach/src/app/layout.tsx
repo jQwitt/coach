@@ -31,7 +31,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <ClerkProvider>
-        <body className={`${base.className}`}>{children}</body>
+        <body className={`${base.className} bg-gray-100`}>{children}</body>
       </ClerkProvider>
     </html>
   );

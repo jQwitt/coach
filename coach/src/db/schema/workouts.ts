@@ -6,5 +6,5 @@ export const workouts_lifting_table = pgTable("WorkoutsLifting", {
   userId: integer().references(() => usersTable.id),
   name: varchar({ length: 150 }),
   date: date(),
-  data: varchar({ length: 255 }),
+  exercises: varchar({ length: 255 }).array(),
 });
