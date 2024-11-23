@@ -20,16 +20,17 @@ export default function WorkoutForm({ userId }: { userId: number }) {
     updateExerciseSets,
   } = useWorkoutStore();
   const { name, exercises } = workout;
-  const initName = `Workout on ${new Date().toDateString()}`;
-
-  React.useEffect(() => {
-    setWorkoutName(initName);
-  }, [setWorkoutName, initName]);
+  const initName = `Workout on ${new Date().toLocaleString()}`;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    console.log(createWorkoutByUser({ data: { ...workout, userId } }));
+    const toSubmit = { ...workout, userId };
+    if (name?.length === 0) {
+      toSubmit.name = initName;
+    }
+
+    createWorkoutByUser({ data: toSubmit });
   };
 
   return (
@@ -39,7 +40,8 @@ export default function WorkoutForm({ userId }: { userId: number }) {
           <input
             type="text"
             className={`${heading.className} peer w-full pb-1 pt-3 border-b-2  focus:outline-none focus:border-primary focus:placeholder-gray-400 placeholder-primary text-primary focus:text-gray-400 border-gray-200  transition-colors text-2xl`}
-            placeholder={name ?? initName}
+            placeholder={name && (name?.length ?? -1 > 0) ? name : initName}
+            onChange={(e) => setWorkoutName(e.target.value)}
           />
           <Edit3 className="pointer-events-none w-6 h-6 absolute right-0 top-[25%] peer-focus:hidden" />
         </div>

@@ -21,12 +21,15 @@ export const createWorkoutForUser = async ({
   data: Omit<WorkoutLifting, "id">;
 }) => {
   const userId = data.userId;
-  const result = await db.insert(schema.workouts_lifting_table).values({
-    ...data,
-    userId,
-  });
+  const result = await db
+    .insert(schema.workouts_lifting_table)
+    .values({
+      ...data,
+      userId,
+    })
+    .returning();
 
-  if (!result.rows.length) {
+  if (!result.length) {
     console.log(`error creating workout for user ${userId}`);
     return false;
   }

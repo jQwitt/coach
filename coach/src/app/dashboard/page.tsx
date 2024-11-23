@@ -9,7 +9,7 @@ export default async function Dashboard() {
   return (
     <div className="space-y-4">
       <QuickActions />
-      <div>
+      <div className="space-y-2">
         <Header title="Recent Workouts" level={HeaderLevel.SECTION} />
         {workouts.map((workout) => {
           return (
@@ -19,6 +19,13 @@ export default async function Dashboard() {
             />
           );
         })}
+        {workouts.length === 0 && (
+          <div className="text-center w-full my-5">
+            <p className="text-sm text-muted-foreground">
+              Future workouts will appear here!
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

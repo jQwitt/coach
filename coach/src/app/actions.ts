@@ -78,7 +78,7 @@ export const createWorkoutByUser = async ({
   const { userId, exercises } = data;
   const toInsert = {
     ...data,
-    date: new Date().toString(),
+    date: new Date().toLocaleString(),
     exercises: toStringArray(exercises),
     userId,
   };

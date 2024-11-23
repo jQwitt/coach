@@ -24,7 +24,7 @@ const initialSet = {
 } satisfies ExerciseSet;
 
 const initialExercise = {
-  name: "Add Exercise Name",
+  name: "Cool Exercise Name",
   sets: [{ ...initialSet }],
 } satisfies Exercise;
 
@@ -37,7 +37,11 @@ const useWorkoutStore = create<WorkoutState>()(
   (set) =>
     ({
       workout: initialWorkout,
-      setWorkoutName: (name) => {
+      setWorkoutName: (name: string) => {
+        if (!name.length) {
+          return;
+        }
+
         set((state) => ({
           workout: {
             ...state.workout,
@@ -79,6 +83,10 @@ const useWorkoutStore = create<WorkoutState>()(
         });
       },
       updateExerciseName: (index: number, name: string) => {
+        if (!name.length) {
+          return;
+        }
+
         set((state) => {
           const exercises = [...(state.workout.exercises ?? [])];
 
