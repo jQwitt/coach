@@ -9,6 +9,7 @@ import { X } from "lucide-react";
 import { heading } from "@/app/fonts";
 import { Input } from "../ui/input";
 import { redirect } from "next/navigation";
+import Header, { HeaderLevel } from "../ui/header";
 
 export default function UserControls() {
   const [showDelete, setShowDelete] = React.useState(false);
@@ -19,9 +20,7 @@ export default function UserControls() {
       <Button>
         <SignOutButton />
       </Button>
-      <h6 className={`${heading.className} text-xl text-primary my-1`}>
-        Danger Zone
-      </h6>
+      <Header title="Danger Zone" level={HeaderLevel.SUB_SECTION} />
       <Button variant="outline" onClick={() => setShowDelete(!showDelete)}>
         Delete my account
       </Button>
@@ -29,9 +28,9 @@ export default function UserControls() {
         <Card>
           <CardHeader>
             <div className="flex justify-between">
-              <h6 className="text-lg font-bold text-destructive my-1">
+              <p className="text-lg font-bold text-destructive my-1">
                 Warning!
-              </h6>
+              </p>
               <Button
                 variant="ghost"
                 className="w-12"

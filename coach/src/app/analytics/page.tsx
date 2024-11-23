@@ -15,7 +15,8 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { heading } from "../fonts";
+
+import Header from "@/components/ui/header";
 
 // Mock data for the chartsn
 const heartRateData = [
@@ -50,10 +51,7 @@ const sleepData = [
 export default function Analytics() {
   return (
     <div>
-      <h3 className={`${heading.className} text-6xl text-primary m-4`}>
-        Anaylitics
-      </h3>
-
+      <Header title="Analytics" />
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Heart Rate</CardTitle>

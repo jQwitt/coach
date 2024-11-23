@@ -3,7 +3,7 @@
 import { User, WorkoutLiftingData } from "@/lib/types";
 import { insertUser, getUserByAuthId, deleteUser } from "@/db/users";
 import { clerkClient, currentUser } from "@clerk/nextjs/server";
-import { createWorkoutForUser } from "@/db/workouts";
+import { createWorkoutForUser, getWorkoutsByUser } from "@/db/workouts";
 import { toStringArray } from "@/lib/utils";
 
 export const createUser = async ({
@@ -84,4 +84,15 @@ export const createWorkoutByUser = async ({
   };
 
   await createWorkoutForUser({ data: toInsert });
+};
+
+export const getWorkouts = async () => {
+  const { id } = (await getCurrentUser()) ?? {};
+
+  if (!id) {
+    console.log("No user found!");
+    return [];
+  }
+
+  return await getWorkoutsByUser({ id });
 };

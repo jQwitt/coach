@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { ExerciseSet } from "@/lib/types";
 import { heading } from "@/app/fonts";
 import useWorkoutStore from "@/hooks/stores/use-workout";
+import Header, { HeaderLevel } from "@/components/ui/header";
 
 export default function SetsForm({
   index,
@@ -30,12 +31,7 @@ export default function SetsForm({
 
   return (
     <div className="space-y-2">
-      <Label
-        htmlFor={`sets-${index}`}
-        className={`${heading.className} text-2xl`}
-      >
-        Sets
-      </Label>
+      <Header title="Sets" level={HeaderLevel.SUB_SECTION} />
       <div className="grid grid-cols-6">
         <p className="col-span-2">Reps</p>
         <p className="col-span-2 col-start-4">Weight</p>

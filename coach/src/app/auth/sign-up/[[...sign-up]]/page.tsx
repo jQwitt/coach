@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { createUser } from "@/app/actions";
+import Header from "@/components/ui/header";
 
 export default function SignUpPage() {
   const [emailData, setEmailData] = React.useState("");
@@ -96,7 +97,7 @@ export default function SignUpPage() {
     <Card className="w-full max-w-md h-[70vh]">
       <CardHeader className="border-b-2">
         <CardTitle className="text-2xl">
-          <h1>Sign Up</h1>
+          <Header title="Sign Up" />
         </CardTitle>
         <CardDescription>
           {"Fill in your details below to get started on your journey."}

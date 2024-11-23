@@ -1,16 +1,15 @@
+import Header from "@/components/ui/header";
 import { getCurrentUser } from "../actions";
 import { heading } from "../fonts";
 import LiveCoachMessage from "@/components/messages/live-coach-message";
 import MessageInput from "@/components/messages/message-input";
 
 export default async function LiveCoachPage() {
-  const { firstName } = await getCurrentUser();
+  const { firstName } = (await getCurrentUser()) || {};
 
   return (
     <div>
-      <h3 className={`${heading.className} text-6xl text-primary m-4`}>
-        Welcome back {firstName}
-      </h3>
+      <Header title={`Welcome back ${firstName}`} />
       <div className="flex flex-col gap-1 items-start">
         <LiveCoachMessage
           messages={[

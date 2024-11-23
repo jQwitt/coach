@@ -13,6 +13,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import useWorkoutStore from "@/hooks/stores/use-workout";
 import { Button } from "@/components/ui/button";
 import { getRepsPerExercise, getSetsPerExercise } from "../helpers";
+import Header, { HeaderLevel } from "@/components/ui/header";
 
 enum Views {
   TOTAL_REPS_PER_EXERCISE = "total-reps-per-exercise",
@@ -59,9 +60,7 @@ export default function WorkoutTimeline() {
     <Card className="shadow-md">
       <CardHeader>
         <CardTitle>
-          <h5 className={`${heading.className} text-3xl text-primary my-1`}>
-            Your workout timeline
-          </h5>
+          <Header title="Workout Timeline" level={HeaderLevel.SECTION} />
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -95,9 +94,7 @@ export default function WorkoutTimeline() {
           </ResponsiveContainer>
         </ChartContainer>
         <div className="my-4 w-full">
-          <h5 className={`${heading.className} text-2xl text-primary my-1`}>
-            Views
-          </h5>
+          <Header title="Views" level={HeaderLevel.SUB_SECTION} />
           <div className="flex gap-4 flex-wrap">
             {Object.entries(charts).map(([key, { buttonLabel }]) => {
               return (
@@ -116,9 +113,7 @@ export default function WorkoutTimeline() {
           </div>
         </div>
         <div>
-          <h5 className={`${heading.className} text-2xl text-primary my-1`}>
-            Summary
-          </h5>
+          <Header title="Summary" level={HeaderLevel.SUB_SECTION} />
           {workout.exercises.map(({ name }, i) => (
             <p key={`${i}-${name}`} className="text-muted-foreground text-sm">
               {name}

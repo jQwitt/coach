@@ -1,7 +1,17 @@
-export default function Dashboard() {
+import { getWorkouts } from "@/app/actions";
+import Header, { HeaderLevel } from "@/components/ui/header";
+
+export default async function Dashboard() {
+  const workouts = await getWorkouts();
+
   return (
     <div>
-      <h1>Dashboard</h1>
+      <Header title="Dashboard" />
+      <div>
+        {workouts.map((workout) => (
+          <div key={workout.id}>{workout.name}</div>
+        ))}
+      </div>
     </div>
   );
 }

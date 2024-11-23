@@ -1,21 +1,18 @@
-import { heading } from "../fonts";
-import { getCurrentUser } from "../actions";
+import { heading } from "@/app/fonts";
+import { getCurrentUser } from "@/app/actions";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import UserControls from "@/components/blocks/user-controls";
+import Header, { HeaderLevel } from "@/components/ui/header";
 
 export default async function Profile() {
-  const { firstName, lastName, email } = await getCurrentUser();
+  const { firstName, lastName, email } = (await getCurrentUser()) || {};
 
   return (
     <div className="flex flex-col gap-4">
-      <h3 className={`${heading.className} text-6xl text-primary my-4`}>
-        Profile
-      </h3>
+      <Header title="Profile" />
       <Card>
         <CardHeader>
-          <h5 className={`${heading.className} text-3xl text-primary my-1`}>
-            Account
-          </h5>
+          <Header title="Account" level={HeaderLevel.SECTION} />
         </CardHeader>
         <CardContent>
           <p>
@@ -26,9 +23,7 @@ export default async function Profile() {
       </Card>
       <Card>
         <CardHeader>
-          <h5 className={`${heading.className} text-3xl text-primary my-1`}>
-            Settings
-          </h5>
+          <Header title="Settings" level={HeaderLevel.SECTION} />
         </CardHeader>
         <CardContent>
           <UserControls />

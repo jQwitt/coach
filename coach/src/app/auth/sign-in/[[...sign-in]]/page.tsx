@@ -13,6 +13,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import Header from "@/components/ui/header";
 
 export default function SignInPage() {
   const [emailData, setEmailData] = React.useState("");
@@ -51,7 +52,7 @@ export default function SignInPage() {
     <Card className="w-full max-w-md h-[70vh]">
       <CardHeader className="border-b-2">
         <CardTitle className="text-2xl">
-          <h1>Sign In</h1>
+          <Header title="Sign In" />
         </CardTitle>
         <CardDescription>{"Good to see you again!"}</CardDescription>
       </CardHeader>
