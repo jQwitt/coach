@@ -78,7 +78,7 @@ export const createWorkoutByUser = async ({
   const { userId, exercises } = data;
   const toInsert = {
     ...data,
-    date: new Date().toDateString(),
+    date: new Date().toString(),
     exercises: toStringArray(exercises),
     userId,
   };
@@ -94,5 +94,14 @@ export const getWorkouts = async () => {
     return [];
   }
 
-  return await getWorkoutsByUser({ id });
+  const result = await getWorkoutsByUser({ id });
+
+  return result.map((workout) => {
+    const { exercises } = workout;
+
+    return {
+      ...workout,
+      exercises: exercises?.map((e) => JSON.parse(e)) ?? [],
+    };
+  });
 };
