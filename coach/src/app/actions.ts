@@ -1,8 +1,10 @@
 "use server";
 
-import { User } from "@/lib/types";
+import { User, WorkoutLiftingData } from "@/lib/types";
 import { insertUser, getUserByAuthId, deleteUser } from "@/db/users";
 import { clerkClient, currentUser } from "@clerk/nextjs/server";
+import { createWorkoutForUser } from "@/db/workouts";
+import { toStringArray } from "@/lib/utils";
 
 export const createUser = async ({
   authId,
@@ -18,7 +20,7 @@ export const createUser = async ({
   });
 };
 
-export const getCurrentUser = async () => {
+export const getCurrentUser = async (): Promise<User | null> => {
   try {
     const clerkUser = await currentUser();
     if (!clerkUser) {
@@ -31,14 +33,12 @@ export const getCurrentUser = async () => {
       throw new Error(`User with authId ${id} not found`);
     }
 
-    const { firstName, lastName, email } = user;
-
-    return { firstName, lastName, email };
+    return { ...user };
   } catch (error) {
     console.log(error);
   }
 
-  return {};
+  return null;
 };
 
 export const deleteCurrentUser = async () => {
@@ -68,4 +68,20 @@ export const deleteCurrentUser = async () => {
   }
 
   return false;
+};
+
+export const createWorkoutByUser = async ({
+  data,
+}: {
+  data: WorkoutLiftingData & { userId: number };
+}) => {
+  const { userId, exercises } = data;
+  const toInsert = {
+    ...data,
+    date: new Date().toDateString(),
+    exercises: toStringArray(exercises),
+    userId,
+  };
+
+  await createWorkoutForUser({ data: toInsert });
 };

@@ -1,18 +1,14 @@
-"use cliemt";
+"use client";
 
 import * as React from "react";
 import { PlusCircle, Trash2, Edit3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { WorkoutLiftingData } from "@/lib/types";
 import { heading } from "@/app/fonts";
 import SetsForm from "./sets-form";
 import useWorkoutStore from "@/hooks/stores/use-workout";
+import { createWorkoutByUser } from "@/app/actions";
 
-export default function WorkoutForm({
-  onSubmit,
-}: {
-  onSubmit: (workout: WorkoutLiftingData) => void;
-}) {
+export default function WorkoutForm({ userId }: { userId: number }) {
   const {
     workout,
     setWorkoutName,
@@ -32,7 +28,8 @@ export default function WorkoutForm({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(workout);
+
+    console.log(createWorkoutByUser({ data: { ...workout, userId } }));
   };
 
   return (
