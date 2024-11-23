@@ -1,5 +1,5 @@
 import { getWorkouts } from "@/app/actions";
-import Header, { HeaderLevel } from "@/components/ui/header";
+import Header from "@/components/ui/header";
 
 export default async function Dashboard() {
   const workouts = await getWorkouts();

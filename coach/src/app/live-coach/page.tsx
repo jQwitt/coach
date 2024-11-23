@@ -1,6 +1,5 @@
 import Header from "@/components/ui/header";
-import { getCurrentUser } from "../actions";
-import { heading } from "../fonts";
+import { getCurrentUser } from "@/app/actions";
 import LiveCoachMessage from "@/components/messages/live-coach-message";
 import MessageInput from "@/components/messages/message-input";
 

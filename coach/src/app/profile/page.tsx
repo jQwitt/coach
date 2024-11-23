@@ -1,4 +1,3 @@
-import { heading } from "@/app/fonts";
 import { getCurrentUser } from "@/app/actions";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import UserControls from "@/components/blocks/user-controls";

@@ -2,7 +2,7 @@ import WorkoutForm from "@/components/forms/workouts/workout-form";
 import WorkoutTimeline from "./components/workout-timeline";
 import WorkoutStats from "./components/workout-stats";
 import { getCurrentUser } from "@/app/actions";
-import Header, { HeaderLevel } from "@/components/ui/header";
+import Header from "@/components/ui/header";
 
 export default async function LogWorkoutLifting() {
   const { id } = (await getCurrentUser()) ?? {};

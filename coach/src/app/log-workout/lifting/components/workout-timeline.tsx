@@ -8,7 +8,6 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { heading } from "@/app/fonts";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import useWorkoutStore from "@/hooks/stores/use-workout";
 import { Button } from "@/components/ui/button";

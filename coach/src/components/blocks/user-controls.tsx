@@ -2,14 +2,13 @@
 
 import React from "react";
 import { SignOutButton } from "@clerk/nextjs";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { deleteCurrentUser } from "@/app/actions";
-import { Card, CardContent, CardHeader } from "../ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { X } from "lucide-react";
-import { heading } from "@/app/fonts";
-import { Input } from "../ui/input";
+import { Input } from "@/components/ui/input";
 import { redirect } from "next/navigation";
-import Header, { HeaderLevel } from "../ui/header";
+import Header, { HeaderLevel } from "@/components/ui/header";
 
 export default function UserControls() {
   const [showDelete, setShowDelete] = React.useState(false);

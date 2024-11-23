@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ExerciseSet } from "@/lib/types";
-import { heading } from "@/app/fonts";
 import useWorkoutStore from "@/hooks/stores/use-workout";
 import Header, { HeaderLevel } from "@/components/ui/header";
 

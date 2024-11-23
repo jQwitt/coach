@@ -1,6 +1,6 @@
 import coachAvatar from "../../../public/images/dumbbell_black_avatar.png";
-import { Message, MessageProps } from "./message";
-import { Avatar, AvatarImage } from "../ui/avatar";
+import { Message, MessageProps } from "@/components/messages/message";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
 
 interface LiveCoachMessageProps {
   messages: string[];
