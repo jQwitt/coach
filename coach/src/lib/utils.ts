@@ -9,3 +9,7 @@ export function cn(...inputs: ClassValue[]) {
 export function toStringArray(value: Exercise[]) {
   return value.map((exercise) => JSON.stringify(exercise));
 }
+
+export function noForbiddenCharacters(value: string): boolean {
+  return /[^a-zA-Z0-9-.]/g.test(value);
+}

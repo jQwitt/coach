@@ -4,7 +4,10 @@ import { User, WorkoutLiftingData } from "@/lib/types";
 import { insertUser, getUserByAuthId, deleteUser } from "@/db/users";
 import { clerkClient, currentUser } from "@clerk/nextjs/server";
 import { createWorkoutForUser, getWorkoutsByUser } from "@/db/workouts";
-import { toStringArray } from "@/lib/utils";
+import {
+  decodeStringsToExercises,
+  encodeExercisesAsStrings,
+} from "@/lib/encoding";
 
 export const createUser = async ({
   authId,
@@ -79,7 +82,7 @@ export const createWorkoutByUser = async ({
   const toInsert = {
     ...data,
     date: new Date().toLocaleString(),
-    exercises: toStringArray(exercises),
+    exercises: encodeExercisesAsStrings(exercises),
     userId,
   };
 
@@ -101,7 +104,7 @@ export const getWorkouts = async () => {
 
     return {
       ...workout,
-      exercises: exercises?.map((e) => JSON.parse(e)) ?? [],
+      exercises: decodeStringsToExercises(exercises),
     };
   });
 };

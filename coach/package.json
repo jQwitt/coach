@@ -12,7 +12,8 @@
     "lint": "next lint",
     "prepare": "cd .. && husky install coach/.husky",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,md,mdx,css,yaml,yml}\"",
-    "check": "prettier --check \"**/*.{ts,tsx,js,jsx,md,mdx,css,yaml,yml}\""
+    "check": "prettier --check \"**/*.{ts,tsx,js,jsx,md,mdx,css,yaml,yml}\"",
+    "schema:push": "pnpm drizzle-kit push"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.3.4",

@@ -72,25 +72,23 @@ export default function WorkoutTimeline() {
           }}
           className="h-1/2 w-full"
         >
-          <ResponsiveContainer width="100%" height="100%">
-            {data.length > 1 ? (
-              <LineChart data={data}>
-                <Line
-                  type="monotone"
-                  dataKey={charts[view].dataKey}
-                  stroke="var(--color-rate)"
-                  strokeWidth={2}
-                />
-                <ChartTooltip content={<ChartTooltipContent />} />
-              </LineChart>
-            ) : (
-              <div className="flex flex-col justify-center h-full">
-                <p className="text-center text-muted-foreground text-sm">
-                  Data will be shown here as you workout!
-                </p>
-              </div>
-            )}
-          </ResponsiveContainer>
+          {data.length > 1 ? (
+            <LineChart data={data}>
+              <Line
+                type="monotone"
+                dataKey={charts[view].dataKey}
+                stroke="var(--color-rate)"
+                strokeWidth={2}
+              />
+              <ChartTooltip content={<ChartTooltipContent />} />
+            </LineChart>
+          ) : (
+            <div className="flex flex-col justify-center h-full">
+              <p className="text-center text-muted-foreground text-sm">
+                Data will be shown here as you workout!
+              </p>
+            </div>
+          )}
         </ChartContainer>
         <div className="my-4 w-full">
           <Header title="Views" level={HeaderLevel.SUB_SECTION} />

@@ -9,6 +9,7 @@ export type Exercise = {
 };
 
 export type ExerciseSet = {
+  count: number;
   reps: number;
   weight: number;
   metadata: ExerciseSetMetadata;

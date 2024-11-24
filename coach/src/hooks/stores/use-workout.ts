@@ -18,6 +18,7 @@ interface WorkoutState {
 }
 
 const initialSet = {
+  count: 1,
   reps: 0,
   weight: 0,
   metadata: {},

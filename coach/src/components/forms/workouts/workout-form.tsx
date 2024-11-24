@@ -7,6 +7,8 @@ import { heading } from "@/app/fonts";
 import SetsForm from "./sets-form";
 import useWorkoutStore from "@/hooks/stores/use-workout";
 import { createWorkoutByUser } from "@/app/actions";
+import { encodeExercisesAsStrings } from "@/lib/encoding";
+import { noForbiddenCharacters } from "@/lib/utils";
 
 export default function WorkoutForm({ userId }: { userId: number }) {
   const {
@@ -41,7 +43,12 @@ export default function WorkoutForm({ userId }: { userId: number }) {
             type="text"
             className={`${heading.className} peer w-full pb-1 pt-3 border-b-2  focus:outline-none focus:border-primary focus:placeholder-gray-400 placeholder-primary text-primary focus:text-gray-400 border-gray-200  transition-colors text-2xl`}
             placeholder={name && (name?.length ?? -1 > 0) ? name : initName}
-            onChange={(e) => setWorkoutName(e.target.value)}
+            onChange={(e) => {
+              const toSet = e.target.value;
+              if (noForbiddenCharacters(toSet)) {
+                setWorkoutName(toSet);
+              }
+            }}
           />
           <Edit3 className="pointer-events-none w-6 h-6 absolute right-0 top-[25%] peer-focus:hidden" />
         </div>
@@ -90,7 +97,12 @@ export default function WorkoutForm({ userId }: { userId: number }) {
         type="button"
         variant="outline"
         className="w-full"
-        onClick={() => addExercise(undefined)}
+        disabled={workout.exercises.length >= 11}
+        onClick={() => {
+          if (workout.exercises.length < 11) {
+            addExercise(undefined);
+          }
+        }}
       >
         Add Exercise
         <PlusCircle className="mr-2 h-4 w-4" />
