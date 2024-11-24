@@ -9,13 +9,17 @@ export enum HeaderLevel {
 export default function Header({
   title,
   level = HeaderLevel.PAGE,
+  className = "",
 }: {
   title: string;
   level?: HeaderLevel;
+  className?: string;
 }) {
   if (level === HeaderLevel.PAGE) {
     return (
-      <h2 className={`${heading.className} text-6xl text-primary m-4`}>
+      <h2
+        className={`${heading.className} text-6xl text-primary m-4 ${className}`}
+      >
         {title}
       </h2>
     );
@@ -23,7 +27,9 @@ export default function Header({
 
   if (level === HeaderLevel.SECTION) {
     return (
-      <h3 className={`${heading.className} text-3xl text-primary my-1`}>
+      <h3
+        className={`${heading.className} text-3xl text-primary my-1 ${className}`}
+      >
         {title}
       </h3>
     );
@@ -31,7 +37,9 @@ export default function Header({
 
   if (level === HeaderLevel.SUB_SECTION) {
     return (
-      <h6 className={`${heading.className} text-xl text-primary my-1`}>
+      <h6
+        className={`${heading.className} text-xl text-primary my-1 ${className}`}
+      >
         {title}
       </h6>
     );

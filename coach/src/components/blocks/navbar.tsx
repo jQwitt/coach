@@ -43,6 +43,7 @@ export function Navbar() {
               height={24}
               width={24}
               onClick={() => redirect("/dashboard")}
+              className="rotate-45"
             />
           </div>
           {isDesktop && (
