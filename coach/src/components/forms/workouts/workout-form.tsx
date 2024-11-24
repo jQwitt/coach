@@ -7,7 +7,6 @@ import { heading } from "@/app/fonts";
 import SetsForm from "./sets-form";
 import useWorkoutStore from "@/hooks/stores/use-workout";
 import { createWorkoutByUser } from "@/app/actions";
-import { encodeExercisesAsStrings } from "@/lib/encoding";
 import { noForbiddenCharacters } from "@/lib/utils";
 
 export default function WorkoutForm({ userId }: { userId: number }) {

@@ -12,12 +12,7 @@ export default async function Dashboard() {
       <div className="space-y-2">
         <Header title="Recent Workouts" level={HeaderLevel.SECTION} />
         {workouts.map((workout) => {
-          return (
-            <WorkoutCard
-              key={`${workout.name}-${workout.date}`}
-              data={workout}
-            />
-          );
+          return <WorkoutCard data={workout} key={""} />;
         })}
         {workouts.length === 0 && (
           <div className="text-center w-full my-5">

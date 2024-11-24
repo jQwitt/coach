@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import { Line, LineChart, ResponsiveContainer } from "recharts";
+import { Line, LineChart } from "recharts";
 import {
   ChartContainer,
   ChartTooltip,

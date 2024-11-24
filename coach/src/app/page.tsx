@@ -29,7 +29,7 @@ export default function Home() {
             onClick={() => redirect("/dashboard")}
             className="mt-4 w-full focus:bg-green-400 transition-colors 2s"
           >
-            Let's get started
+            {"Let's get started"}
           </Button>
         </CardContent>
       </Card>

@@ -48,7 +48,7 @@ export const decodeStringsToExercises = (
     } satisfies Exercise;
   });
 
-  if (decoded.length !== exercises.length) {
+  if (decoded.length === exercises.length) {
     return decoded;
   }
 
