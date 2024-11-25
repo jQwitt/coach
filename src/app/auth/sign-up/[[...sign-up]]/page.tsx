@@ -5,10 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import Header from "@/components/ui/header";
 import { Input } from "@/components/ui/input";
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { Label } from "@/components/ui/label";
 import { useSignUp } from "@clerk/nextjs";
+import Image from "next/image";
 import Link from "next/link";
 import * as React from "react";
+import Barbell from "../../../../../public/images/dumbbell_black.png";
 
 export default function SignUpPage() {
 	const [emailData, setEmailData] = React.useState("");
@@ -88,8 +91,9 @@ export default function SignUpPage() {
 	return (
 		<Card className="h-[70vh] w-full max-w-md">
 			<CardHeader className="border-b-2">
-				<CardTitle className="text-2xl">
+				<CardTitle className="text-2xl flex items-center gap-2">
 					<Header title="Sign Up" />
+					<Image src={Barbell} alt="dumbbell logo" className="rotate-45" width={48} height={48} />
 				</CardTitle>
 				<CardDescription>
 					{"Fill in your details below to get started on your journey."}
@@ -98,16 +102,21 @@ export default function SignUpPage() {
 			<CardContent className="py-5">
 				{pendingVerification ? (
 					<form onSubmit={onProcessVerify}>
-						<Label htmlFor="email">Verification Code</Label>
-						<Input
-							id="code"
-							name="code"
-							type="text"
-							inputMode="numeric"
-							placeholder="XXXXXX"
+						<Label htmlFor="verificationCode">Verification Code</Label>
+						<InputOTP
+							maxLength={6}
 							value={verificationCode}
-							onChange={(e) => setVerificationCode(e.target.value)}
-						/>
+							onChange={(value) => setVerificationCode(value)}
+						>
+							<InputOTPGroup>
+								<InputOTPSlot index={0} />
+								<InputOTPSlot index={1} />
+								<InputOTPSlot index={2} />
+								<InputOTPSlot index={3} />
+								<InputOTPSlot index={4} />
+								<InputOTPSlot index={5} />
+							</InputOTPGroup>
+						</InputOTP>
 						<div className="my-5">
 							<Button className="w-full" type="submit">
 								{"Verify"}

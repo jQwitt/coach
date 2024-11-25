@@ -9,13 +9,14 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "biome lint --write",
     "check": "npx @biomejs/biome check",
     "schema:push": "pnpm drizzle-kit push",
     "cy:component": "cypress open --component"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.3.4",
+    "@clerk/types": "^4.35.0",
     "@next/env": "^15.0.3",
     "@radix-ui/react-avatar": "^1.1.1",
     "@radix-ui/react-label": "^2.1.0",
@@ -27,6 +28,7 @@
     "clsx": "^2.1.1",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.36.2",
+    "input-otp": "^1.4.1",
     "lucide-react": "^0.456.0",
     "next": "15.0.3",
     "react": "19.0.0-rc-66855b96-20241106",

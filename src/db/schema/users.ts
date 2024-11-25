@@ -1,7 +1,7 @@
 import { integer, pgTable, varchar } from "drizzle-orm/pg-core";
 import { user_tags } from "./tags";
 
-export const user_table = pgTable("Users", {
+export const users_table = pgTable("Users", {
 	id: integer().primaryKey().generatedAlwaysAsIdentity(),
 
 	// third party identifiers

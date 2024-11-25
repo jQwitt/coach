@@ -11,6 +11,9 @@ importers:
       '@clerk/nextjs':
         specifier: ^6.3.4
         version: 6.3.4(next@15.0.3(@babel/core@7.26.0)(react-dom@19.0.0-rc-66855b96-20241106(react@19.0.0-rc-66855b96-20241106))(react@19.0.0-rc-66855b96-20241106))(react-dom@19.0.0-rc-66855b96-20241106(react@19.0.0-rc-66855b96-20241106))(react@19.0.0-rc-66855b96-20241106)
+      '@clerk/types':
+        specifier: ^4.35.0
+        version: 4.35.0
       '@next/env':
         specifier: ^15.0.3
         version: 15.0.3
@@ -44,6 +47,9 @@ importers:
       drizzle-orm:
         specifier: ^0.36.2
         version: 0.36.2(@neondatabase/serverless@0.9.5)(@types/pg@8.11.6)(@types/react@18.3.12)(@vercel/postgres@0.10.0)(react@19.0.0-rc-66855b96-20241106)
+      input-otp:
+        specifier: ^1.4.1
+        version: 1.4.1(react-dom@19.0.0-rc-66855b96-20241106(react@19.0.0-rc-66855b96-20241106))(react@19.0.0-rc-66855b96-20241106)
       lucide-react:
         specifier: ^0.456.0
         version: 0.456.0(react@19.0.0-rc-66855b96-20241106)
@@ -382,6 +388,10 @@ packages:
 
   '@clerk/types@4.34.0':
     resolution: {integrity: sha512-4ghDvf80/sFlpx5HnmIl3vW7SOqEaTDwyKAw64H/E2ahgGUMk+qLVpxnBumTpowq+bGjfMVwbneDQOhtmYidoQ==}
+    engines: {node: '>=18.17.0'}
+
+  '@clerk/types@4.35.0':
+    resolution: {integrity: sha512-sBSYCCIXcwI+JHQRqBtskw10+rQ1NcA9w1G6ndnS48F5C+if6xI9OpYaaDjhhvzLjBeZFydKAOhe35mgC7bmoA==}
     engines: {node: '>=18.17.0'}
 
   '@colors/colors@1.5.0':
@@ -2582,6 +2592,12 @@ packages:
     resolution: {integrity: sha512-7PnF4oN3CvZF23ADhA5wRaYEQpJ8qygSkbtTXWBeXWXmEVRXK+1ITciHWwHhsjv1TmW0MgacIv6hEi5pX5NQdA==}
     engines: {node: '>=10'}
 
+  input-otp@1.4.1:
+    resolution: {integrity: sha512-+yvpmKYKHi9jIGngxagY9oWiiblPB7+nEO75F2l2o4vs+6vpPZZmUl4tBNYuTCvQjhvEIbdNeJu70bhfYP2nbw==}
+    peerDependencies:
+      react: ^16.8 || ^17.0 || ^18.0 || ^19.0.0 || ^19.0.0-rc
+      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0.0 || ^19.0.0-rc
+
   internmap@2.0.3:
     resolution: {integrity: sha512-5Hh7Y1wQbvY5ooGgPbDaL5iYLAPzMTUrjMulskHLH6wnv/A+1q5rgEaiuqEjB+oxGXIVZs1FF+R/KPN3ZSQYYg==}
     engines: {node: '>=12'}
@@ -4148,6 +4164,10 @@ snapshots:
       react-dom: 19.0.0-rc-66855b96-20241106(react@19.0.0-rc-66855b96-20241106)
 
   '@clerk/types@4.34.0':
+    dependencies:
+      csstype: 3.1.1
+
+  '@clerk/types@4.35.0':
     dependencies:
       csstype: 3.1.1
 
@@ -6231,6 +6251,11 @@ snapshots:
   inherits@2.0.4: {}
 
   ini@2.0.0: {}
+
+  input-otp@1.4.1(react-dom@19.0.0-rc-66855b96-20241106(react@19.0.0-rc-66855b96-20241106))(react@19.0.0-rc-66855b96-20241106):
+    dependencies:
+      react: 19.0.0-rc-66855b96-20241106
+      react-dom: 19.0.0-rc-66855b96-20241106(react@19.0.0-rc-66855b96-20241106)
 
   internmap@2.0.3: {}
 

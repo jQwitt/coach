@@ -1,6 +1,7 @@
 import { create } from "zustand";
 
 import type { Exercise, ExerciseSet, WorkoutLiftingData } from "@/lib/types";
+import { hasForbiddenCharacters } from "@/lib/utils";
 
 interface WorkoutState {
 	workout: WorkoutLiftingData;
@@ -28,6 +29,7 @@ const initialExercise = {
 const initialWorkout = {
 	name: "",
 	exercises: [{ ...initialExercise }],
+	tags: [],
 } satisfies WorkoutLiftingData;
 
 const useWorkoutStore = create<WorkoutState>()(
@@ -35,16 +37,17 @@ const useWorkoutStore = create<WorkoutState>()(
 		({
 			workout: initialWorkout,
 			setWorkoutName: (name: string) => {
-				if (!name.length) {
-					return;
-				}
-
-				set((state) => ({
-					workout: {
-						...state.workout,
-						name,
-					},
-				}));
+				set((state) => {
+					if (hasForbiddenCharacters(name)) {
+						return state;
+					}
+					return {
+						workout: {
+							...state.workout,
+							name,
+						},
+					};
+				});
 			},
 
 			// EXERCISE
@@ -80,11 +83,11 @@ const useWorkoutStore = create<WorkoutState>()(
 				});
 			},
 			updateExerciseName: (index: number, name: string) => {
-				if (!name.length) {
-					return;
-				}
-
 				set((state) => {
+					if (hasForbiddenCharacters(name)) {
+						return state;
+					}
+
 					const exercises = [...(state.workout.exercises ?? [])];
 
 					if (index < 0 || index >= exercises.length) {

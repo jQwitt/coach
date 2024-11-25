@@ -4,7 +4,6 @@ import { createWorkoutByUser } from "@/app/actions";
 import { heading } from "@/app/fonts";
 import { Button } from "@/components/ui/button";
 import useWorkoutStore from "@/hooks/stores/use-workout";
-import { noForbiddenCharacters } from "@/lib/utils";
 import { Edit3, PlusCircle, Trash2 } from "lucide-react";
 import type * as React from "react";
 import SetsForm from "./sets-form";
@@ -41,13 +40,10 @@ export default function WorkoutForm({ userId }: { userId: number }) {
 					<input
 						type="text"
 						className={`${heading.className} peer w-full border-b-2 border-gray-200 pb-1 pt-3 text-2xl text-primary placeholder-primary transition-colors focus:border-primary focus:text-gray-400 focus:placeholder-gray-400 focus:outline-none`}
-						placeholder={name && (name?.length ?? -1 > 0) ? name : initName}
 						onChange={(e) => {
-							const toSet = e.target.value;
-							if (noForbiddenCharacters(toSet)) {
-								setWorkoutName(toSet);
-							}
+							setWorkoutName(e.target.value);
 						}}
+						value={name?.length && name.length > 0 ? name : initName}
 					/>
 					<Edit3 className="pointer-events-none absolute right-0 top-[25%] h-6 w-6 peer-focus:hidden" />
 				</div>
@@ -56,16 +52,14 @@ export default function WorkoutForm({ userId }: { userId: number }) {
 				const { name } = exercise;
 
 				return (
-					<div
-						key={`${name}-${index}`}
-						className="relative space-y-2 rounded-md border border-gray-400 p-4"
-					>
+					<div key={index} className="relative space-y-2 rounded-md border border-gray-400 p-4">
 						<div className="flex items-center justify-between">
 							<div className="relative min-w-full">
 								<input
+									name="name"
 									type="text"
 									className="peer w-full border-b-2 border-gray-200 pb-1 pt-3 text-lg text-primary placeholder-primary transition-colors focus:border-primary focus:text-gray-400 focus:placeholder-gray-400 focus:outline-none"
-									placeholder={name}
+									value={name}
 									onChange={(e) => {
 										updateExerciseName(index, e.target.value);
 									}}

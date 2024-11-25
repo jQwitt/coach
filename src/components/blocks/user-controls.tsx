@@ -5,20 +5,19 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import Header, { HeaderLevel } from "@/components/ui/header";
 import { Input } from "@/components/ui/input";
-import { SignOutButton } from "@clerk/nextjs";
+import { useClerk } from "@clerk/nextjs";
 import { X } from "lucide-react";
 import { redirect } from "next/navigation";
 import React from "react";
 
 export default function UserControls() {
+	const { signOut } = useClerk();
 	const [showDelete, setShowDelete] = React.useState(false);
 	const [deleteConfirm, setDeleteConfirm] = React.useState("");
 
 	return (
 		<div className="flex flex-col items-start gap-2">
-			<Button>
-				<SignOutButton />
-			</Button>
+			<Button onClick={() => signOut({ redirectUrl: "/auth/sign-in" })}>Sign out</Button>
 			<Header title="Danger Zone" level={HeaderLevel.SUB_SECTION} />
 			<Button variant="outline" onClick={() => setShowDelete(!showDelete)}>
 				Delete my account

@@ -10,6 +10,6 @@ export function toStringArray(value: Exercise[]) {
 	return value.map((exercise) => JSON.stringify(exercise));
 }
 
-export function noForbiddenCharacters(value: string): boolean {
-	return /[^a-zA-Z0-9-.]/g.test(value);
+export function hasForbiddenCharacters(value: string): boolean {
+	return !/^[A-Z0-9_\.\- ]*$/i.test(value);
 }
