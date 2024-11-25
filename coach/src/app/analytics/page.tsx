@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Header, { HeaderLevel } from "@/components/ui/header";
 import WeekdayCountChart from "./components/weekday-count-chart";
 import { getWorkouts } from "@/app/actions";
+import Body from "@/components/blocks/body-highlighter";
 
 const initialCountPerWeekday = {
   Mon: 0,
@@ -61,6 +62,18 @@ export default async function Analytics() {
           </CardHeader>
           <CardContent>
             <WeekdayCountChart data={allWorkoutsByWeekday} />
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <Header
+              title="Most Exercised Muscles"
+              level={HeaderLevel.SECTION}
+            />
+          </CardHeader>
+          <CardContent className="flex flex-row justify-center gap-6">
+            <Body size="small" />
+            <Body size="small" />
           </CardContent>
         </Card>
       </div>
