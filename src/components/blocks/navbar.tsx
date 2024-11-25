@@ -1,27 +1,42 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { BarChart2, ClipboardCheck, LayoutDashboard, Menu, Rocket, User, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { redirect, usePathname } from "next/navigation";
 import * as React from "react";
 import { useMediaQuery } from "react-responsive";
-
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-
-import { redirect } from "next/navigation";
 import DumbellLogo from "../../../public/images/dumbbell_black.png";
 
-export function Navbar() {
+export default function Navbar() {
+	const path = usePathname();
 	const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 	const isDesktop = useMediaQuery({ query: "(min-width: 640px)" });
+	console.log(path);
 
 	const navItems = [
-		{ name: "Coach", href: "/live-coach", icon: Rocket },
-		{ name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-		{ name: "Workout", href: "/log-workout/lifting", icon: ClipboardCheck },
-		{ name: "Analytics", href: "/analytics", icon: BarChart2 },
-		{ name: "Profile", href: "/profile", icon: User },
+		{ name: "Coach", href: "/live-coach", icon: Rocket, selected: path.startsWith("/live-coach") },
+		{
+			name: "Dashboard",
+			href: "/dashboard",
+			icon: LayoutDashboard,
+			selected: path.startsWith("/dashboard"),
+		},
+		{
+			name: "Workout",
+			href: "/log-workout/lifting",
+			icon: ClipboardCheck,
+			selected: path.startsWith("/log-workout"),
+		},
+		{
+			name: "Analytics",
+			href: "/analytics",
+			icon: BarChart2,
+			selected: path.startsWith("/analytics"),
+		},
+		{ name: "Profile", href: "/profile", icon: User, selected: path.startsWith("/profile") },
 	];
 
 	return (
@@ -44,7 +59,7 @@ export function Navbar() {
 								<Link
 									key={item.name}
 									href={item.href}
-									className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-muted-foreground transition duration-150 ease-in-out hover:border-foreground hover:text-foreground"
+									className={`inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-muted-foreground transition duration-150 ease-in-out hover:border-foreground hover:text-foreground ${item.selected ? "border-foreground" : ""}`}
 								>
 									<item.icon className="mr-2 h-4 w-4" />
 									{item.name}
