@@ -16,12 +16,12 @@
 			},
 			"recommended": true
 		},
-		"ignore": ["**/*.config.ts"]
+		"ignore": ["**/*.config.ts", "package.json"]
 	},
 	"formatter": {
 		"enabled": true,
 		"formatWithErrors": false,
-		"ignore": [],
+		"ignore": ["package.json"],
 		"indentStyle": "tab",
 		"lineEnding": "lf",
 		"lineWidth": 100
