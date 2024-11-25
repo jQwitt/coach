@@ -1,22 +1,22 @@
 import "dotenv/config";
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/vercel-postgres";
-import { usersTable } from "./schema/users";
+import { users_table } from "./schema/users";
 
 async function main() {
 	const db = drizzle();
 
-	const user: typeof usersTable.$inferInsert = {
+	const user: typeof users_table.$inferInsert = {
 		authId: "user.9999999",
 		firstName: "Test",
 		lastName: "Testerson",
 		email: "test@test.com",
 	};
 
-	await db.insert(usersTable).values(user);
+	await db.insert(users_table).values(user);
 	console.log("New user created!");
 
-	const users = await db.select().from(usersTable);
+	const users = await db.select().from(users_table);
 	console.log("Getting all users from the database: ", users);
 	/*
   const users: {
@@ -27,11 +27,11 @@ async function main() {
   */
 
 	await db
-		.update(usersTable)
+		.update(users_table)
 		.set({
 			email: "tested@updated.com",
 		})
-		.where(eq(usersTable.email, user.email));
+		.where(eq(users_table.email, user.email));
 	console.log("User info updated!");
 }
 
