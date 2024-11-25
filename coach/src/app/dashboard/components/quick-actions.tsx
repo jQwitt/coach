@@ -13,7 +13,7 @@ export default function QuickActions() {
           className="w-full sm:w-fit"
           onClick={() => redirect("/log-workout/lifting")}
         >
-          Log Weights
+          Log Weights change
         </Button>
         <Button
           className="w-full sm:w-fit"
