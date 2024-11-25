@@ -1,6 +1,6 @@
 import { getCurrentUser } from "@/app/actions";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import UserControls from "@/components/blocks/user-controls";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import Header, { HeaderLevel } from "@/components/ui/header";
 
 export default async function Profile() {

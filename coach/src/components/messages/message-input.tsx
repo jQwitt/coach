@@ -13,12 +13,12 @@ export default function MessageInput({ actions }: MessageInputProps) {
       <div className="relative">
         <input
           type="text"
-          className={`peer w-full pb-1 pt-3 border-b-2 border-gray-300 text-gray-900 placeholder-transparent focus:outline-none focus:border-primary transition-colors`}
+          className={`peer w-full border-b-2 border-gray-300 pb-1 pt-3 text-gray-900 placeholder-transparent transition-colors focus:border-primary focus:outline-none`}
           placeholder="Talk with the coach"
         />
         <Label
           htmlFor="userMessageInput"
-          className="pointer-events-none absolute left-0 -top-3.5 text-gray-600 text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2 peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm"
+          className="pointer-events-none absolute -top-3.5 left-0 text-sm text-gray-600 transition-all peer-placeholder-shown:top-2 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:-top-3.5 peer-focus:text-sm peer-focus:text-gray-600"
         >
           Tell your coach something...
         </Label>
@@ -27,7 +27,7 @@ export default function MessageInput({ actions }: MessageInputProps) {
         {actions?.map((action) => (
           <Button
             variant="outline"
-            className="border rounded-full"
+            className="rounded-full border"
             key={`user-Input-action-${action}`}
           >
             {action}

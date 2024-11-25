@@ -1,14 +1,13 @@
 "use client";
 
-import * as React from "react";
-import { X, Plus, Minus, Weight } from "lucide-react";
+import { Minus, Plus, Weight, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import Header, { HeaderLevel } from "@/components/ui/header";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ExerciseSet } from "@/lib/types";
 import useWorkoutStore from "@/hooks/stores/use-workout";
-import Header, { HeaderLevel } from "@/components/ui/header";
+import { ExerciseSet } from "@/lib/types";
 
 export default function SetsForm({
   index,
@@ -22,7 +21,7 @@ export default function SetsForm({
   updateSet: (
     index: number,
     setIndex: number,
-    value: Partial<ExerciseSet>
+    value: Partial<ExerciseSet>,
   ) => void;
 }) {
   const { workout } = useWorkoutStore();
@@ -30,7 +29,7 @@ export default function SetsForm({
 
   const handleUpdate = (
     setIndex: number,
-    { key, value }: { key: keyof Omit<ExerciseSet, "metadata">; value: string }
+    { key, value }: { key: keyof Omit<ExerciseSet, "metadata">; value: string },
   ) => {
     const cast = Number(value);
     if (!isNaN(cast)) {
@@ -78,8 +77,8 @@ export default function SetsForm({
                 })
               }
             />
-            <div className="col-span-1 text-center self-center">
-              <X className="w-4 h-4 mx-auto" />
+            <div className="col-span-1 self-center text-center">
+              <X className="mx-auto h-4 w-4" />
             </div>
             <Label
               className="hidden"
@@ -103,8 +102,8 @@ export default function SetsForm({
                 })
               }
             />
-            <div className="col-span-1 text-center self-center">
-              <Weight className="w-4 h-4 mx-auto" />
+            <div className="col-span-1 self-center text-center">
+              <Weight className="mx-auto h-4 w-4" />
             </div>
             <Label
               className="hidden"

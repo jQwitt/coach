@@ -1,6 +1,6 @@
-import coachAvatar from "../../../public/images/dumbbell_black_avatar.png";
 import { Message, MessageProps } from "@/components/messages/message";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import coachAvatar from "../../../public/images/dumbbell_black_avatar.png";
 
 interface LiveCoachMessageProps {
   messages: string[];
@@ -15,7 +15,7 @@ export default function LiveCoachMessage({
     <div className="grid grid-cols-8 items-end">
       {showAvatar && (
         <div className="col-span-1">
-          <Avatar className="w-12 h-12 rounded-full border border-muted-foreground p-2 mt-2">
+          <Avatar className="mt-2 h-12 w-12 rounded-full border border-muted-foreground p-2">
             <AvatarImage src={coachAvatar.src} alt="Coach avatar" />
           </Avatar>
         </div>

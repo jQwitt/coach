@@ -24,7 +24,7 @@ export const encodeExercisesAsStrings = (exercises: Exercise[]): string[] => {
 };
 
 export const decodeStringsToExercises = (
-  exercises: string[] | null
+  exercises: string[] | null,
 ): Exercise[] => {
   if (!exercises?.length) {
     return [];

@@ -1,13 +1,13 @@
 "use server";
 
-import { User, WorkoutLiftingData } from "@/lib/types";
-import { insertUser, getUserByAuthId, deleteUser } from "@/db/users";
-import { clerkClient, currentUser } from "@clerk/nextjs/server";
+import { deleteUser, getUserByAuthId, insertUser } from "@/db/users";
 import { createWorkoutForUser, getWorkoutsByUser } from "@/db/workouts";
 import {
   decodeStringsToExercises,
   encodeExercisesAsStrings,
 } from "@/lib/encoding";
+import { User, WorkoutLiftingData } from "@/lib/types";
+import { clerkClient, currentUser } from "@clerk/nextjs/server";
 
 export const createUser = async ({
   authId,

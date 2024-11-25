@@ -1,10 +1,6 @@
 "use client";
 
-import * as React from "react";
-import Link from "next/link";
-import { useSignIn } from "@clerk/nextjs";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -12,8 +8,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import Header from "@/components/ui/header";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useSignIn } from "@clerk/nextjs";
+import Link from "next/link";
+import * as React from "react";
 
 export default function SignInPage() {
   const [emailData, setEmailData] = React.useState("");
@@ -49,7 +49,7 @@ export default function SignInPage() {
   };
 
   return (
-    <Card className="w-full max-w-md h-[70vh]">
+    <Card className="h-[70vh] w-full max-w-md">
       <CardHeader className="border-b-2">
         <CardTitle className="text-2xl">
           <Header title="Sign In" />
@@ -88,7 +88,7 @@ export default function SignInPage() {
             <Button className="w-full" type="submit">
               {"Continue Training!"}
             </Button>
-            <div className="flex flex-col items-center gap-4 mt-5">
+            <div className="mt-5 flex flex-col items-center gap-4">
               <Link href="/auth/reset-password">
                 <p className="link text-xs">{"Having trouble signing in?"}</p>
               </Link>

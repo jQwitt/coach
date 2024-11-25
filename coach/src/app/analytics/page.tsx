@@ -1,10 +1,10 @@
 import { Heart } from "lucide-react";
 
+import { getWorkouts } from "@/app/actions";
+import Body from "@/components/blocks/body-highlighter";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Header, { HeaderLevel } from "@/components/ui/header";
 import WeekdayCountChart from "./components/weekday-count-chart";
-import { getWorkouts } from "@/app/actions";
-import Body from "@/components/blocks/body-highlighter";
 
 const initialCountPerWeekday = {
   Mon: 0,
@@ -33,7 +33,7 @@ export default async function Analytics() {
       }
 
       return acc;
-    }, initialCountPerWeekday)
+    }, initialCountPerWeekday),
   ).map(([key, value]) => ({ day: key, count: value }));
 
   return (

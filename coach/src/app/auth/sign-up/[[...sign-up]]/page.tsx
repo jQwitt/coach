@@ -1,10 +1,7 @@
 "use client";
 
-import * as React from "react";
-import Link from "next/link";
-import { useSignUp } from "@clerk/nextjs";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { createUser } from "@/app/actions";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -12,9 +9,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { createUser } from "@/app/actions";
 import Header from "@/components/ui/header";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useSignUp } from "@clerk/nextjs";
+import Link from "next/link";
+import * as React from "react";
 
 export default function SignUpPage() {
   const [emailData, setEmailData] = React.useState("");
@@ -62,7 +62,7 @@ export default function SignUpPage() {
         const verificationResult = await signUp.attemptEmailAddressVerification(
           {
             code: verificationCode,
-          }
+          },
         );
 
         if (verificationResult.status !== "complete") {
@@ -94,7 +94,7 @@ export default function SignUpPage() {
   };
 
   return (
-    <Card className="w-full max-w-md h-[70vh]">
+    <Card className="h-[70vh] w-full max-w-md">
       <CardHeader className="border-b-2">
         <CardTitle className="text-2xl">
           <Header title="Sign Up" />
@@ -180,7 +180,7 @@ export default function SignUpPage() {
               >
                 {"Start training!"}
               </Button>
-              <div className="flex justify-center mt-5">
+              <div className="mt-5 flex justify-center">
                 <Link href="/auth/sign-in">
                   <p className="link text-xs">{"Already have an account?"}</p>
                 </Link>

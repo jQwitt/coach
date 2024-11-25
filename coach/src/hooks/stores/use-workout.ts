@@ -13,7 +13,7 @@ interface WorkoutState {
   updateExerciseSets: (
     index: number,
     setIndex: number,
-    values: Partial<ExerciseSet>
+    values: Partial<ExerciseSet>,
   ) => void;
 }
 
@@ -147,7 +147,7 @@ const useWorkoutStore = create<WorkoutState>()(
       updateExerciseSets: (
         index: number,
         setIndex: number,
-        values: Partial<ExerciseSet>
+        values: Partial<ExerciseSet>,
       ) => {
         set((state) => {
           const exercises = [...(state.workout.exercises ?? [])];
@@ -176,7 +176,7 @@ const useWorkoutStore = create<WorkoutState>()(
           };
         });
       },
-    }) satisfies WorkoutState
+    }) satisfies WorkoutState,
 );
 
 export default useWorkoutStore;

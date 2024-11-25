@@ -1,9 +1,10 @@
 "use client";
 
-import * as React from "react";
-import { Clock, ChevronDown, X, ArrowRight, Edit } from "lucide-react";
+import { ArrowRight, ChevronDown, Clock, Edit, X } from "lucide-react";
 import { redirect } from "next/navigation";
+import * as React from "react";
 
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -12,7 +13,6 @@ import {
 } from "@/components/ui/card";
 import Header, { HeaderLevel } from "@/components/ui/header";
 import { WorkoutLifting, WorkoutLiftingData } from "@/lib/types";
-import { Button } from "@/components/ui/button";
 
 export default function WorkoutCard({
   data,
@@ -34,7 +34,7 @@ export default function WorkoutCard({
   return (
     <Card className="relative" key={`${key ?? ""}-workout-${name}-${date}`}>
       <Button
-        className="absolute top-2 right-2"
+        className="absolute right-2 top-2"
         variant="ghost"
         onClick={() => setDetails(!details)}
       >
@@ -42,18 +42,18 @@ export default function WorkoutCard({
       </Button>
       <CardHeader>
         <Header title={name} level={HeaderLevel.SUB_SECTION} />
-        <div className="flex gap-2 items-center">
+        <div className="flex items-center gap-2">
           <Clock className="h-4 w-4" />
           <p className="text-sm text-muted-foreground">{formattedDate}</p>
         </div>
       </CardHeader>
       {details && (
         <CardContent>
-          <div className="relative w-full flex gap-2 overflow-x-auto border-t-2 pt-2">
+          <div className="relative flex w-full gap-2 overflow-x-auto border-t-2 pt-2">
             {exercises.map(({ name, sets }, i) => (
               <Card
                 key={`${name}-${i}`}
-                className="max-w-48 min-w-48 min-h-full"
+                className="min-h-full min-w-48 max-w-48"
               >
                 <CardContent className="mt-4 overflow-clip whitespace-nowrap">
                   <Header
@@ -64,13 +64,13 @@ export default function WorkoutCard({
                   {sets.map(({ count, reps, weight }, i) => (
                     <p
                       key={`${name}-set-${i}`}
-                      className="text-sm text-muted-foreground text-ellipsis whitespace-nowrap overflow-clip"
+                      className="overflow-clip text-ellipsis whitespace-nowrap text-sm text-muted-foreground"
                     >{`${count} x ${reps} @ ${weight}`}</p>
                   ))}
                 </CardContent>
               </Card>
             ))}
-            <div className="absolute bottom-1 left-0 w-full h-4 bg-gradient-to-t from-white to-transparent z-10"></div>
+            <div className="absolute bottom-1 left-0 z-10 h-4 w-full bg-gradient-to-t from-white to-transparent"></div>
           </div>
         </CardContent>
       )}

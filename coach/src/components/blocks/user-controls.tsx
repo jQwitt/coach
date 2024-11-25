@@ -1,14 +1,14 @@
 "use client";
 
-import React from "react";
-import { SignOutButton } from "@clerk/nextjs";
-import { Button } from "@/components/ui/button";
 import { deleteCurrentUser } from "@/app/actions";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { X } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { redirect } from "next/navigation";
 import Header, { HeaderLevel } from "@/components/ui/header";
+import { Input } from "@/components/ui/input";
+import { SignOutButton } from "@clerk/nextjs";
+import { X } from "lucide-react";
+import { redirect } from "next/navigation";
+import React from "react";
 
 export default function UserControls() {
   const [showDelete, setShowDelete] = React.useState(false);
@@ -27,7 +27,7 @@ export default function UserControls() {
         <Card>
           <CardHeader>
             <div className="flex justify-between">
-              <p className="text-lg font-bold text-destructive my-1">
+              <p className="my-1 text-lg font-bold text-destructive">
                 Warning!
               </p>
               <Button

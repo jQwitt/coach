@@ -1,33 +1,33 @@
 "use client";
 
-import Image from "next/image";
-import Header from "@/components/ui/header";
 import { Button } from "@/components/ui/button";
-import Barbell from "../../public/images/dumbbell_black.png";
 import { Card, CardContent } from "@/components/ui/card";
+import Header from "@/components/ui/header";
+import Image from "next/image";
 import { redirect } from "next/navigation";
+import Barbell from "../../public/images/dumbbell_black.png";
 
 export default function Home() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen overflow-none">
-      <Card className="shadow-md p-4 max-w-[80%]">
+    <div className="overflow-none flex min-h-screen flex-col items-center justify-center">
+      <Card className="max-w-[80%] p-4 shadow-md">
         <CardContent>
           <Image
             src={Barbell}
             alt="dumbbell logo"
-            className="rotate-45 opacity-10 mx-auto"
+            className="mx-auto rotate-45 opacity-10"
             width={250}
             height={250}
           />
           <Header title="Coach.me" className="mx-0" />
           <div className="-mt-5">
-            <p className="text-md ">
+            <p className="text-md">
               Your on-demand virtual fitness assistant and workout tracker!
             </p>
           </div>
           <Button
             onClick={() => redirect("/dashboard")}
-            className="mt-4 w-full focus:bg-green-400 transition-colors 2s"
+            className="2s mt-4 w-full transition-colors focus:bg-green-400"
           >
             {"Let's get started"}
           </Button>

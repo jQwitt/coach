@@ -10,8 +10,8 @@ export default async function NavBarLayout({
       <header>
         <Navbar />
       </header>
-      <main className="min-h-screen bg-background text-foreground py-20">
-        <div className="space-y-4 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-20">
+      <main className="min-h-screen bg-background py-20 text-foreground">
+        <div className="mx-auto max-w-3xl scroll-mt-20 space-y-4 px-4 sm:px-6 lg:px-8">
           {children}
         </div>
       </main>

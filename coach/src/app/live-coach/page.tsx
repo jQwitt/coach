@@ -1,7 +1,7 @@
-import Header from "@/components/ui/header";
 import { getCurrentUser } from "@/app/actions";
 import LiveCoachMessage from "@/components/messages/live-coach-message";
 import MessageInput from "@/components/messages/message-input";
+import Header from "@/components/ui/header";
 
 export default async function LiveCoachPage() {
   const { firstName } = (await getCurrentUser()) || {};
@@ -9,7 +9,7 @@ export default async function LiveCoachPage() {
   return (
     <div>
       <Header title={`Welcome back ${firstName}`} />
-      <div className="flex flex-col gap-1 items-start">
+      <div className="flex flex-col items-start gap-1">
         <LiveCoachMessage
           messages={[
             "It's good to see you again - lets get back to training!",

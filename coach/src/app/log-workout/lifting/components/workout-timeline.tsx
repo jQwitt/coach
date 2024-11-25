@@ -2,17 +2,17 @@
 
 import * as React from "react";
 
-import { Line, LineChart } from "recharts";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import useWorkoutStore from "@/hooks/stores/use-workout";
-import { Button } from "@/components/ui/button";
-import { getRepsPerExercise, getSetsPerExercise } from "../helpers";
 import Header, { HeaderLevel } from "@/components/ui/header";
+import useWorkoutStore from "@/hooks/stores/use-workout";
+import { Line, LineChart } from "recharts";
+import { getRepsPerExercise, getSetsPerExercise } from "../helpers";
 
 enum Views {
   TOTAL_REPS_PER_EXERCISE = "total-reps-per-exercise",
@@ -83,8 +83,8 @@ export default function WorkoutTimeline() {
               <ChartTooltip content={<ChartTooltipContent />} />
             </LineChart>
           ) : (
-            <div className="flex flex-col justify-center h-full">
-              <p className="text-center text-muted-foreground text-sm">
+            <div className="flex h-full flex-col justify-center">
+              <p className="text-center text-sm text-muted-foreground">
                 Data will be shown here as you workout!
               </p>
             </div>
@@ -92,7 +92,7 @@ export default function WorkoutTimeline() {
         </ChartContainer>
         <div className="my-4 w-full">
           <Header title="Views" level={HeaderLevel.SUB_SECTION} />
-          <div className="flex gap-4 flex-wrap">
+          <div className="flex flex-wrap gap-4">
             {Object.entries(charts).map(([key, { buttonLabel }]) => {
               return (
                 <Button
@@ -112,7 +112,7 @@ export default function WorkoutTimeline() {
         <div>
           <Header title="Summary" level={HeaderLevel.SUB_SECTION} />
           {workout.exercises.map(({ name }, i) => (
-            <p key={`${i}-${name}`} className="text-muted-foreground text-sm">
+            <p key={`${i}-${name}`} className="text-sm text-muted-foreground">
               {name}
             </p>
           ))}

@@ -5,7 +5,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { ResponsiveContainer, Bar, BarChart } from "recharts";
+import { Bar, BarChart, ResponsiveContainer } from "recharts";
 
 export default function WeekdayCountChart({
   data,

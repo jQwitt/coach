@@ -1,24 +1,24 @@
 "use client";
 
-import * as React from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { useMediaQuery } from "react-responsive";
 import {
-  Menu,
-  X,
-  LayoutDashboard,
-  ClipboardCheck,
   BarChart2,
-  User,
+  ClipboardCheck,
+  LayoutDashboard,
+  Menu,
   Rocket,
+  User,
+  X,
 } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import * as React from "react";
+import { useMediaQuery } from "react-responsive";
 
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
-import DumbellLogo from "../../../public/images/dumbbell_black.png";
 import { redirect } from "next/navigation";
+import DumbellLogo from "../../../public/images/dumbbell_black.png";
 
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
@@ -33,10 +33,10 @@ export function Navbar() {
   ];
 
   return (
-    <nav className="fixed top-0 left-0 w-full bg-background border-b z-40">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
-          <div className="flex-shrink-0 flex items-center">
+    <nav className="fixed left-0 top-0 z-40 w-full border-b bg-background">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-16 justify-between">
+          <div className="flex flex-shrink-0 items-center">
             <Image
               src={DumbellLogo}
               alt="dumbbell logo"
@@ -52,7 +52,7 @@ export function Navbar() {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-muted-foreground hover:text-foreground hover:border-foreground transition duration-150 ease-in-out"
+                  className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-muted-foreground transition duration-150 ease-in-out hover:border-foreground hover:text-foreground"
                 >
                   <item.icon className="mr-2 h-4 w-4" />
                   {item.name}
@@ -63,7 +63,7 @@ export function Navbar() {
           <div className="-mr-2 flex items-center sm:hidden">
             <Button
               variant="ghost"
-              className="inline-flex items-center justify-center p-2 rounded-md text-muted-foreground hover:text-foreground focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary"
+              className="inline-flex items-center justify-center rounded-md p-2 text-muted-foreground hover:text-foreground focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               <span className="sr-only">Open main menu</span>
@@ -79,16 +79,16 @@ export function Navbar() {
       <div
         className={`${cn(
           "sm:hidden",
-          mobileMenuOpen ? "block" : "hidden"
-        )} relative z-50 bg-background border-b`}
+          mobileMenuOpen ? "block" : "hidden",
+        )} relative z-50 border-b bg-background`}
       >
-        <div className="pt-2 pb-3 space-y-1">
+        <div className="space-y-1 pb-3 pt-2">
           {navItems.map((item) => (
             <Link
               key={item.name}
               href={item.href}
               onClickCapture={() => setMobileMenuOpen(false)}
-              className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-muted-foreground hover:text-foreground hover:bg-accent hover:border-foreground transition duration-150 ease-in-out"
+              className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-muted-foreground transition duration-150 ease-in-out hover:border-foreground hover:bg-accent hover:text-foreground"
             >
               <div className="flex items-center">
                 <item.icon className="mr-2 h-4 w-4" />

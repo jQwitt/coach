@@ -1,8 +1,8 @@
 "use client";
 
-import React from "react";
-import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { Card, CardContent } from "@/components/ui/card";
+import React from "react";
 
 export interface MessageProps {
   text: string;
@@ -24,7 +24,7 @@ export function Message({
   return (
     <div>
       {avatarSrc && (
-        <Avatar className="w-12 h-12 rounded-full border border-muted-foreground p-2">
+        <Avatar className="h-12 w-12 rounded-full border border-muted-foreground p-2">
           <AvatarImage src={avatarSrc} alt="User avatar" />
         </Avatar>
       )}

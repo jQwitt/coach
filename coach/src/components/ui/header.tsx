@@ -18,7 +18,7 @@ export default function Header({
   if (level === HeaderLevel.PAGE) {
     return (
       <h2
-        className={`${heading.className} text-6xl text-primary m-4 ${className}`}
+        className={`${heading.className} m-4 text-6xl text-primary ${className}`}
       >
         {title}
       </h2>
@@ -28,7 +28,7 @@ export default function Header({
   if (level === HeaderLevel.SECTION) {
     return (
       <h3
-        className={`${heading.className} text-3xl text-primary my-1 ${className}`}
+        className={`${heading.className} my-1 text-3xl text-primary ${className}`}
       >
         {title}
       </h3>
@@ -38,7 +38,7 @@ export default function Header({
   if (level === HeaderLevel.SUB_SECTION) {
     return (
       <h6
-        className={`${heading.className} text-xl text-primary my-1 ${className}`}
+        className={`${heading.className} my-1 text-xl text-primary ${className}`}
       >
         {title}
       </h6>

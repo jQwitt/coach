@@ -1,7 +1,7 @@
 "use client";
 
 import { heading } from "@/app/fonts";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import useWorkoutStore from "@/hooks/stores/use-workout";
 
 export default function WorkoutStats() {
@@ -11,7 +11,7 @@ export default function WorkoutStats() {
     averageSets:
       workout.exercises.reduce(
         (acc, exercise) => acc + exercise.sets.length,
-        0
+        0,
       ) / workout.exercises.length,
   };
 
@@ -19,20 +19,20 @@ export default function WorkoutStats() {
     <Card className="shadow-md md:col-span-2">
       <CardHeader>
         <CardTitle>
-          <h5 className={`${heading.className} text-3xl text-primary my-1`}>
+          <h5 className={`${heading.className} my-1 text-3xl text-primary`}>
             Quick Stats
           </h5>
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="space-y-2 ">
+        <div className="space-y-2">
           <p>
             Total Exercises:
-            <span className="font-semibold mx-1">{exerciseStats.total}</span>
+            <span className="mx-1 font-semibold">{exerciseStats.total}</span>
           </p>
           <p>
             Average Sets per Workout:
-            <span className="font-semibold mx-1">
+            <span className="mx-1 font-semibold">
               {exerciseStats.averageSets}
             </span>
           </p>
