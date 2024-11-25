@@ -21,7 +21,7 @@ export default function WorkoutForm({ userId }: { userId: number }) {
 		updateExerciseSets,
 	} = useWorkoutStore();
 	const { name, exercises } = workout;
-	const initName = `Workout on ${new Date().toLocaleString()}`;
+	const initName = "Workout Name";
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
