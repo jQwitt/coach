@@ -1,4 +1,0 @@
-{
-  "*/**/*.{js,jsx,ts,tsx}": ["pnpm format", "pnpm lint"],
-  "*/**/*.{json,css,md}": ["prettier --write"]
-}

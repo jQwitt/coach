@@ -1,182 +1,174 @@
 import { create } from "zustand";
 
-import { Exercise, ExerciseSet, WorkoutLiftingData } from "@/lib/types";
+import type { Exercise, ExerciseSet, WorkoutLiftingData } from "@/lib/types";
 
 interface WorkoutState {
-  workout: WorkoutLiftingData;
-  setWorkoutName: (name: string) => void;
-  addExercise: (exercise?: Exercise) => void;
-  removeExercise: (index: number) => void;
-  updateExerciseName: (index: number, name: string) => void;
-  addSetToExercise: (index: number) => void;
-  removeSetFromExercise: (index: number) => void;
-  updateExerciseSets: (
-    index: number,
-    setIndex: number,
-    values: Partial<ExerciseSet>,
-  ) => void;
+	workout: WorkoutLiftingData;
+	setWorkoutName: (name: string) => void;
+	addExercise: (exercise?: Exercise) => void;
+	removeExercise: (index: number) => void;
+	updateExerciseName: (index: number, name: string) => void;
+	addSetToExercise: (index: number) => void;
+	removeSetFromExercise: (index: number) => void;
+	updateExerciseSets: (index: number, setIndex: number, values: Partial<ExerciseSet>) => void;
 }
 
 const initialSet = {
-  count: 1,
-  reps: 0,
-  weight: 0,
-  metadata: {},
+	count: 1,
+	reps: 0,
+	weight: 0,
+	metadata: {},
 } satisfies ExerciseSet;
 
 const initialExercise = {
-  name: "Cool Exercise Name",
-  sets: [{ ...initialSet }],
+	name: "Cool Exercise Name",
+	sets: [{ ...initialSet }],
 } satisfies Exercise;
 
 const initialWorkout = {
-  name: "",
-  exercises: [{ ...initialExercise }],
+	name: "",
+	exercises: [{ ...initialExercise }],
 } satisfies WorkoutLiftingData;
 
 const useWorkoutStore = create<WorkoutState>()(
-  (set) =>
-    ({
-      workout: initialWorkout,
-      setWorkoutName: (name: string) => {
-        if (!name.length) {
-          return;
-        }
+	(set) =>
+		({
+			workout: initialWorkout,
+			setWorkoutName: (name: string) => {
+				if (!name.length) {
+					return;
+				}
 
-        set((state) => ({
-          workout: {
-            ...state.workout,
-            name,
-          },
-        }));
-      },
+				set((state) => ({
+					workout: {
+						...state.workout,
+						name,
+					},
+				}));
+			},
 
-      // EXERCISE
-      addExercise: (exercise) => {
-        set((state) => {
-          const exercises = [
-            ...state.workout.exercises.map((e) => ({
-              ...e,
-              sets: [...e.sets.map((s) => ({ ...s }))],
-            })),
-            exercise ?? initialExercise,
-          ];
+			// EXERCISE
+			addExercise: (exercise) => {
+				set((state) => {
+					const exercises = [
+						...state.workout.exercises.map((e) => ({
+							...e,
+							sets: [...e.sets.map((s) => ({ ...s }))],
+						})),
+						exercise ?? initialExercise,
+					];
 
-          return {
-            workout: {
-              ...state.workout,
-              exercises,
-            },
-          };
-        });
-      },
-      removeExercise: (index: number) => {
-        set((state) => {
-          const exercises = [...(state.workout.exercises ?? [])];
-          exercises.splice(index, 1);
+					return {
+						workout: {
+							...state.workout,
+							exercises,
+						},
+					};
+				});
+			},
+			removeExercise: (index: number) => {
+				set((state) => {
+					const exercises = [...(state.workout.exercises ?? [])];
+					exercises.splice(index, 1);
 
-          return {
-            workout: {
-              ...state.workout,
-              exercises,
-            },
-          };
-        });
-      },
-      updateExerciseName: (index: number, name: string) => {
-        if (!name.length) {
-          return;
-        }
+					return {
+						workout: {
+							...state.workout,
+							exercises,
+						},
+					};
+				});
+			},
+			updateExerciseName: (index: number, name: string) => {
+				if (!name.length) {
+					return;
+				}
 
-        set((state) => {
-          const exercises = [...(state.workout.exercises ?? [])];
+				set((state) => {
+					const exercises = [...(state.workout.exercises ?? [])];
 
-          if (index < 0 || index >= exercises.length) {
-            return state;
-          }
+					if (index < 0 || index >= exercises.length) {
+						return state;
+					}
 
-          exercises[index].name = name;
+					exercises[index].name = name;
 
-          return {
-            workout: {
-              ...state.workout,
-              exercises,
-            },
-          };
-        });
-      },
+					return {
+						workout: {
+							...state.workout,
+							exercises,
+						},
+					};
+				});
+			},
 
-      // SETS
-      addSetToExercise: (index: number) => {
-        set((state) => {
-          const exercises = [...(state.workout.exercises ?? [])];
+			// SETS
+			addSetToExercise: (index: number) => {
+				set((state) => {
+					const exercises = [...(state.workout.exercises ?? [])];
 
-          if (index < 0 || index >= exercises.length) {
-            return state;
-          }
+					if (index < 0 || index >= exercises.length) {
+						return state;
+					}
 
-          exercises[index].sets.push({ ...initialSet });
+					exercises[index].sets.push({ ...initialSet });
 
-          return {
-            workout: {
-              ...state.workout,
-              exercises,
-            },
-          };
-        });
-      },
-      removeSetFromExercise: (index: number) => {
-        set((state) => {
-          const exercises = [...(state.workout.exercises ?? [])];
+					return {
+						workout: {
+							...state.workout,
+							exercises,
+						},
+					};
+				});
+			},
+			removeSetFromExercise: (index: number) => {
+				set((state) => {
+					const exercises = [...(state.workout.exercises ?? [])];
 
-          if (index < 0 || index >= exercises.length) {
-            return state;
-          }
+					if (index < 0 || index >= exercises.length) {
+						return state;
+					}
 
-          const exercise = exercises[index];
-          exercise.sets.pop();
+					const exercise = exercises[index];
+					exercise.sets.pop();
 
-          return {
-            workout: {
-              ...state.workout,
-              exercises,
-            },
-          };
-        });
-      },
-      updateExerciseSets: (
-        index: number,
-        setIndex: number,
-        values: Partial<ExerciseSet>,
-      ) => {
-        set((state) => {
-          const exercises = [...(state.workout.exercises ?? [])];
+					return {
+						workout: {
+							...state.workout,
+							exercises,
+						},
+					};
+				});
+			},
+			updateExerciseSets: (index: number, setIndex: number, values: Partial<ExerciseSet>) => {
+				set((state) => {
+					const exercises = [...(state.workout.exercises ?? [])];
 
-          if (index < 0 || index >= exercises.length) {
-            return state;
-          }
+					if (index < 0 || index >= exercises.length) {
+						return state;
+					}
 
-          const exercise = exercises[index];
+					const exercise = exercises[index];
 
-          if (setIndex < 0 || setIndex >= exercise.sets.length) {
-            return state;
-          }
+					if (setIndex < 0 || setIndex >= exercise.sets.length) {
+						return state;
+					}
 
-          const sets = exercise.sets[setIndex];
-          exercise.sets[setIndex] = {
-            ...sets,
-            ...values,
-          };
+					const sets = exercise.sets[setIndex];
+					exercise.sets[setIndex] = {
+						...sets,
+						...values,
+					};
 
-          return {
-            workout: {
-              ...state.workout,
-              exercises,
-            },
-          };
-        });
-      },
-    }) satisfies WorkoutState,
+					return {
+						workout: {
+							...state.workout,
+							exercises,
+						},
+					};
+				});
+			},
+		}) satisfies WorkoutState,
 );
 
 export default useWorkoutStore;

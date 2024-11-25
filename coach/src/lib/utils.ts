@@ -1,15 +1,15 @@
-import { clsx, type ClassValue } from "clsx";
+import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { Exercise } from "./types";
+import type { Exercise } from "./types";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
+	return twMerge(clsx(inputs));
 }
 
 export function toStringArray(value: Exercise[]) {
-  return value.map((exercise) => JSON.stringify(exercise));
+	return value.map((exercise) => JSON.stringify(exercise));
 }
 
 export function noForbiddenCharacters(value: string): boolean {
-  return /[^a-zA-Z0-9-.]/g.test(value);
+	return /[^a-zA-Z0-9-.]/g.test(value);
 }

@@ -4,25 +4,23 @@ import QuickActions from "./components/quick-actions";
 import WorkoutCard from "./components/workout-card";
 
 export default async function Dashboard() {
-  const workouts = await getWorkouts();
+	const workouts = await getWorkouts();
 
-  return (
-    <div className="space-y-4">
-      <QuickActions />
-      test
-      <div className="space-y-2">
-        <Header title="Recent Workouts" level={HeaderLevel.SECTION} />
-        {workouts.map((workout) => {
-          return <WorkoutCard data={workout} key={""} />;
-        })}
-        {workouts.length === 0 && (
-          <div className="my-5 w-full text-center">
-            <p className="text-sm text-muted-foreground">
-              Future workouts will appear here!
-            </p>
-          </div>
-        )}
-      </div>
-    </div>
-  );
+	return (
+		<div className="space-y-4">
+			<QuickActions />
+			test
+			<div className="space-y-2">
+				<Header title="Recent Workouts" level={HeaderLevel.SECTION} />
+				{workouts.map((workout) => {
+					return <WorkoutCard data={workout} key={""} />;
+				})}
+				{workouts.length === 0 && (
+					<div className="my-5 w-full text-center">
+						<p className="text-sm text-muted-foreground">Future workouts will appear here!</p>
+					</div>
+				)}
+			</div>
+		</div>
+	);
 }

@@ -1,11 +1,11 @@
-import { PageProps } from ".next/types/app/page";
+import type { PageProps } from ".next/types/app/page";
 
 export default async function WorkoutAnalyticsPage({
-  params,
+	params,
 }: {
-  params: { workoutId: string };
+	params: { workoutId: string };
 } & PageProps) {
-  const { workoutId } = params;
+	const { workoutId } = params;
 
-  return <div>workout by id {workoutId}</div>;
+	return <div>workout by id {workoutId}</div>;
 }
