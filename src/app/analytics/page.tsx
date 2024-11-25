@@ -1,53 +1,97 @@
-import { Heart } from "lucide-react";
+import { ChartColumn } from "lucide-react";
 
 import { getWorkouts } from "@/app/actions";
 import Body from "@/components/blocks/body-highlighter";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import Header, { HeaderLevel } from "@/components/ui/header";
-import WeekdayCountChart from "./components/weekday-count-chart";
+import {
+	Select,
+	SelectContent,
+	SelectGroup,
+	SelectItem,
+	SelectLabel,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 
-const initialCountPerWeekday = {
-	Mon: 0,
-	Tue: 0,
-	Wed: 0,
-	Thu: 0,
-	Fri: 0,
-	Sat: 0,
-	Sun: 0,
+const CardSizes = {
+	SMALL: "col-span-1 md:col-span-2",
 };
 
 export default async function Analytics() {
 	const workouts = await getWorkouts();
 
-	// get all workouts grouped by weekday
+	const statistics = {
+		totalWorkouts: workouts.length,
+		totalSets: 0,
+		totalReps: 0,
+	};
 
-	const allWorkoutsByWeekday = Object.entries(
-		workouts.reduce((acc, { date }) => {
-			if (date) {
-				const weekday = new Date(date).toString().split(" ")[0];
+	for (const workout of workouts) {
+		const { name, date, exercises } = workout;
 
-				acc[weekday as keyof typeof initialCountPerWeekday] += 1;
-				return acc;
+		for (const exercise of exercises) {
+			for (const set of exercise.sets) {
+				statistics.totalSets += set.count;
+				statistics.totalReps += set.reps;
 			}
-
-			return acc;
-		}, initialCountPerWeekday),
-	).map(([key, value]) => ({ day: key, count: value }));
+		}
+	}
 
 	return (
-		<div>
-			<Header title="Analytics" />
-			<div className="space-y-4">
-				<Card>
-					<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-						<CardTitle className="text-sm font-medium">Heart Rate</CardTitle>
-						<Heart className="h-4 w-4 text-muted-foreground" />
+		<div className="space-y-4">
+			<Header title="Analytics" Icon={ChartColumn} />
+			<div className="fixed bottom-3 left-4 sm:left-6 md:relative md:left-0 bg-background">
+				<Select>
+					<SelectTrigger className="w-[120px]">
+						<SelectValue placeholder="Day" defaultValue={"day"} />
+					</SelectTrigger>
+					<SelectContent>
+						<SelectGroup>
+							<SelectItem value="day">Day</SelectItem>
+							<SelectItem value="month">Month</SelectItem>
+							<SelectItem value="year">Year</SelectItem>
+							<SelectItem value="all time">All time</SelectItem>
+						</SelectGroup>
+					</SelectContent>
+				</Select>
+			</div>
+			<div className="grid grid-cols-3 md:grid-cols-8 gap-2">
+				<Card className={CardSizes.SMALL}>
+					<CardHeader>
+						<Header title="Total Workouts" level={HeaderLevel.SUB_SECTION} />
 					</CardHeader>
 					<CardContent>
-						<div className="text-2xl font-bold">72 BPM</div>
-						<p className="text-xs text-muted-foreground">+2% from yesterday</p>
+						<div className="text-2xl font-bold">{statistics.totalWorkouts}</div>
+						<p className="text-xs text-muted-foreground">
+							<span className="font-bold">{`+${workouts.length}`}</span> this week
+						</p>
 					</CardContent>
 				</Card>
+				<Card className={CardSizes.SMALL}>
+					<CardHeader>
+						<Header title="Total Total Sets" level={HeaderLevel.SUB_SECTION} />
+					</CardHeader>
+					<CardContent>
+						<div className="text-2xl font-bold">{statistics.totalSets}</div>
+						<p className="text-xs text-muted-foreground">
+							<span className="font-bold">{`+${statistics.totalSets}`}</span> this week
+						</p>
+					</CardContent>
+				</Card>
+				<Card className={CardSizes.SMALL}>
+					<CardHeader>
+						<Header title="Total Reps" level={HeaderLevel.SUB_SECTION} />
+					</CardHeader>
+					<CardContent>
+						<div className="text-2xl font-bold">{statistics.totalReps}</div>
+						<p className="text-xs text-muted-foreground">
+							<span className="font-bold">{`+${statistics.totalReps}`}</span> this week
+						</p>
+					</CardContent>
+				</Card>
+			</div>
+			<div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3">
 				<Card>
 					<CardHeader>
 						<Header title="Total Workouts by Weekday" level={HeaderLevel.SECTION} />
@@ -55,9 +99,6 @@ export default async function Analytics() {
 							All yours workouts organized by day of the week logged.
 						</p>
 					</CardHeader>
-					<CardContent>
-						<WeekdayCountChart data={allWorkoutsByWeekday} />
-					</CardContent>
 				</Card>
 				<Card>
 					<CardHeader>

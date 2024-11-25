@@ -17,9 +17,9 @@ export function Navbar() {
 	const isDesktop = useMediaQuery({ query: "(min-width: 640px)" });
 
 	const navItems = [
-		{ name: "Live Coach", href: "/live-coach", icon: Rocket },
+		{ name: "Coach", href: "/live-coach", icon: Rocket },
 		{ name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-		{ name: "Log Workout", href: "/log-workout/lifting", icon: ClipboardCheck },
+		{ name: "Workout", href: "/log-workout/lifting", icon: ClipboardCheck },
 		{ name: "Analytics", href: "/analytics", icon: BarChart2 },
 		{ name: "Profile", href: "/profile", icon: User },
 	];
