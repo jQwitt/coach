@@ -16,6 +16,15 @@
     "schema:push": "pnpm drizzle-kit push",
     "cy:component": "cypress open --component"
   },
+  "lint-staged": {
+    "**/*.{js,jsx,ts,tsx}": [
+      "next lint --fix --file",
+      "prettier --write"
+    ],
+    "**/*.{ts,tsx,js,jsx,md,mdx,css,yaml,yml}": [
+      "prettier --write"
+    ]
+  },
   "dependencies": {
     "@clerk/nextjs": "^6.3.4",
     "@next/env": "^15.0.3",

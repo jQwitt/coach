@@ -9,6 +9,7 @@ export default async function Dashboard() {
   return (
     <div className="space-y-4">
       <QuickActions />
+      test
       <div className="space-y-2">
         <Header title="Recent Workouts" level={HeaderLevel.SECTION} />
         {workouts.map((workout) => {
