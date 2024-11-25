@@ -5,8 +5,10 @@ import { getCurrentUser } from "@/app/actions";
 import WorkoutForm from "@/components/forms/workouts/workout-form";
 import Header from "@/components/ui/header";
 
+import { Card, CardContent } from "@/components/ui/card";
+import WorkoutPreviousExercises from "./components/previous-exercises";
 import WorkoutStats from "./components/workout-stats";
-import WorkoutTimeline from "./components/workout-timeline";
+import WorkoutVisualizer from "./components/workout-visualizer";
 
 export default async function LogWorkoutLifting() {
 	const { id } = (await getCurrentUser()) ?? {};
@@ -23,13 +25,18 @@ export default async function LogWorkoutLifting() {
 					alt="dumbbell logo"
 					width={48}
 					height={48}
-					className="-mt-1 rotate-45"
+					className="-mt-1 rotate-45 mr-2"
 				/>
 				<Header title="Weights" />
 			</div>
 			<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-				<WorkoutForm userId={id} />
-				<WorkoutTimeline />
+				<Card>
+					<CardContent>
+						<WorkoutForm userId={id} />
+					</CardContent>
+				</Card>
+				<WorkoutPreviousExercises />
+				<WorkoutVisualizer />
 				<WorkoutStats />
 			</div>
 		</div>

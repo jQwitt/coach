@@ -36,7 +36,7 @@ const charts = {
 	},
 } satisfies ChartViews;
 
-export default function WorkoutTimeline() {
+export default function WorkoutVisualizer() {
 	const { workout } = useWorkoutStore();
 	const [view, setView] = React.useState<Views>(Views.TOTAL_REPS_PER_EXERCISE);
 
@@ -104,14 +104,6 @@ export default function WorkoutTimeline() {
 							);
 						})}
 					</div>
-				</div>
-				<div>
-					<Header title="Summary" level={HeaderLevel.SUB_SECTION} />
-					{workout.exercises.map(({ name }, i) => (
-						<p key={`${i}-${name}`} className="text-sm text-muted-foreground">
-							{name}
-						</p>
-					))}
 				</div>
 			</CardContent>
 		</Card>
