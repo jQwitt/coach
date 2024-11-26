@@ -5,6 +5,7 @@ import { hasForbiddenCharacters } from "@/lib/utils";
 
 interface WorkoutState {
 	workout: WorkoutLiftingData;
+	reset: () => void;
 	setWorkoutName: (name: string) => void;
 	addEmptyExercise: () => void;
 	removeExercise: (index: number) => void;
@@ -36,6 +37,9 @@ const useWorkoutStore = create<WorkoutState>()(
 	(set) =>
 		({
 			workout: initialWorkout,
+			reset: () => {
+				set({ workout: { ...initialWorkout } });
+			},
 			setWorkoutName: (name: string) => {
 				set((state) => {
 					if (hasForbiddenCharacters(name)) {

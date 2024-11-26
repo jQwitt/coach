@@ -24,7 +24,7 @@ export default function Header({
 }: HeaderProps) {
 	if (level === HeaderLevel.PAGE) {
 		return (
-			<div className="flex items-center gap-2 my-4">
+			<div className="flex items-center gap-2 my-4 text-ellipsis">
 				{Icon && <Icon className={`h-12 w-12 ${iconClassName}`} />}
 				<h2 className={`${heading.className} text-6xl text-primary ${className}`}>{title}</h2>
 			</div>

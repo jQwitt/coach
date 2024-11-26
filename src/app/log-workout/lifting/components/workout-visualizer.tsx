@@ -55,7 +55,7 @@ export default function WorkoutVisualizer() {
 		<Card className="shadow-md">
 			<CardHeader>
 				<CardTitle>
-					<Header title="Workout Timeline" level={HeaderLevel.SECTION} />
+					<Header title="Your Workout in Data" level={HeaderLevel.SECTION} />
 				</CardTitle>
 			</CardHeader>
 			<CardContent>

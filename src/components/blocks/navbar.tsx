@@ -14,7 +14,6 @@ export default function Navbar() {
 	const path = usePathname();
 	const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 	const isDesktop = useMediaQuery({ query: "(min-width: 640px)" });
-	console.log(path);
 
 	const navItems = [
 		{ name: "Coach", href: "/live-coach", icon: Rocket, selected: path.startsWith("/live-coach") },

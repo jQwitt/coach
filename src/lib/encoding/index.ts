@@ -52,3 +52,35 @@ export const decodeStringsToExercises = (exercises: string[] | null): Exercise[]
 
 	return [];
 };
+
+export const timeStamp = (): string => {
+	return new Date().toISOString();
+};
+
+export const fromIso = (iso: string): Date => {
+	return new Date(iso);
+};
+
+export const getDateParts = (iso: Date) => {
+	const [numericDayMonthYear, hours] = iso
+		.toLocaleTimeString([], {
+			year: "numeric",
+			month: "numeric",
+			day: "numeric",
+			hour: "2-digit",
+			minute: "2-digit",
+		})
+		.split(", ");
+	const [weekday, month, numericDay, year, ...rest] = iso.toString().split(" ");
+	const timeZone = rest.join(" ").split("(")[1].slice(0, -1);
+
+	return {
+		numericDayMonthYear,
+		hours,
+		weekday,
+		month,
+		numericDay,
+		year,
+		timeZone,
+	};
+};

@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import Header, { HeaderLevel } from "@/components/ui/header";
 import useWorkoutStore from "@/hooks/stores/use-workout";
+import { timeStamp } from "@/lib/encoding";
 import { Edit3, Plus } from "lucide-react";
 import { redirect } from "next/navigation";
 import * as React from "react";
@@ -20,6 +21,7 @@ import SetsForm from "./sets-form";
 export default function WorkoutForm({ userId }: { userId: number }) {
 	const {
 		workout,
+		reset,
 		setWorkoutName,
 		updateExerciseName,
 		addEmptyExercise,
@@ -64,16 +66,22 @@ export default function WorkoutForm({ userId }: { userId: number }) {
 	};
 
 	const handleSubmit = () => {
-		const toSubmit = { ...workout, userId, exercises: previousExercises };
+		const toSubmit = {
+			...workout,
+			userId,
+			exercises: previousExercises,
+			date: timeStamp(),
+		};
+
 		if (name?.length === 0) {
 			toSubmit.name = initName;
 		}
 
-		console.log("here");
-		console.log(error);
-
 		if (error.length === 0) {
-			createWorkoutByUser({ data: toSubmit }).then(() => redirect("/dashboard"));
+			createWorkoutByUser({ data: toSubmit }).then(() => {
+				reset();
+				redirect("/dashboard");
+			});
 		} else {
 			setSubmitting(false);
 		}

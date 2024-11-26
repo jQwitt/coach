@@ -73,12 +73,11 @@ export const deleteCurrentUser = async () => {
 export const createWorkoutByUser = async ({
 	data,
 }: {
-	data: WorkoutLiftingData & { userId: number };
+	data: WorkoutLiftingData & { userId: number; date: string };
 }) => {
 	const { userId, exercises } = data;
 	const toInsert = {
 		...data,
-		date: new Date().toLocaleString(),
 		exercises: encodeExercisesAsStrings(exercises),
 		userId,
 	};
