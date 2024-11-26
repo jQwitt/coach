@@ -1,6 +1,7 @@
 import type schema from "@/db/schema";
 
 export type User = typeof schema.users_table.$inferSelect;
+export type UserTagCollection = typeof schema.user_tags.$inferSelect;
 export type WorkoutLifting = typeof schema.workouts_lifting_table.$inferSelect;
 
 export type Exercise = {

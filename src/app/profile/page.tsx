@@ -2,9 +2,10 @@ import { getCurrentUser } from "@/app/actions";
 import UserControls from "@/components/blocks/user-controls";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import Header, { HeaderLevel } from "@/components/ui/header";
+import UserData from "./components/user-data";
 
 export default async function Profile() {
-	const { firstName, lastName, email, exerciseNames } = (await getCurrentUser()) || {};
+	const { firstName, lastName, email, exerciseNames, tags } = (await getCurrentUser()) || {};
 
 	return (
 		<div className="flex flex-col gap-4">
@@ -25,10 +26,7 @@ export default async function Profile() {
 					<Header title="Data" level={HeaderLevel.SECTION} />
 				</CardHeader>
 				<CardContent>
-					<Header title="Known Exercises" level={HeaderLevel.SUB_SECTION} />
-					{exerciseNames?.map((name) => (
-						<p key={name}>{name}</p>
-					))}
+					<UserData exerciseNames={exerciseNames ?? []} tags={tags ?? []} />
 				</CardContent>
 			</Card>
 			<Card>

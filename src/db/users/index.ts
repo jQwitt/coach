@@ -96,3 +96,19 @@ export const insertAppendExerciseNameToUser = async ({
 
 	return result[0].exerciseNames;
 };
+
+export const getUserTags = async ({ userId }: { userId: number }) => {
+	const result = await db.query.users_table.findFirst({
+		where: (users, { eq }) => eq(users.id, userId),
+		columns: {
+			tags: true,
+		},
+	});
+
+	if (!result) {
+		console.log("error getting user tags!");
+		return null;
+	}
+
+	return result;
+};
