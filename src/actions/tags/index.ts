@@ -11,7 +11,10 @@ export async function getTagsForUser({ userId }: { userId: number }) {
 
 	const result = [];
 	for (const tag of user.tags) {
-		result.push(await getTagCollectionsById({ id: tag }));
+		const data = await getTagCollectionsById({ id: tag });
+		if (data) {
+			result.push(data);
+		}
 	}
 
 	return result;
