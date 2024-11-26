@@ -1,6 +1,6 @@
 "use client";
 
-import ErrorAlert from "@/components/blocks/error-alert";
+import Alert from "@/components/blocks/error-alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import Header from "@/components/ui/header";
@@ -67,7 +67,7 @@ export default function SignInPage() {
 			</CardHeader>
 			<CardContent className="py-5">
 				{errorMessage.length ? (
-					<ErrorAlert
+					<Alert
 						message={errorMessage}
 						className="mb-2"
 						linkRoute={errorLink.link}

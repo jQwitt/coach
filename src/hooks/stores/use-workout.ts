@@ -6,7 +6,7 @@ import { hasForbiddenCharacters } from "@/lib/utils";
 interface WorkoutState {
 	workout: WorkoutLiftingData;
 	setWorkoutName: (name: string) => void;
-	addExercise: (exercise?: Exercise) => void;
+	addEmptyExercise: () => void;
 	removeExercise: (index: number) => void;
 	updateExerciseName: (index: number, name: string) => void;
 	addSetToExercise: (index: number) => void;
@@ -51,14 +51,15 @@ const useWorkoutStore = create<WorkoutState>()(
 			},
 
 			// EXERCISE
-			addExercise: (exercise) => {
+			addEmptyExercise: () => {
 				set((state) => {
+					const toAdd = { ...initialExercise, sets: [{ ...initialSet }] } satisfies Exercise;
 					const exercises = [
 						...state.workout.exercises.map((e) => ({
 							...e,
 							sets: [...e.sets.map((s) => ({ ...s }))],
 						})),
-						exercise ?? initialExercise,
+						toAdd,
 					];
 
 					return {

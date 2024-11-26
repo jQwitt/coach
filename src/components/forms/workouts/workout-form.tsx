@@ -3,9 +3,18 @@
 import { createWorkoutByUser } from "@/app/actions";
 import { heading } from "@/app/fonts";
 import { Button } from "@/components/ui/button";
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogTitle,
+	DialogTrigger,
+} from "@/components/ui/dialog";
+import Header, { HeaderLevel } from "@/components/ui/header";
 import useWorkoutStore from "@/hooks/stores/use-workout";
-import { Edit3, PlusCircle } from "lucide-react";
-import type * as React from "react";
+import { Edit3, Plus } from "lucide-react";
+import { redirect } from "next/navigation";
+import * as React from "react";
 import SetsForm from "./sets-form";
 
 export default function WorkoutForm({ userId }: { userId: number }) {
@@ -13,8 +22,7 @@ export default function WorkoutForm({ userId }: { userId: number }) {
 		workout,
 		setWorkoutName,
 		updateExerciseName,
-		addExercise,
-		removeExercise,
+		addEmptyExercise,
 		addSetToExercise,
 		removeSetFromExercise,
 		updateExerciseSets,
@@ -24,21 +32,55 @@ export default function WorkoutForm({ userId }: { userId: number }) {
 
 	const last = exercises.length - 1;
 	const currentExercise = exercises[last];
-	const { name: exerciseName, sets } = currentExercise;
+	const { name: exerciseName } = currentExercise;
+	const previousExercises = exercises.slice(0, last);
 
-	const handleSubmit = (e: React.FormEvent) => {
-		e.preventDefault();
+	const [error, setError] = React.useState("");
+	const [submitting, setSubmitting] = React.useState(false);
 
-		const toSubmit = { ...workout, userId };
+	const [isMounted, setIsMounted] = React.useState(false);
+
+	React.useEffect(() => {
+		// prevent hydration error
+		setIsMounted(true);
+	}, []);
+
+	if (!isMounted) {
+		return null;
+	}
+
+	const handleValidation = () => {
+		if (name?.length === 0) {
+			setError("Please add a name to your workout before saving.");
+			return;
+		}
+
+		if (previousExercises.length === 0) {
+			setError("Please add some exercises to your workout before saving.");
+			return;
+		}
+
+		setError("");
+	};
+
+	const handleSubmit = () => {
+		const toSubmit = { ...workout, userId, exercises: previousExercises };
 		if (name?.length === 0) {
 			toSubmit.name = initName;
 		}
 
-		createWorkoutByUser({ data: toSubmit });
+		console.log("here");
+		console.log(error);
+
+		if (error.length === 0) {
+			createWorkoutByUser({ data: toSubmit }).then(() => redirect("/dashboard"));
+		} else {
+			setSubmitting(false);
+		}
 	};
 
 	return (
-		<form onSubmit={handleSubmit} className="space-y-4">
+		<form className="space-y-4" id="workout-form">
 			<div className="min-w-full">
 				<div className="relative">
 					<input
@@ -80,16 +122,49 @@ export default function WorkoutForm({ userId }: { userId: number }) {
 				disabled={workout.exercises.length >= 11}
 				onClick={() => {
 					if (workout.exercises.length < 11) {
-						addExercise(undefined);
+						addEmptyExercise();
 					}
 				}}
 			>
-				Add Exercise
-				<PlusCircle className="mr-2 h-4 w-4" />
+				<Plus className="h-4 w-4" />
+				Add to Workout
 			</Button>
-			<Button type="button" className="w-full" onClick={handleSubmit}>
-				Log Workout
-			</Button>
+
+			<Dialog>
+				<DialogTrigger asChild>
+					<Button type="button" className="w-full" onClick={handleValidation}>
+						Finish Workout
+					</Button>
+				</DialogTrigger>
+				<DialogContent className="max-w-[80%] sm:max-w-[50%] rounded-lg">
+					<DialogTitle className="hidden">Your Summary</DialogTitle>
+					<DialogDescription>
+						<Header title="Workout Summary" level={HeaderLevel.SECTION} />
+						{error.length === 0 ? (
+							<div>
+								<p className="font-semibold text-sm">{workout.name}</p>
+								{previousExercises.map((e, i) => (
+									<p key={`${e.name}-${i}`}>{e.name}</p>
+								))}
+							</div>
+						) : (
+							<p className="text-primary text-md">{error}</p>
+						)}
+					</DialogDescription>
+					<Button
+						type="submit"
+						form="workout-form"
+						className="w-full"
+						onClick={() => {
+							setSubmitting(true);
+							handleSubmit();
+						}}
+						disabled={error.length > 0 || submitting}
+					>
+						Save
+					</Button>
+				</DialogContent>
+			</Dialog>
 		</form>
 	);
 }

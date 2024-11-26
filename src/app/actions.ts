@@ -83,7 +83,7 @@ export const createWorkoutByUser = async ({
 		userId,
 	};
 
-	await createWorkoutForUser({ data: toInsert });
+	return await createWorkoutForUser({ data: toInsert });
 };
 
 export const getWorkouts = async () => {
