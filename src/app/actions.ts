@@ -1,137 +1,26 @@
 "use server";
 
 import {
-	deleteUser,
-	getExerciseNamesByUser,
-	getUserByAuthId,
-	insertAppendExerciseNameToUser,
-	insertUser,
-} from "@/db/users";
-import { createWorkoutForUser, getWorkoutsByUser } from "@/db/workouts";
-import { decodeStringsToExercises, encodeExercisesAsStrings } from "@/lib/encoding";
-import type { User, WorkoutLiftingData } from "@/lib/types";
-import { clerkClient, currentUser } from "@clerk/nextjs/server";
+	createUser as createUserAction,
+	deleteCurrentUser as deleteCurrentUserAction,
+	getCurrentUser as getCurrentUserAction,
+} from "../actions/user";
+import {
+	addKnownExerciseForUser as addKnownExerciseForUserAction,
+	getExerciseNames as getExerciseNamesAction,
+} from "../actions/user/exerciseNames";
+import {
+	createWorkoutByUser as createWorkoutForUserAction,
+	getWorkouts as getWorkoutsAction,
+} from "../actions/workouts";
 
-export const createUser = async ({
-	authId,
-	email,
-	firstName,
-	lastName,
-}: Pick<User, "authId" | "email" | "firstName" | "lastName">) => {
-	await insertUser({
-		authId,
-		email,
-		firstName,
-		lastName,
-	});
-};
+// USER ACTIONS
+export const createUser = createUserAction;
+export const getCurrentUser = getCurrentUserAction;
+export const deleteCurrentUser = deleteCurrentUserAction;
+export const addKnownExerciseForUser = addKnownExerciseForUserAction;
+export const getKnownExercisesForUser = getExerciseNamesAction;
 
-export const getCurrentUser = async (): Promise<User | null> => {
-	try {
-		const clerkUser = await currentUser();
-		if (!clerkUser) {
-			throw new Error("Clerk user not found");
-		}
-		const { id } = clerkUser;
-
-		const user = await getUserByAuthId({ authId: id });
-		if (!user) {
-			throw new Error(`User with authId ${id} not found`);
-		}
-
-		return { ...user };
-	} catch (error) {
-		console.log(error);
-	}
-
-	return null;
-};
-
-export const deleteCurrentUser = async () => {
-	try {
-		const authClient = await clerkClient();
-		const clerkUser = await currentUser();
-		if (!clerkUser) {
-			throw new Error("Clerk user not found");
-		}
-
-		// Delete user data
-		const { id } = clerkUser;
-		const result = await deleteUser({ authId: id });
-		if (!result) {
-			throw new Error("User not deleted from Database");
-		}
-
-		// Delete Clerk user
-		const clerkResult = await authClient.users.deleteUser(id);
-		if (!clerkResult) {
-			throw new Error("User not deleted from Clerk");
-		}
-
-		return true;
-	} catch (error) {
-		console.log(error);
-	}
-
-	return false;
-};
-
-export const createWorkoutByUser = async ({
-	data,
-}: {
-	data: WorkoutLiftingData & { userId: number; date: string };
-}) => {
-	const { userId, exercises } = data;
-	const toInsert = {
-		...data,
-		exercises: encodeExercisesAsStrings(exercises),
-		userId,
-	};
-
-	return await createWorkoutForUser({ data: toInsert });
-};
-
-export const getWorkouts = async () => {
-	const { id } = (await getCurrentUser()) ?? {};
-
-	if (!id) {
-		console.log("No user found!");
-		return [];
-	}
-
-	const result = await getWorkoutsByUser({ id });
-
-	return result.map((workout) => {
-		const { exercises } = workout;
-
-		return {
-			...workout,
-			exercises: decodeStringsToExercises(exercises),
-		};
-	});
-};
-
-export const addKnownExerciseForUser = async ({
-	userId,
-	name,
-}: { userId: number; name: string }) => {
-	const knownExercises = await getExerciseNamesByUser({ userId });
-
-	if (!knownExercises?.exerciseNames) {
-		console.log("error getting user exerciseNames!");
-		return [];
-	}
-
-	if (knownExercises.exerciseNames.includes(name)) {
-		return knownExercises.exerciseNames;
-	}
-
-	const result = await insertAppendExerciseNameToUser({ userId, exerciseName: name });
-
-	if (!result) {
-		console.log("error updating user exerciseNames!");
-		return knownExercises.exerciseNames ?? [];
-	}
-
-	return result;
-};
+// WORKOUT ACTIONS
+export const createWorkoutForUser = createWorkoutForUserAction;
+export const getWorkouts = getWorkoutsAction;
