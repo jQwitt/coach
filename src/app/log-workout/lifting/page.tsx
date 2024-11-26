@@ -11,7 +11,7 @@ import WorkoutStats from "./components/workout-stats";
 import WorkoutVisualizer from "./components/workout-visualizer";
 
 export default async function LogWorkoutLifting() {
-	const { id } = (await getCurrentUser()) ?? {};
+	const { id, exerciseNames } = (await getCurrentUser()) ?? {};
 
 	if (!id) {
 		return <div>Not logged in</div>;
@@ -32,7 +32,7 @@ export default async function LogWorkoutLifting() {
 			<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
 				<Card>
 					<CardContent>
-						<WorkoutForm userId={id} />
+						<WorkoutForm userId={id} exerciseNames={exerciseNames ?? []} />
 					</CardContent>
 				</Card>
 				<WorkoutPreviousExercises />

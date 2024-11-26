@@ -38,7 +38,12 @@ const useWorkoutStore = create<WorkoutState>()(
 		({
 			workout: initialWorkout,
 			reset: () => {
-				set({ workout: { ...initialWorkout } });
+				set({
+					workout: {
+						...initialWorkout,
+						exercises: [{ ...initialExercise, sets: [{ ...initialSet }] }],
+					},
+				});
 			},
 			setWorkoutName: (name: string) => {
 				set((state) => {

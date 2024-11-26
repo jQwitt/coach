@@ -11,14 +11,18 @@ import {
 	DialogTrigger,
 } from "@/components/ui/dialog";
 import Header, { HeaderLevel } from "@/components/ui/header";
+import { Skeleton } from "@/components/ui/skeleton";
 import useWorkoutStore from "@/hooks/stores/use-workout";
 import { timeStamp } from "@/lib/encoding";
-import { Edit3, Plus } from "lucide-react";
+import { Edit3, Plus, X } from "lucide-react";
 import { redirect } from "next/navigation";
 import * as React from "react";
 import SetsForm from "./sets-form";
 
-export default function WorkoutForm({ userId }: { userId: number }) {
+export default function WorkoutForm({
+	userId,
+	exerciseNames,
+}: { userId: number; exerciseNames: string[] }) {
 	const {
 		workout,
 		reset,
@@ -39,7 +43,7 @@ export default function WorkoutForm({ userId }: { userId: number }) {
 
 	const [error, setError] = React.useState("");
 	const [submitting, setSubmitting] = React.useState(false);
-
+	const [autoCompleteExerciseName, setAutoCompleteExerciseName] = React.useState<string[]>([]);
 	const [isMounted, setIsMounted] = React.useState(false);
 
 	React.useEffect(() => {
@@ -48,8 +52,18 @@ export default function WorkoutForm({ userId }: { userId: number }) {
 	}, []);
 
 	if (!isMounted) {
-		return null;
+		return <WorkoutFormLoading />;
 	}
+
+	const updateAutoCompleteList = (name: string) => {
+		if (!name.length || !exerciseNames.length) {
+			return [];
+		}
+
+		setAutoCompleteExerciseName(
+			exerciseNames.filter((e) => e.toLowerCase().startsWith(name.toLowerCase())),
+		);
+	};
 
 	const handleValidation = () => {
 		if (name?.length === 0) {
@@ -114,11 +128,40 @@ export default function WorkoutForm({ userId }: { userId: number }) {
 							className="peer w-full border-b-2 border-gray-200 pb-1 pt-3 text-lg text-primary placeholder-primary transition-colors focus:border-primary focus:text-gray-400 focus:placeholder-gray-400 focus:outline-none"
 							value={exerciseName}
 							onChange={(e) => {
+								updateAutoCompleteList(e.target.value);
 								updateExerciseName(last, e.target.value);
 							}}
 						/>
 					</div>
 				</div>
+				{autoCompleteExerciseName.length ? (
+					<div className="absolute  z-10 w-[calc(100%-2rem)] rounded-md border border-gray-400 bg-white p-2">
+						<div className="flex items-center justify-between">
+							<Header title="Previous Names" level={HeaderLevel.SUB_SECTION} />
+							<Button
+								type="button"
+								variant="ghost"
+								size="icon"
+								onClick={() => setAutoCompleteExerciseName([])}
+							>
+								<X />
+							</Button>
+						</div>
+						{autoCompleteExerciseName.map((name) => (
+							<Button
+								key={name}
+								variant="ghost"
+								className="w-full"
+								onClick={() => {
+									updateExerciseName(last, name);
+									setAutoCompleteExerciseName([]);
+								}}
+							>
+								{name}
+							</Button>
+						))}
+					</div>
+				) : null}
 				<SetsForm
 					index={last}
 					addSet={addSetToExercise}
@@ -177,5 +220,16 @@ export default function WorkoutForm({ userId }: { userId: number }) {
 				</DialogContent>
 			</Dialog>
 		</form>
+	);
+}
+
+export function WorkoutFormLoading() {
+	return (
+		<div className="space-y-4">
+			<Skeleton className="h-10 w-full mb-1 mt-3" />
+			<Skeleton className="h-40 space-y-2 rounded-md p-4" />
+			<Skeleton className="h-8 w-full" />
+			<Skeleton className="h-8 w-full" />
+		</div>
 	);
 }
