@@ -36,3 +36,16 @@ export const createWorkoutForUser = async ({
 
 	return true;
 };
+
+export async function getWorkoutById({ id }: { id: number }) {
+	const result = await db.query.workouts_lifting_table.findFirst({
+		where: (workouts, { eq }) => eq(workouts.id, id),
+	});
+
+	if (!result) {
+		console.log(`No workout with id: ${id}!`);
+		return null;
+	}
+
+	return result;
+}

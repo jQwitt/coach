@@ -11,6 +11,7 @@ import {
 } from "../actions/user/exerciseNames";
 import {
 	createWorkoutByUser as createWorkoutForUserAction,
+	getWorkout as getWorkoutByIdAction,
 	getWorkouts as getWorkoutsAction,
 } from "../actions/workouts";
 
@@ -24,3 +25,4 @@ export const getKnownExercisesForUser = getExerciseNamesAction;
 // WORKOUT ACTIONS
 export const createWorkoutForUser = createWorkoutForUserAction;
 export const getWorkouts = getWorkoutsAction;
+export const getWorkoutById = getWorkoutByIdAction;

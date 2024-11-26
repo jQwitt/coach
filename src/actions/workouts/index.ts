@@ -1,6 +1,6 @@
 "use server";
 
-import { createWorkoutForUser, getWorkoutsByUser } from "@/db/workouts";
+import { createWorkoutForUser, getWorkoutById, getWorkoutsByUser } from "@/db/workouts";
 import { decodeStringsToExercises, encodeExercisesAsStrings } from "@/lib/encoding";
 import type { WorkoutLiftingData } from "@/lib/types";
 import { getCurrentUser } from "../user";
@@ -39,3 +39,17 @@ export const getWorkouts = async () => {
 		};
 	});
 };
+
+export async function getWorkout({ workoutId }: { workoutId: number }) {
+	const result = await getWorkoutById({ id: workoutId });
+
+	if (!result) {
+		console.log("error getting workout!");
+		return null;
+	}
+
+	return {
+		...result,
+		exercises: decodeStringsToExercises(result.exercises),
+	};
+}
