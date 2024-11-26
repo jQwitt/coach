@@ -12,9 +12,9 @@ export default function WorkoutPreviousExercises() {
 	const previousExercises = workout.exercises.slice(0, -1);
 
 	return (
-		<Card>
+		<Card className="h-full">
 			<CardHeader>
-				<Header title="Previous Exercises" level={HeaderLevel.SUB_SECTION} />
+				<Header title="Previous Exercises" level={HeaderLevel.SECTION} />
 			</CardHeader>
 			<CardContent className="flex flex-row flex-wrap gap-1">
 				{previousExercises.length === 0 && (

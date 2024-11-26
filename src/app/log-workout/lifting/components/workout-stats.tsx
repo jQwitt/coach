@@ -14,7 +14,7 @@ export default function WorkoutStats() {
 	};
 
 	return (
-		<Card className="shadow-md md:col-span-2">
+		<Card className="shadow-md lg:col-span-2 col-span-1">
 			<CardHeader>
 				<CardTitle>
 					<h5 className={`${heading.className} my-1 text-3xl text-primary`}>Quick Stats</h5>

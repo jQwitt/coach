@@ -29,15 +29,21 @@ export default async function LogWorkoutLifting() {
 				/>
 				<Header title="Weights" />
 			</div>
-			<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-				<Card>
+			<div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-8">
+				<Card className="lg:col-span-3 sm:col-span-2">
 					<CardContent>
 						<WorkoutForm userId={id} exerciseNames={exerciseNames ?? []} />
 					</CardContent>
 				</Card>
-				<WorkoutPreviousExercises />
-				<WorkoutVisualizer />
-				<WorkoutStats />
+				<div className="lg:col-span-5 sm:col-span-1">
+					<WorkoutVisualizer />
+				</div>
+				<div className="lg:col-span-4 sm:col-span-1">
+					<WorkoutPreviousExercises />
+				</div>
+				<div className="lg:col-span-4 sm:col-span-2">
+					<WorkoutStats />
+				</div>
 			</div>
 		</div>
 	);
