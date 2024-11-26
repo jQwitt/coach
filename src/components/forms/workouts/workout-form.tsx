@@ -1,6 +1,6 @@
 "use client";
 
-import { createWorkoutByUser } from "@/app/actions";
+import { addKnownExerciseForUser, createWorkoutByUser } from "@/app/actions";
 import { heading } from "@/app/fonts";
 import { Button } from "@/components/ui/button";
 import {
@@ -78,6 +78,9 @@ export default function WorkoutForm({ userId }: { userId: number }) {
 		}
 
 		if (error.length === 0) {
+			for (const { name } of previousExercises) {
+				addKnownExerciseForUser({ userId, name });
+			}
 			createWorkoutByUser({ data: toSubmit }).then(() => {
 				reset();
 				redirect("/dashboard");

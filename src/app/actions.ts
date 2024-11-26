@@ -1,6 +1,12 @@
 "use server";
 
-import { deleteUser, getUserByAuthId, insertUser } from "@/db/users";
+import {
+	deleteUser,
+	getExerciseNamesByUser,
+	getUserByAuthId,
+	insertAppendExerciseNameToUser,
+	insertUser,
+} from "@/db/users";
 import { createWorkoutForUser, getWorkoutsByUser } from "@/db/workouts";
 import { decodeStringsToExercises, encodeExercisesAsStrings } from "@/lib/encoding";
 import type { User, WorkoutLiftingData } from "@/lib/types";
@@ -103,4 +109,29 @@ export const getWorkouts = async () => {
 			exercises: decodeStringsToExercises(exercises),
 		};
 	});
+};
+
+export const addKnownExerciseForUser = async ({
+	userId,
+	name,
+}: { userId: number; name: string }) => {
+	const knownExercises = await getExerciseNamesByUser({ userId });
+
+	if (!knownExercises?.exerciseNames) {
+		console.log("error getting user exerciseNames!");
+		return [];
+	}
+
+	if (knownExercises.exerciseNames.includes(name)) {
+		return knownExercises.exerciseNames;
+	}
+
+	const result = await insertAppendExerciseNameToUser({ userId, exerciseName: name });
+
+	if (!result) {
+		console.log("error updating user exerciseNames!");
+		return knownExercises.exerciseNames ?? [];
+	}
+
+	return result;
 };
