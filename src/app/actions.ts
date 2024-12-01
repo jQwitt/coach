@@ -13,6 +13,7 @@ import {
 	createWorkoutByUser as createWorkoutForUserAction,
 	getWorkout as getWorkoutByIdAction,
 	getWorkouts as getWorkoutsAction,
+	getWorkoutsInRange as getWorkoutsInRangeAction,
 	getWorkoutsSince as getWorkoutsSinceAction,
 } from "../actions/workouts";
 
@@ -27,4 +28,5 @@ export const getKnownExercisesForUser = getExerciseNamesAction;
 export const createWorkoutForUser = createWorkoutForUserAction;
 export const getWorkouts = getWorkoutsAction;
 export const getWorkoutsSince = getWorkoutsSinceAction;
+export const getWorkoutsInRange = getWorkoutsInRangeAction;
 export const getWorkoutById = getWorkoutByIdAction;

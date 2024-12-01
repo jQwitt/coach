@@ -4,6 +4,7 @@ import {
 	createWorkoutForUser,
 	getWorkoutById,
 	getWorkoutsByUser,
+	getWorkoutsByUserInDateRange,
 	getWorkoutsByUserSince,
 } from "@/db/workouts";
 import { decodeStringsToExercises, encodeExercisesAsStrings } from "@/lib/encoding";
@@ -57,6 +58,31 @@ export async function getWorkoutsSince({ date }: { date: string }) {
 
 	if (!result) {
 		console.log("Error getting workouts since!");
+		return [];
+	}
+
+	return result.map((workout) => {
+		const { exercises } = workout;
+
+		return {
+			...workout,
+			exercises: decodeStringsToExercises(exercises),
+		};
+	});
+}
+
+export async function getWorkoutsInRange({ start, end }: { start: string; end: string }) {
+	const { id } = (await getCurrentUser()) ?? {};
+
+	if (!id) {
+		console.log("No user found!");
+		return [];
+	}
+
+	const result = await getWorkoutsByUserInDateRange({ userId: id, start, end });
+
+	if (!result) {
+		console.log("Error getting workouts in timeframe!");
 		return [];
 	}
 

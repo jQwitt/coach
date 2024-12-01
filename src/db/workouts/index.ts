@@ -31,6 +31,25 @@ export async function getWorkoutsByUserSince({ userId, date }: { userId: number;
 	return result;
 }
 
+export async function getWorkoutsByUserInDateRange({
+	userId,
+	start,
+	end,
+}: { userId: number; start: string; end: string }) {
+	const result = await db.query.workouts_lifting_table.findMany({
+		where: (workouts, { eq, and, gte, lte }) =>
+			and(gte(workouts.date, start), lte(workouts.date, end), eq(workouts.userId, userId)),
+		orderBy: (workouts, { desc }) => desc(workouts.date),
+	});
+
+	if (!result) {
+		console.log(`No workouts between ${start} and ${end} for user: ${userId}!`);
+		return [];
+	}
+
+	return result;
+}
+
 export async function createWorkoutForUser({
 	data,
 }: {
