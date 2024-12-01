@@ -21,6 +21,8 @@ export type ExerciseSetMetadata = {
 	unilateral?: boolean;
 };
 
-export type WorkoutLiftingData = Omit<WorkoutLifting, "id" | "userId" | "date" | "exercises"> & {
+export type WorkoutLiftingData = Omit<WorkoutLifting, "id" | "userId" | "exercises"> & {
 	exercises: Exercise[];
 };
+
+export type WorkoutLiftingDataWithoutDate = Omit<WorkoutLiftingData, "date">;

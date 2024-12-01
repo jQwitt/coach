@@ -1,10 +1,10 @@
 import { create } from "zustand";
 
-import type { Exercise, ExerciseSet, WorkoutLiftingData } from "@/lib/types";
+import type { Exercise, ExerciseSet, WorkoutLiftingDataWithoutDate } from "@/lib/types";
 import { hasForbiddenCharacters } from "@/lib/utils";
 
 interface WorkoutState {
-	workout: WorkoutLiftingData;
+	workout: WorkoutLiftingDataWithoutDate;
 	reset: () => void;
 	setWorkoutName: (name: string) => void;
 	addEmptyExercise: () => void;
@@ -31,7 +31,7 @@ const initialWorkout = {
 	name: "",
 	exercises: [{ ...initialExercise }],
 	tags: [],
-} satisfies WorkoutLiftingData;
+} satisfies WorkoutLiftingDataWithoutDate;
 
 const useWorkoutStore = create<WorkoutState>()(
 	(set) =>

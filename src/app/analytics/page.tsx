@@ -9,34 +9,20 @@ import {
 	SelectContent,
 	SelectGroup,
 	SelectItem,
-	SelectLabel,
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import { getWorkoutStatistics } from "./helpers";
 
 const CardSizes = {
-	SMALL: "col-span-1 md:col-span-2",
+	SMALL: "col-span-2 lg:col-span-1",
+	MEDIUM: "col-span-3 lg:col-span-2",
+	LARGE: "col-span-6 lg:col-span-4",
 };
 
 export default async function Analytics() {
 	const workouts = await getWorkouts();
-
-	const statistics = {
-		totalWorkouts: workouts.length,
-		totalSets: 0,
-		totalReps: 0,
-	};
-
-	for (const workout of workouts) {
-		const { name, date, exercises } = workout;
-
-		for (const exercise of exercises) {
-			for (const set of exercise.sets) {
-				statistics.totalSets += set.count;
-				statistics.totalReps += set.reps;
-			}
-		}
-	}
+	const statistics = getWorkoutStatistics(workouts);
 
 	return (
 		<div className="space-y-4">
@@ -49,6 +35,7 @@ export default async function Analytics() {
 					<SelectContent>
 						<SelectGroup>
 							<SelectItem value="day">Day</SelectItem>
+							<SelectItem value="week">Week</SelectItem>
 							<SelectItem value="month">Month</SelectItem>
 							<SelectItem value="year">Year</SelectItem>
 							<SelectItem value="all time">All time</SelectItem>
@@ -56,7 +43,7 @@ export default async function Analytics() {
 					</SelectContent>
 				</Select>
 			</div>
-			<div className="grid grid-cols-3 md:grid-cols-8 gap-2">
+			<div className="grid grid-cols-6 gap-2">
 				<Card className={CardSizes.SMALL}>
 					<CardHeader>
 						<Header title="Total Workouts" level={HeaderLevel.SUB_SECTION} />
@@ -90,9 +77,7 @@ export default async function Analytics() {
 						</p>
 					</CardContent>
 				</Card>
-			</div>
-			<div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3">
-				<Card>
+				<Card className={CardSizes.MEDIUM}>
 					<CardHeader>
 						<Header title="Total Workouts by Weekday" level={HeaderLevel.SECTION} />
 						<p className="text-sm text-muted-foreground">
@@ -100,13 +85,21 @@ export default async function Analytics() {
 						</p>
 					</CardHeader>
 				</Card>
-				<Card>
+				<Card className={CardSizes.MEDIUM}>
 					<CardHeader>
 						<Header title="Most Exercised Muscles" level={HeaderLevel.SECTION} />
 					</CardHeader>
 					<CardContent className="flex flex-row justify-center gap-6">
 						<Body size="small" />
 						<Body size="small" />
+					</CardContent>
+				</Card>
+				<Card className={CardSizes.LARGE}>
+					<CardHeader>
+						<Header title="One Rep Max" level={HeaderLevel.SECTION} />
+					</CardHeader>
+					<CardContent className="flex flex-row justify-center gap-6">
+						<p>test</p>
 					</CardContent>
 				</Card>
 			</div>
