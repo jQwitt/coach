@@ -8,9 +8,10 @@ export default function WorkoutStats() {
 	const { workout } = useWorkoutStore();
 	const exerciseStats = {
 		total: workout.exercises.length - 1,
-		averageSets:
+		averageSets: Math.floor(
 			workout.exercises.slice(0, -1).reduce((acc, exercise) => acc + exercise.sets.length, 0) /
-			workout.exercises.length,
+				workout.exercises.length,
+		),
 	};
 
 	return (

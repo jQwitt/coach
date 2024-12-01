@@ -57,9 +57,10 @@ export default function SetsForm({
 							inputMode="numeric"
 							placeholder="0"
 							className="col-span-1"
-							min={1}
-							max={20}
+							min="1"
+							max="99"
 							value={count}
+							step={1}
 							onChange={(e) =>
 								handleUpdate(setIndex, {
 									key: "count",
@@ -79,9 +80,10 @@ export default function SetsForm({
 							inputMode="numeric"
 							placeholder="0"
 							className="col-span-1"
-							min={1}
-							max={99}
+							min="1"
+							max="99"
 							value={reps}
+							step={1}
 							onChange={(e) =>
 								handleUpdate(setIndex, {
 									key: "reps",
@@ -98,12 +100,13 @@ export default function SetsForm({
 						<Input
 							id={`exercise-${index}-set-${setIndex}-weight`}
 							type="text"
-							inputMode="numeric"
+							inputMode="decimal"
 							placeholder="0"
 							className="col-span-2"
-							min={0.1}
-							max={1000}
+							min="0.1"
+							max="1000"
 							value={weight}
+							step="0.01"
 							onChange={(e) =>
 								handleUpdate(setIndex, {
 									key: "weight",

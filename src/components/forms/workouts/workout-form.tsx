@@ -21,8 +21,13 @@ import * as React from "react";
 import SetsForm from "./sets-form";
 
 const WORKOUT_NAME_ERROR = "Please add a name to your workout before saving.";
-const WORKOUT_EXERCISES_COUNT_ERROR = "Please add some exercises to your workout before saving.";
+const WORKOUT_EXERCISES_EMPTY_ERROR = "Please add some exercises to your workout before saving.";
+const WORKOUT_EXERCISES_COUNT_ERROR = "Cannot add more than 12 exercises to a workout!";
 const WORKOUT_EXERCISES_NAME_ERROR = "Please add a name to your exercise before saving.";
+const WORKOUT_EXERCISES_SETS_ERROR =
+	"An exercise cannot have 0 sets, please add the number of sets you've done!";
+const WORKOUT_EXERCISES_REPS_ERROR =
+	"An exercise cannot have 0 reps, please add the number of reps you've done!";
 
 export default function WorkoutForm({
 	userId,
@@ -71,6 +76,14 @@ export default function WorkoutForm({
 		);
 	};
 
+	const toastWithError = (message: string) => {
+		toast({
+			title: "Whoops!",
+			description: message,
+			variant: "destructive",
+		});
+	};
+
 	const handleValidation = () => {
 		if (name?.length === 0) {
 			setError(WORKOUT_NAME_ERROR);
@@ -78,7 +91,7 @@ export default function WorkoutForm({
 		}
 
 		if (previousExercises.length === 0) {
-			setError(WORKOUT_EXERCISES_COUNT_ERROR);
+			setError(WORKOUT_EXERCISES_EMPTY_ERROR);
 			return;
 		}
 
@@ -93,18 +106,30 @@ export default function WorkoutForm({
 	};
 
 	const handleAddExercise = () => {
-		if (!currentExercise.name.length) {
-			toast({
-				title: "Whoops!",
-				description: WORKOUT_EXERCISES_NAME_ERROR,
-				variant: "destructive",
-			});
+		const { name, sets } = currentExercise;
+		if (!name.length) {
+			toastWithError(WORKOUT_EXERCISES_NAME_ERROR);
 			return;
 		}
 
-		if (workout.exercises.length < 11) {
-			addEmptyExercise();
+		if (workout.exercises.length > 12) {
+			toastWithError(WORKOUT_EXERCISES_COUNT_ERROR);
+			return;
 		}
+
+		for (const { count, reps } of sets) {
+			if (count === 0) {
+				toastWithError(WORKOUT_EXERCISES_SETS_ERROR);
+				return;
+			}
+
+			if (reps === 0) {
+				toastWithError(WORKOUT_EXERCISES_REPS_ERROR);
+				return;
+			}
+		}
+
+		addEmptyExercise();
 	};
 
 	const handleSubmit = () => {
