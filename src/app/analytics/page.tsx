@@ -1,6 +1,6 @@
 import { ChartColumn } from "lucide-react";
 
-import { getWorkouts } from "@/app/actions";
+import { getWorkoutsSince } from "@/app/actions";
 import Body from "@/components/blocks/body-highlighter";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import Header, { HeaderLevel } from "@/components/ui/header";
@@ -21,7 +21,11 @@ const CardSizes = {
 };
 
 export default async function Analytics() {
-	const workouts = await getWorkouts();
+	const today = new Date();
+	const weekOffset = new Date(today);
+	weekOffset.setDate(today.getDate() - 7);
+
+	const workouts = await getWorkoutsSince({ date: weekOffset.toISOString() });
 	const statistics = getWorkoutStatistics(workouts);
 
 	return (
