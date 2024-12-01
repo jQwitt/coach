@@ -1,7 +1,7 @@
-import type { WorkoutLiftingData } from "@/lib/types";
+import type { WorkoutLiftingDataWithoutDate } from "@/lib/types";
 
 export const getRepsPerExercise = (
-	workout: WorkoutLiftingData,
+	workout: WorkoutLiftingDataWithoutDate,
 ): Array<{ index: number; reps: number }> => {
 	return workout.exercises.map((exercise, index) => {
 		const { sets } = exercise;
@@ -12,7 +12,7 @@ export const getRepsPerExercise = (
 };
 
 export const getSetsPerExercise = (
-	workout: WorkoutLiftingData,
+	workout: WorkoutLiftingDataWithoutDate,
 ): Array<{ index: number; sets: number }> => {
 	return workout.exercises.map(({ sets }, index) => ({
 		index,
