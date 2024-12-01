@@ -25,4 +25,8 @@ export type WorkoutLiftingData = Omit<WorkoutLifting, "id" | "userId" | "exercis
 	exercises: Exercise[];
 };
 
+export type WorkoutLiftingDataWithID = Omit<WorkoutLifting, "userId" | "exercises"> & {
+	exercises: Exercise[];
+};
+
 export type WorkoutLiftingDataWithoutDate = Omit<WorkoutLiftingData, "date">;

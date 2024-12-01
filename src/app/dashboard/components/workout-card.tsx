@@ -4,17 +4,15 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import Header, { HeaderLevel } from "@/components/ui/header";
 import { fromIso, getDateParts } from "@/lib/encoding";
-import type { WorkoutLifting, WorkoutLiftingData } from "@/lib/types";
+import type { WorkoutLiftingDataWithID } from "@/lib/types";
 import { ArrowRight, Calendar, ChevronDown, Clock, Edit, X } from "lucide-react";
 import { redirect } from "next/navigation";
 import * as React from "react";
 
 export default function WorkoutCard({
 	data,
-	key,
 }: {
-	data: WorkoutLiftingData & Pick<WorkoutLifting, "date" | "id">;
-	key?: string;
+	data: WorkoutLiftingDataWithID;
 }) {
 	const [details, setDetails] = React.useState(false);
 
@@ -26,7 +24,7 @@ export default function WorkoutCard({
 	const { numericDayMonthYear, hours } = getDateParts(fromIso(date));
 
 	return (
-		<Card className="relative" key={`${key ?? ""}-workout-${name}-${date}`}>
+		<Card className="relative">
 			<CardHeader className="flex flex-row items-center justify-between gap-2">
 				<div className="max-w-[80%] text-ellipsis overflow-clip whitespace-nowrap">
 					<Header title={name} level={HeaderLevel.SUB_SECTION} className="truncate" />
