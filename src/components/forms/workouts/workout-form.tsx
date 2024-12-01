@@ -13,11 +13,16 @@ import {
 import Header, { HeaderLevel } from "@/components/ui/header";
 import { Skeleton } from "@/components/ui/skeleton";
 import useWorkoutStore from "@/hooks/stores/use-workout";
+import { useToast } from "@/hooks/use-toast";
 import { timeStamp } from "@/lib/encoding";
 import { Edit3, Plus, X } from "lucide-react";
 import { redirect } from "next/navigation";
 import * as React from "react";
 import SetsForm from "./sets-form";
+
+const WORKOUT_NAME_ERROR = "Please add a name to your workout before saving.";
+const WORKOUT_EXERCISES_COUNT_ERROR = "Please add some exercises to your workout before saving.";
+const WORKOUT_EXERCISES_NAME_ERROR = "Please add a name to your exercise before saving.";
 
 export default function WorkoutForm({
 	userId,
@@ -34,7 +39,6 @@ export default function WorkoutForm({
 		updateExerciseSets,
 	} = useWorkoutStore();
 	const { name, exercises } = workout;
-	const initName = "Workout Name";
 
 	const last = exercises.length - 1;
 	const currentExercise = exercises[last];
@@ -45,6 +49,8 @@ export default function WorkoutForm({
 	const [submitting, setSubmitting] = React.useState(false);
 	const [autoCompleteExerciseName, setAutoCompleteExerciseName] = React.useState<string[]>([]);
 	const [isMounted, setIsMounted] = React.useState(false);
+
+	const { toast } = useToast();
 
 	React.useEffect(() => {
 		// prevent hydration error
@@ -67,16 +73,38 @@ export default function WorkoutForm({
 
 	const handleValidation = () => {
 		if (name?.length === 0) {
-			setError("Please add a name to your workout before saving.");
+			setError(WORKOUT_NAME_ERROR);
 			return;
 		}
 
 		if (previousExercises.length === 0) {
-			setError("Please add some exercises to your workout before saving.");
+			setError(WORKOUT_EXERCISES_COUNT_ERROR);
 			return;
 		}
 
+		for (const { name } of previousExercises) {
+			if (!name.length) {
+				setError(WORKOUT_EXERCISES_NAME_ERROR);
+				return;
+			}
+		}
+
 		setError("");
+	};
+
+	const handleAddExercise = () => {
+		if (!currentExercise.name.length) {
+			toast({
+				title: "Whoops!",
+				description: WORKOUT_EXERCISES_NAME_ERROR,
+				variant: "destructive",
+			});
+			return;
+		}
+
+		if (workout.exercises.length < 11) {
+			addEmptyExercise();
+		}
 	};
 
 	const handleSubmit = () => {
@@ -86,10 +114,6 @@ export default function WorkoutForm({
 			exercises: previousExercises,
 			date: timeStamp(),
 		};
-
-		if (name?.length === 0) {
-			toSubmit.name = initName;
-		}
 
 		if (error.length === 0) {
 			for (const { name } of previousExercises) {
@@ -111,10 +135,11 @@ export default function WorkoutForm({
 					<input
 						type="text"
 						className={`${heading.className} peer w-full border-b-2 border-gray-200 pb-1 pt-3 text-2xl text-primary placeholder-primary transition-colors focus:border-primary focus:text-gray-400 focus:placeholder-gray-400 focus:outline-none`}
+						placeholder="Workout Name"
 						onChange={(e) => {
 							setWorkoutName(e.target.value);
 						}}
-						value={name?.length && name.length > 0 ? name : initName}
+						value={name ?? ""}
 					/>
 					<Edit3 className="pointer-events-none absolute right-0 top-[25%] h-6 w-6 peer-focus:hidden" />
 				</div>
@@ -127,6 +152,7 @@ export default function WorkoutForm({
 							type="text"
 							className="peer w-full border-b-2 border-gray-200 pb-1 pt-3 text-lg text-primary placeholder-primary transition-colors focus:border-primary focus:text-gray-400 focus:placeholder-gray-400 focus:outline-none"
 							value={exerciseName}
+							placeholder="Add an Exercise Name"
 							onChange={(e) => {
 								updateAutoCompleteList(e.target.value);
 								updateExerciseName(last, e.target.value);
@@ -174,11 +200,7 @@ export default function WorkoutForm({
 				variant="outline"
 				className="w-full"
 				disabled={workout.exercises.length >= 11}
-				onClick={() => {
-					if (workout.exercises.length < 11) {
-						addEmptyExercise();
-					}
-				}}
+				onClick={handleAddExercise}
 			>
 				<Plus className="h-4 w-4" />
 				Add to Workout

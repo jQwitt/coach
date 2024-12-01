@@ -23,7 +23,7 @@ const initialSet = {
 } satisfies ExerciseSet;
 
 const initialExercise = {
-	name: "Cool Exercise Name",
+	name: "",
 	sets: [{ ...initialSet }],
 } satisfies Exercise;
 
