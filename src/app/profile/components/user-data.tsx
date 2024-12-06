@@ -9,13 +9,13 @@ import {
 	DialogTrigger,
 } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
-import type { UserTagCollection } from "@/lib/types";
+import type { UserTag } from "@/lib/types";
 import * as React from "react";
 
 export default function UserData({
 	exerciseNames,
 	tags,
-}: { exerciseNames: string[]; tags: UserTagCollection[] }) {
+}: { exerciseNames: string[]; tags: UserTag[] }) {
 	const [isMounted, setIsMounted] = React.useState(false);
 	React.useEffect(() => {
 		setIsMounted(true);

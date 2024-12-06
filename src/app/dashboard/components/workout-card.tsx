@@ -16,8 +16,8 @@ export default function WorkoutCard({
 }) {
 	const [details, setDetails] = React.useState(false);
 
-	const { name, date, exercises, id, tags } = data;
-	if (!name || !date || !exercises.length) {
+	const { name, date, exercisesSerial, id, tags } = data;
+	if (!name || !date || !exercisesSerial.length) {
 		return null;
 	}
 
@@ -50,7 +50,7 @@ export default function WorkoutCard({
 					</div>
 
 					<div className="flex items-center justify-start gap-2 flex-wrap">
-						{exercises.map(({ name }, i) => (
+						{exercisesSerial.map(({ name }, i) => (
 							<p
 								key={`${name}-${i}`}
 								className="text-ellipsis whitespace-nowrap overflow-hidden

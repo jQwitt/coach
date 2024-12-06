@@ -19,7 +19,8 @@ export const createWorkoutByUser = async ({
 	const { userId, exercises } = data;
 	const toInsert = {
 		...data,
-		exercises: encodeExercisesAsStrings(exercises),
+		exercisesSerial: encodeExercisesAsStrings(exercises),
+		exercises: [],
 		userId,
 	};
 
@@ -37,11 +38,11 @@ export const getWorkouts = async () => {
 	const result = await getWorkoutsByUser({ userId: id });
 
 	return result.map((workout) => {
-		const { exercises } = workout;
+		const { exercisesSerial } = workout;
 
 		return {
 			...workout,
-			exercises: decodeStringsToExercises(exercises),
+			exercisesSerial: decodeStringsToExercises(exercisesSerial),
 		};
 	});
 };
@@ -62,11 +63,11 @@ export async function getWorkoutsSince({ date }: { date: string }) {
 	}
 
 	return result.map((workout) => {
-		const { exercises } = workout;
+		const { exercisesSerial } = workout;
 
 		return {
 			...workout,
-			exercises: decodeStringsToExercises(exercises),
+			exercisesSerial: decodeStringsToExercises(exercisesSerial),
 		};
 	});
 }
@@ -87,11 +88,11 @@ export async function getWorkoutsInRange({ start, end }: { start: string; end: s
 	}
 
 	return result.map((workout) => {
-		const { exercises } = workout;
+		const { exercisesSerial } = workout;
 
 		return {
 			...workout,
-			exercises: decodeStringsToExercises(exercises),
+			exercisesSerial: decodeStringsToExercises(exercisesSerial),
 		};
 	});
 }
@@ -106,6 +107,6 @@ export async function getWorkout({ workoutId }: { workoutId: number }) {
 
 	return {
 		...result,
-		exercises: decodeStringsToExercises(result.exercises),
+		exercisesSerial: decodeStringsToExercises(result.exercisesSerial),
 	};
 }
