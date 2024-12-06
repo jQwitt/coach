@@ -18,13 +18,6 @@ async function main() {
 
 	const users = await db.select().from(users_table);
 	console.log("Getting all users from the database: ", users);
-	/*
-  const users: {
-    id: number;
-    name: string;
-    email: string;
-  }[]
-  */
 
 	await db
 		.update(users_table)

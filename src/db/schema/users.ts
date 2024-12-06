@@ -1,5 +1,5 @@
 import { integer, pgTable, varchar } from "drizzle-orm/pg-core";
-import { user_tags } from "./tags";
+import { user_tag_table } from "./tags";
 
 export const users_table = pgTable("Users", {
 	id: integer().primaryKey().generatedAlwaysAsIdentity(),
@@ -9,7 +9,7 @@ export const users_table = pgTable("Users", {
 
 	// references
 	tags: integer()
-		.references(() => user_tags.id)
+		.references(() => user_tag_table.id)
 		.array()
 		.default([]),
 
@@ -17,5 +17,4 @@ export const users_table = pgTable("Users", {
 	firstName: varchar({ length: 50 }).notNull(),
 	lastName: varchar({ length: 50 }),
 	email: varchar({ length: 100 }).notNull().unique(),
-	exerciseNames: varchar({ length: 255 }).array().default([]),
 });
