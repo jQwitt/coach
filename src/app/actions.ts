@@ -1,6 +1,12 @@
 "use server";
 
 import {
+	createExercise as createExerciseAction,
+	deleteExercise as deleteExerciseAction,
+	getExercises as getExercisesAction,
+	updateExercise as updateExerciseAction,
+} from "../actions/exercises";
+import {
 	createUser as createUserAction,
 	deleteCurrentUser as deleteCurrentUserAction,
 	getCurrentUser as getCurrentUserAction,
@@ -23,6 +29,12 @@ export const getCurrentUser = getCurrentUserAction;
 export const deleteCurrentUser = deleteCurrentUserAction;
 export const addKnownExerciseForUser = addKnownExerciseForUserAction;
 export const getKnownExercisesForUser = getExerciseNamesAction;
+
+// EXERCISE ACTIONS
+export const createExercise = createExerciseAction;
+export const getExercises = getExercisesAction;
+export const updateExercise = updateExerciseAction;
+export const deleteExercise = deleteExerciseAction;
 
 // WORKOUT ACTIONS
 export const createWorkoutForUser = createWorkoutForUserAction;
