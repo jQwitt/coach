@@ -25,7 +25,7 @@ export default function Navbar() {
 		},
 		{
 			name: "Workout",
-			href: "/log-workout/lifting",
+			href: "/log-workout",
 			icon: ClipboardCheck,
 			selected: path.startsWith("/log-workout"),
 		},
