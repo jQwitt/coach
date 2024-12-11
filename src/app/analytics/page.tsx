@@ -1,6 +1,6 @@
 import { ChartColumn } from "lucide-react";
 
-import { getWorkoutsSince } from "@/app/actions";
+import { getWorkouts } from "@/app/actions";
 import Body from "@/components/blocks/body-highlighter";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import Header, { HeaderLevel } from "@/components/ui/header";
@@ -12,7 +12,6 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { getWorkoutStatistics } from "./helpers";
 
 const CardSizes = {
 	SMALL: "col-span-2 lg:col-span-1",
@@ -25,8 +24,7 @@ export default async function Analytics() {
 	const weekOffset = new Date(today);
 	weekOffset.setDate(today.getDate() - 7);
 
-	const workouts = await getWorkoutsSince({ date: weekOffset.toISOString() });
-	const statistics = getWorkoutStatistics(workouts);
+	const workouts = await getWorkouts(); // TODO: make time range
 
 	return (
 		<div className="space-y-4">
@@ -52,34 +50,34 @@ export default async function Analytics() {
 					<CardHeader>
 						<Header title="Total Workouts" level={HeaderLevel.SUB_SECTION} />
 					</CardHeader>
-					<CardContent>
+					{/* <CardContent>
 						<div className="text-2xl font-bold">{statistics.totalWorkouts}</div>
 						<p className="text-xs text-muted-foreground">
 							<span className="font-bold">{`+${workouts.length}`}</span> this week
 						</p>
-					</CardContent>
+					</CardContent> */}
 				</Card>
 				<Card className={CardSizes.SMALL}>
 					<CardHeader>
 						<Header title="Total Total Sets" level={HeaderLevel.SUB_SECTION} />
 					</CardHeader>
-					<CardContent>
+					{/* <CardContent>
 						<div className="text-2xl font-bold">{statistics.totalSets}</div>
 						<p className="text-xs text-muted-foreground">
 							<span className="font-bold">{`+${statistics.totalSets}`}</span> this week
 						</p>
-					</CardContent>
+					</CardContent> */}
 				</Card>
 				<Card className={CardSizes.SMALL}>
 					<CardHeader>
 						<Header title="Total Reps" level={HeaderLevel.SUB_SECTION} />
 					</CardHeader>
-					<CardContent>
+					{/* <CardContent>
 						<div className="text-2xl font-bold">{statistics.totalReps}</div>
 						<p className="text-xs text-muted-foreground">
 							<span className="font-bold">{`+${statistics.totalReps}`}</span> this week
 						</p>
-					</CardContent>
+					</CardContent> */}
 				</Card>
 				<Card className={CardSizes.MEDIUM}>
 					<CardHeader>

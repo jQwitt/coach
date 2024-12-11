@@ -1,13 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-	Dialog,
-	DialogContent,
-	DialogDescription,
-	DialogTitle,
-	DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import * as React from "react";
 
@@ -31,12 +25,12 @@ export default function UserData({ exerciseNames }: { exerciseNames: string[] })
 					</DialogTrigger>
 					<DialogContent>
 						<DialogTitle>Exercise Names</DialogTitle>
-						<DialogDescription>
+						<div>
 							{exerciseNames?.map((name) => (
 								<p key={name}>{name}</p>
 							))}
 							{exerciseNames.length === 0 ? <p>No names</p> : null}
-						</DialogDescription>
+						</div>
 					</DialogContent>
 				</Dialog>
 			</div>
