@@ -1,9 +1,9 @@
-import type { Exercise, ExerciseSet } from "../types";
+import type { ExerciseData, ExerciseSetData } from "../types";
 
 const SPLIT = "$";
 const SET_SPLIT = "#";
 
-export const encodeExercisesAsStrings = (exercises: Exercise[]): string[] => {
+export const encodeExercisesAsStrings = (exercises: ExerciseData[]): string[] => {
 	const encoded = exercises.map((exercise) => {
 		const { name, sets } = exercise;
 		let result = `${name}`;
@@ -23,7 +23,7 @@ export const encodeExercisesAsStrings = (exercises: Exercise[]): string[] => {
 	return [];
 };
 
-export const decodeStringsToExercises = (exercises: string[] | null): Exercise[] => {
+export const decodeStringsToExercises = (exercises: string[] | null): ExerciseData[] => {
 	if (!exercises?.length) {
 		return [];
 	}
@@ -41,9 +41,9 @@ export const decodeStringsToExercises = (exercises: string[] | null): Exercise[]
 					reps: Number(reps),
 					weight: Number(weight),
 					metadata: {},
-				} satisfies ExerciseSet;
+				} satisfies ExerciseSetData;
 			}),
-		} satisfies Exercise;
+		} satisfies ExerciseData;
 	});
 
 	if (decoded.length === exercises.length) {
