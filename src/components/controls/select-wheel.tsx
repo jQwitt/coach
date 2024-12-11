@@ -10,6 +10,7 @@ interface VerticalScrollWheelProps {
 	step?: number;
 	id?: string;
 	onChange?: (value: number) => void;
+	className: string;
 }
 
 export function VerticalScrollWheel({
@@ -19,6 +20,7 @@ export function VerticalScrollWheel({
 	step = 1,
 	id,
 	onChange,
+	className,
 }: VerticalScrollWheelProps) {
 	const [value, setValue] = React.useState(defaultValue);
 	const [isFocused, setIsFocused] = React.useState(false);
@@ -95,7 +97,7 @@ export function VerticalScrollWheel({
 	};
 
 	return (
-		<div className="flex flex-col items-center">
+		<div className={`flex flex-col items-center w-12 ${className}`}>
 			<button
 				type="button"
 				onClick={incrementValue}
@@ -106,7 +108,7 @@ export function VerticalScrollWheel({
 			</button>
 			<input
 				ref={wheelRef}
-				className={`w-10 h-12 bg-white rounded-md text-center font-bold font-2xl flex items-center justify-center cursor-grab active:cursor-grabbing select-none transition-all ${
+				className={`w-full h-12 bg-white rounded-md text-center font-bold font-2xl flex items-center justify-center cursor-grab active:cursor-grabbing select-none transition-all ${
 					isFocused ? "border-2 border-black" : "border-2 border-transparent"
 				}`}
 				onWheel={handleWheel}

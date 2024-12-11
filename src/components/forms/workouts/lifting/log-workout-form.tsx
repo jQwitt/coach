@@ -4,9 +4,11 @@ import { heading } from "@/app/fonts";
 import { VerticalScrollWheel } from "@/components/controls/select-wheel";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import Header, { HeaderLevel } from "@/components/ui/header";
 import useWorkoutStore from "@/hooks/stores/use-workout";
-import { Check, Edit3, Plus, X } from "lucide-react";
+import { Check, Edit3, Plus } from "lucide-react";
+import PreviousExerciseCard from "./previous-exercise-card";
 
 export default function LogWorkoutLiftingForm() {
 	const {
@@ -26,10 +28,18 @@ export default function LogWorkoutLiftingForm() {
 	const currentSet = sets[setsLast];
 	const { count, reps, weight } = currentSet;
 
-	const handleSubmitStart = () => {};
+	const handleSubmitStart = (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+
+		console.log(previousExercises);
+	};
 
 	return (
-		<form className="flex flex-col gap-4">
+		<form
+			className="flex flex-col gap-4"
+			onSubmit={handleSubmitStart}
+			id="log-workout-lifting-form"
+		>
 			<div className="relative">
 				<input
 					type="text"
@@ -91,6 +101,7 @@ export default function LogWorkoutLiftingForm() {
 							</label>
 							<VerticalScrollWheel
 								id="set-weight"
+								className="w-36"
 								defaultValue={weight}
 								step={0.5}
 								min={0}
@@ -119,40 +130,42 @@ export default function LogWorkoutLiftingForm() {
 					<Plus className="h-4 w-4" />
 					Add to Workout
 				</Button>
-				<Button type="submit" className="w-full" onClick={() => handleSubmitStart()}>
-					<Check className="h-4 w-4" />
-					Finish Workout
-				</Button>
+
+				<Dialog>
+					<DialogTrigger asChild>
+						<Button type="button" className="w-full">
+							<Check className="h-4 w-4" />
+							Finish Workout
+						</Button>
+					</DialogTrigger>
+					<DialogTitle className="hidden">Workout Summary</DialogTitle>
+					<DialogContent className="max-w-[80%] sm:max-w-[50%] rounded-lg">
+						<Header title="Workout Summary" level={HeaderLevel.SECTION} />
+						<Button type="submit" form="log-workout-lifting-form" className="w-full">
+							Save
+						</Button>
+					</DialogContent>
+				</Dialog>
 			</div>
 			<div>
 				<Header title="Previous Exercises" level={HeaderLevel.SECTION} />
-				<div className="flex gap-2 overflow-x-scroll py-4">
-					{previousExercises.map((exercise, index) => (
-						<Card key={index} className="min-w-[75%] min-h-[75%]">
-							<CardContent className="-m-2">
-								<div className="flex flex-row justify-between mt-4">
-									<Header title={exercise.name} level={HeaderLevel.SECTION} />
-									<Button
-										className="hover:color-destructive"
-										variant="ghost"
-										size="icon"
-										onClick={() => removeExercise(index)}
-										type="button"
-									>
-										<X />
-									</Button>
-								</div>
-							</CardContent>
-						</Card>
-					))}
-					<div>
-						{previousExercises.length === 0 ? (
-							<p className="text-sm text-muted-foreground">
-								Exercises will appear here as you log them!
-							</p>
-						) : null}
+				{previousExercises.length === 0 ? (
+					<div className="text-center my-6">
+						<p className="text-sm text-muted-foreground">
+							Exercises will appear here as you log them!
+						</p>
 					</div>
-				</div>
+				) : (
+					<div className="flex gap-2 overflow-x-scroll py-4">
+						{previousExercises.map((exercise, index) => (
+							<PreviousExerciseCard
+								key={`previous-exercise-${exercise.name}`}
+								exercise={exercise}
+								onRemove={() => removeExercise(index)}
+							/>
+						))}
+					</div>
+				)}
 			</div>
 		</form>
 	);
