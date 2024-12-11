@@ -66,7 +66,6 @@ async function main() {
 		timeStarted: now,
 		timeCompleted: now,
 		duration: "0h 0m",
-		exercisesSerial: ["data"],
 	};
 
 	const insertWorkoutResult = await db.insert(workouts_lifting_table).values(workout).returning();
@@ -85,7 +84,7 @@ async function main() {
 				userId,
 				totalReps: 10,
 				totalSets: 3,
-				maxWeight: 100,
+				maxWeight: "100",
 				serializedSetData: ["data A"],
 			},
 			{
@@ -94,7 +93,7 @@ async function main() {
 				userId,
 				totalReps: 10,
 				totalSets: 3,
-				maxWeight: 200,
+				maxWeight: "200",
 				serializedSetData: ["data B"],
 			},
 		])
