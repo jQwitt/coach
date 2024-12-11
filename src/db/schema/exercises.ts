@@ -12,7 +12,7 @@ export const user_lifting_exercises_table = pgTable("UserLiftingExercises", {
 		.notNull(),
 
 	// data fields
-	name: varchar({ length: 255 }).notNull(),
+	name: varchar({ length: 255 }).notNull().unique(),
 	primaryTarget: varchar({ length: 100 }).notNull(),
 	detailedTargets: varchar({ length: 100 }).array().notNull(),
 });

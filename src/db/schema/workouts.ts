@@ -32,18 +32,18 @@ export const workouts_lifting_relations = relations(workouts_lifting_table, ({ m
 export const workouts_lifting_exercises_table = pgTable(
 	"WorkoutsLiftingExercises",
 	{
-		workoutId: integer("workout_id")
+		workoutId: integer()
 			.notNull()
 			.references(() => workouts_lifting_table.id, { onDelete: "cascade" }),
-		exerciseId: integer("exercise_id")
+		exerciseId: integer()
 			.notNull()
 			.references(() => user_lifting_exercises_table.id, { onDelete: "cascade" }),
-		userId: integer("user_id")
+		userId: integer()
 			.notNull()
 			.references(() => users_table.id, { onDelete: "cascade" }),
-		totalSets: integer("total_sets").notNull(),
-		totalReps: integer("total_reps").notNull(),
-		maxWeight: integer("max_weight").notNull(),
+		totalSets: integer().notNull(),
+		totalReps: integer().notNull(),
+		maxWeight: varchar({ length: 10 }).notNull(),
 		serializedSetData: varchar({ length: 255 }).array().notNull().default([]),
 	},
 	(t) => ({
