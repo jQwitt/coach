@@ -1,8 +1,7 @@
-import { getWorkoutById } from "@/app/actions";
+import { getWorkout } from "@/app/actions";
 import Header, { HeaderLevel } from "@/components/ui/header";
 import { fromIso, getDateParts } from "@/lib/encoding";
 import { Calendar, CalendarDays, Clock } from "lucide-react";
-import WorkoutSummaryCard from "../components/workout-summary-card";
 import type { PageProps } from ".next/types/app/page";
 
 export default async function WorkoutAnalyticsPage({
@@ -11,13 +10,13 @@ export default async function WorkoutAnalyticsPage({
 	params: { workoutId: string };
 } & PageProps) {
 	const { workoutId } = await params;
-	const workout = await getWorkoutById({ workoutId: Number(workoutId) });
+	const workout = await getWorkout({ id: workoutId });
 
 	if (!workout || !workout.name) {
 		return <div>Error</div>;
 	}
 
-	const { name, date, exercises } = workout;
+	const { name, date } = workout;
 	const { month, weekday, hours } = getDateParts(fromIso(date ?? ""));
 
 	return (
@@ -36,7 +35,6 @@ export default async function WorkoutAnalyticsPage({
 					<Clock size={16} />
 					<p>{`${hours[0] === "0" ? "" : hours[0]}${hours.slice(1)}`}</p>
 				</div>
-				<WorkoutSummaryCard exercises={exercises} />
 			</div>
 		</div>
 	);

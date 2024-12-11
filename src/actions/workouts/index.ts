@@ -1,17 +1,24 @@
 "use server";
 
-import { getWorkoutsByUser } from "@/db/workouts";
+import { getWorkoutById, getWorkoutsByUser } from "@/db/workouts";
 import { getCurrentUser } from "../user";
 
-export const getWorkouts = async () => {
-	const { id } = (await getCurrentUser()) ?? {};
+export async function getWorkouts() {
+	const { id: userId } = (await getCurrentUser()) ?? {};
 
-	if (!id) {
-		console.log("No user found!");
+	if (!userId) {
 		return [];
 	}
 
-	const result = await getWorkoutsByUser({ userId: id });
+	return await getWorkoutsByUser({ userId });
+}
 
-	return result;
-};
+export async function getWorkout({ id }: { id: string }) {
+	const { id: userId } = (await getCurrentUser()) ?? {};
+
+	if (!userId) {
+		return null;
+	}
+
+	return await getWorkoutById({ userId, id: Number(id) });
+}
