@@ -8,7 +8,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import type { WorkoutLiftingDataWithID } from "@/lib/types";
+import type { WorkoutLifting } from "@/lib/types";
 import * as React from "react";
 import WorkoutCard from "./workout-card";
 
@@ -17,7 +17,7 @@ enum SortMethods {
 	OLDEST = "oldest",
 }
 
-export default function WorkoutsList({ workouts }: { workouts: WorkoutLiftingDataWithID[] }) {
+export default function WorkoutsList({ workouts }: { workouts: WorkoutLifting[] }) {
 	const [sortBy, setSortBy] = React.useState(SortMethods.NEWEST);
 
 	return (
@@ -34,7 +34,7 @@ export default function WorkoutsList({ workouts }: { workouts: WorkoutLiftingDat
 				</SelectContent>
 			</Select>
 			<div className={`flex flex-col${sortBy === SortMethods.NEWEST ? "" : "-reverse"} gap-2`}>
-				{workouts.map((workout) => {
+				{workouts?.map((workout) => {
 					return <WorkoutCard data={workout} key={`${workout.name}-${workout.id}`} />;
 				})}
 			</div>

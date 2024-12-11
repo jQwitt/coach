@@ -1,10 +1,10 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import { Card, CardFooter, CardHeader } from "@/components/ui/card";
 import Header, { HeaderLevel } from "@/components/ui/header";
 import { fromIso, getDateParts } from "@/lib/encoding";
-import type { WorkoutLiftingDataWithID } from "@/lib/types";
+import type { WorkoutLifting } from "@/lib/types";
 import { ArrowRight, Calendar, ChevronDown, Clock, Edit, X } from "lucide-react";
 import { redirect } from "next/navigation";
 import * as React from "react";
@@ -12,12 +12,12 @@ import * as React from "react";
 export default function WorkoutCard({
 	data,
 }: {
-	data: WorkoutLiftingDataWithID;
+	data: WorkoutLifting;
 }) {
 	const [details, setDetails] = React.useState(false);
 
-	const { name, date, exercisesSerial, id, tags } = data;
-	if (!name || !date || !exercisesSerial.length) {
+	const { name, date, id } = data;
+	if (!name || !date) {
 		return null;
 	}
 
@@ -39,29 +39,6 @@ export default function WorkoutCard({
 					{details ? <X /> : <ChevronDown />}
 				</Button>
 			</CardHeader>
-			{details && (
-				<CardContent>
-					<div className="flex items-center justify-start gap-2 flex-wrap">
-						{tags?.map((tag) => (
-							<Button variant="outline" key={tag}>
-								{tag}
-							</Button>
-						))}
-					</div>
-
-					<div className="flex items-center justify-start gap-2 flex-wrap">
-						{exercisesSerial.map(({ name }, i) => (
-							<p
-								key={`${name}-${i}`}
-								className="text-ellipsis whitespace-nowrap overflow-hidden
-								w-fit max-w-[40%] text-muted-foreground text-sm -mt-2"
-							>
-								{name}
-							</p>
-						))}
-					</div>
-				</CardContent>
-			)}
 			{details && (
 				<CardFooter className="flex justify-between">
 					<Button variant="outline" onClick={() => redirect(`/analytics/${id}`)}>

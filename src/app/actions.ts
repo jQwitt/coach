@@ -6,13 +6,7 @@ import {
 	deleteCurrentUser as deleteCurrentUserAction,
 	getCurrentUser as getCurrentUserAction,
 } from "../actions/user";
-import {
-	createWorkoutByUser as createWorkoutForUserAction,
-	getWorkout as getWorkoutByIdAction,
-	getWorkouts as getWorkoutsAction,
-	getWorkoutsInRange as getWorkoutsInRangeAction,
-	getWorkoutsSince as getWorkoutsSinceAction,
-} from "../actions/workouts";
+import { getWorkouts as getWorkoutsAction } from "../actions/workouts";
 import { saveWorkoutLifting as saveWorkoutLiftingAction } from "../actions/workouts/log-workout";
 
 // USER ACTIONS
@@ -24,10 +18,6 @@ export const deleteCurrentUser = deleteCurrentUserAction;
 export const getExercises = getExercisesAction;
 
 // WORKOUT ACTIONS
-export const createWorkoutForUser = createWorkoutForUserAction;
 export const getWorkouts = getWorkoutsAction;
-export const getWorkoutsSince = getWorkoutsSinceAction;
-export const getWorkoutsInRange = getWorkoutsInRangeAction;
-export const getWorkoutById = getWorkoutByIdAction;
 
 export const saveWorkoutLifting = saveWorkoutLiftingAction;
