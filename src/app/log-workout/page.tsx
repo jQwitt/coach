@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 export default function LogWorkout() {
 	const workout = {
 		className:
-			"group p-4 items-center flex gap-2 hover:bg-gray-100 tracking-normal hover:tracking-widest transition-all ease-out duration-200",
+			"group p-4 items-center flex gap-2 hover:bg-gray-100 tracking-normal sm:hover:tracking-widest transition-all ease-out duration-200",
 		icon: {
 			className: "h-12 w-12 stroke-[2.5px] mr-2",
 		},

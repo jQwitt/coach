@@ -11,6 +11,7 @@ interface VerticalScrollWheelProps {
 	id?: string;
 	onChange?: (value: number) => void;
 	className?: string;
+	inputMode?: "numeric" | "decimal";
 }
 
 export function VerticalScrollWheel({
@@ -21,6 +22,7 @@ export function VerticalScrollWheel({
 	id,
 	onChange,
 	className = "",
+	inputMode = "numeric",
 }: VerticalScrollWheelProps) {
 	const [value, setValue] = React.useState(defaultValue);
 	const [isFocused, setIsFocused] = React.useState(false);
@@ -123,7 +125,7 @@ export function VerticalScrollWheel({
 				aria-valuemax={max}
 				aria-valuenow={value}
 				onChange={handleChange}
-				inputMode="numeric"
+				inputMode={inputMode}
 				value={value}
 				id={id}
 			/>

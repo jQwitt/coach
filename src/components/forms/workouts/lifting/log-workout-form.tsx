@@ -169,6 +169,7 @@ export default function LogWorkoutLiftingForm() {
 								min={0}
 								max={1000}
 								onChange={(value) => updateExerciseSets(exerciseLast, setsLast, { weight: value })}
+								inputMode="decimal"
 							/>
 						</div>
 					</div>
