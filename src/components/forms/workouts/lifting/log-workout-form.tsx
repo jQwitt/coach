@@ -2,6 +2,7 @@
 
 import * as React from "react";
 
+import { saveWorkoutLifting } from "@/app/actions";
 import { heading } from "@/app/fonts";
 import { VerticalScrollWheel } from "@/components/controls/select-wheel";
 import { Button } from "@/components/ui/button";
@@ -10,12 +11,13 @@ import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/
 import Header, { HeaderLevel } from "@/components/ui/header";
 import useWorkoutStore from "@/hooks/stores/use-workout";
 import { useToast } from "@/hooks/use-toast";
-import { Check, Edit3, Plus } from "lucide-react";
+import { fromIso, timeStamp } from "@/lib/encoding";
+import { Check, Edit3, Loader2, Plus } from "lucide-react";
 import PreviousExerciseCard from "./previous-exercise-card";
 
 export default function LogWorkoutLiftingForm() {
 	const {
-		workout: { name, exercises },
+		workout,
 		setWorkoutName,
 		addEmptyExercise,
 		updateExerciseSets,
@@ -35,6 +37,10 @@ export default function LogWorkoutLiftingForm() {
 		[toast],
 	);
 
+	const [timeStarted] = React.useState(timeStamp());
+	const [submitting, setSubmitting] = React.useState(false);
+
+	const { name, exercises } = workout;
 	const exerciseLast = exercises.length - 1;
 	const currentExercise = exercises[exerciseLast];
 	const previousExercises = exercises.slice(0, exerciseLast);
@@ -65,23 +71,42 @@ export default function LogWorkoutLiftingForm() {
 		addEmptyExercise();
 	};
 
-	const handleSubmitStart = (e: React.FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
+	const handleSubmitStart = (e: React.MouseEvent<HTMLButtonElement>) => {
+		if (!name.length) {
+			toastError("Please add a name to your workout before finishing!");
+			e.preventDefault();
+		}
+	};
 
-		console.log(previousExercises);
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		setSubmitting(true);
+
+		const timeCompleted = timeStamp();
+		const date = timeCompleted.split("T")[0];
+		const duration = (
+			(fromIso(timeCompleted).getTime() - fromIso(timeStarted).getTime()) /
+			(1000 * 60)
+		).toPrecision(2);
+
+		await saveWorkoutLifting({
+			name,
+			exercises: previousExercises, // only include exercises "added" manually
+			timeStarted,
+			timeCompleted,
+			date,
+			duration,
+		});
+		setSubmitting(false);
 	};
 
 	return (
-		<form
-			className="flex flex-col gap-4"
-			onSubmit={handleSubmitStart}
-			id="log-workout-lifting-form"
-		>
+		<form className="flex flex-col gap-4" onSubmit={handleSubmit} id="log-workout-lifting-form">
 			<div className="relative">
 				<input
 					type="text"
 					className={`${heading.className} peer w-full border-b-2 border-gray-200 pb-1 pt-3 text-2xl text-primary placeholder-primary transition-colors focus:border-primary focus:text-gray-400 focus:placeholder-gray-400 focus:outline-none`}
-					placeholder="Workout Name"
+					placeholder="Add a Workout Name"
 					onChange={(e) => {
 						setWorkoutName(e.target.value);
 					}}
@@ -170,7 +195,7 @@ export default function LogWorkoutLiftingForm() {
 
 				<Dialog>
 					<DialogTrigger asChild>
-						<Button type="button" className="w-full">
+						<Button type="button" className="w-full" onClick={handleSubmitStart}>
 							<Check className="h-4 w-4" />
 							Finish Workout
 						</Button>
@@ -178,8 +203,25 @@ export default function LogWorkoutLiftingForm() {
 					<DialogTitle className="hidden">Workout Summary</DialogTitle>
 					<DialogContent className="max-w-[80%] sm:max-w-[50%] rounded-lg">
 						<Header title="Workout Summary" level={HeaderLevel.SECTION} />
-						<Button type="submit" form="log-workout-lifting-form" className="w-full">
-							Save
+						<div>
+							{previousExercises.map(({ name, sets }, index) => (
+								<div key={`previous-exercise-${index}`} className="w-full flex justify-between">
+									<p>{name}</p>
+									{sets.map(({ count, reps, weight }, index) => (
+										<p key={`set-${index}`}>
+											{count} x {reps} @ {weight}
+										</p>
+									))}
+								</div>
+							))}
+						</div>
+						<Button
+							type="submit"
+							form="log-workout-lifting-form"
+							className="w-full"
+							disabled={submitting}
+						>
+							{submitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <p>Save Workout</p>}
 						</Button>
 					</DialogContent>
 				</Dialog>
