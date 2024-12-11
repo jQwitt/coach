@@ -1,4 +1,4 @@
-import { getTagsForUser } from "@/actions/tags";
+import { getExercises } from "@/actions/exercises";
 import { getCurrentUser } from "@/app/actions";
 import UserControls from "@/components/blocks/user-controls";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -6,8 +6,8 @@ import Header, { HeaderLevel } from "@/components/ui/header";
 import UserData from "./components/user-data";
 
 export default async function Profile() {
-	const { id, firstName, lastName, email, exerciseNames } = (await getCurrentUser()) || {};
-	const tagCollections = id ? await getTagsForUser({ userId: id }) : [];
+	const { firstName, lastName, email } = (await getCurrentUser()) || {};
+	const exercises = await getExercises();
 
 	return (
 		<div className="flex flex-col gap-4">
@@ -28,7 +28,7 @@ export default async function Profile() {
 					<Header title="Data" level={HeaderLevel.SECTION} />
 				</CardHeader>
 				<CardContent>
-					<UserData exerciseNames={exerciseNames ?? []} tags={tagCollections} />
+					<UserData exerciseNames={exercises.map(({ name }) => name) ?? []} />
 				</CardContent>
 			</Card>
 			<Card>

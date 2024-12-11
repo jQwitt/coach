@@ -1,4 +1,4 @@
-import type { UserExerciseLifting } from "@/lib/types";
+import type { MuscleGroups, MusclesDetailed, UserExerciseLifting } from "@/lib/types";
 import { and, eq } from "drizzle-orm";
 import db from "..";
 import schema from "../schema";
@@ -19,15 +19,21 @@ export async function getExercisesByUser({ userId }: { userId: number }) {
 export async function createExerciseForUser({
 	userId,
 	name,
+	primaryTarget,
+	detailedTargets,
 }: {
 	userId: number;
 	name: string;
+	primaryTarget: MuscleGroups;
+	detailedTargets: MusclesDetailed[];
 }) {
 	const result = await db
 		.insert(schema.user_lifting_exercises_table)
 		.values({
 			userId,
 			name,
+			primaryTarget,
+			detailedTargets,
 		})
 		.returning();
 
@@ -39,15 +45,19 @@ export async function createExerciseForUser({
 	return true;
 }
 
-export async function updateExerciseForUser(data: UserExerciseLifting) {
-	const { name, oneRepMaxes, timesLogged, userId, id } = data;
+export async function updateExerciseForUser({
+	id,
+	data,
+}: { id: number; data: Partial<UserExerciseLifting> }) {
+	const { userId } = data;
+	if (!userId) {
+		return false;
+	}
 
 	const result = await db
 		.update(schema.user_lifting_exercises_table)
 		.set({
-			name,
-			oneRepMaxes,
-			timesLogged,
+			...data,
 		})
 		.where(
 			and(

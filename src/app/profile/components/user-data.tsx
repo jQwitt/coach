@@ -9,13 +9,9 @@ import {
 	DialogTrigger,
 } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
-import type { UserTag } from "@/lib/types";
 import * as React from "react";
 
-export default function UserData({
-	exerciseNames,
-	tags,
-}: { exerciseNames: string[]; tags: UserTag[] }) {
+export default function UserData({ exerciseNames }: { exerciseNames: string[] }) {
 	const [isMounted, setIsMounted] = React.useState(false);
 	React.useEffect(() => {
 		setIsMounted(true);
@@ -40,25 +36,6 @@ export default function UserData({
 								<p key={name}>{name}</p>
 							))}
 							{exerciseNames.length === 0 ? <p>No names</p> : null}
-						</DialogDescription>
-					</DialogContent>
-				</Dialog>
-			</div>
-			<div className="flex justify-between items-center" suppressHydrationWarning>
-				<p className="text-muted-foreground text-sm">Tag Collections</p>
-				<Dialog>
-					<DialogTrigger asChild>
-						<Button size="sm" variant="outline">
-							View
-						</Button>
-					</DialogTrigger>
-					<DialogContent>
-						<DialogTitle>Tags</DialogTitle>
-						<DialogDescription>
-							{tags?.map(({ name }) => (
-								<p key={name}>{name}</p>
-							))}
-							{tags.length === 0 ? <p>No user tags</p> : null}
 						</DialogDescription>
 					</DialogContent>
 				</Dialog>
