@@ -26,6 +26,10 @@ export type MusclesDetailed =
 	| "Glutes";
 
 // Client Data Types
+export type WorkoutLiftingData = {
+	name: string;
+	exercises: ExerciseData[];
+};
 export type ExerciseData = {
 	name: string;
 	sets: ExerciseSetData[];
@@ -39,12 +43,4 @@ export type ExerciseSetData = {
 export type ExerciseSetMetadata = {
 	toFailure?: boolean;
 	unilateral?: boolean;
-};
-
-export type WorkoutLiftingData = Omit<WorkoutLifting, "id" | "userId" | "exercisesSerial"> & {
-	exercisesSerial: ExerciseData[];
-};
-
-export type WorkoutLiftingDataWithID = Omit<WorkoutLifting, "userId" | "exercisesSerial"> & {
-	exercisesSerial: ExerciseData[];
 };

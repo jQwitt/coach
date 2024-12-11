@@ -1,10 +1,10 @@
 import { create } from "zustand";
 
-import type { Exercise, ExerciseSet, WorkoutLiftingDataWithoutDate } from "@/lib/types";
+import type { ExerciseData, ExerciseSetData, WorkoutLiftingData } from "@/lib/types";
 import { hasForbiddenCharacters } from "@/lib/utils";
 
 interface WorkoutState {
-	workout: WorkoutLiftingDataWithoutDate;
+	workout: Omit<WorkoutLiftingData, "date">;
 	reset: () => void;
 	setWorkoutName: (name: string) => void;
 	addEmptyExercise: () => void;
@@ -12,7 +12,7 @@ interface WorkoutState {
 	updateExerciseName: (index: number, name: string) => void;
 	addSetToExercise: (index: number) => void;
 	removeSetFromExercise: (index: number) => void;
-	updateExerciseSets: (index: number, setIndex: number, values: Partial<ExerciseSet>) => void;
+	updateExerciseSets: (index: number, setIndex: number, values: Partial<ExerciseSetData>) => void;
 }
 
 const initialSet = {
@@ -20,18 +20,17 @@ const initialSet = {
 	reps: 0,
 	weight: 0,
 	metadata: {},
-} satisfies ExerciseSet;
+} satisfies ExerciseSetData;
 
 const initialExercise = {
 	name: "",
 	sets: [{ ...initialSet }],
-} satisfies Exercise;
+} satisfies ExerciseData;
 
 const initialWorkout = {
 	name: "",
 	exercises: [{ ...initialExercise }],
-	tags: [],
-} satisfies WorkoutLiftingDataWithoutDate;
+} satisfies WorkoutLiftingData;
 
 const useWorkoutStore = create<WorkoutState>()(
 	(set) =>
@@ -62,7 +61,7 @@ const useWorkoutStore = create<WorkoutState>()(
 			// EXERCISE
 			addEmptyExercise: () => {
 				set((state) => {
-					const toAdd = { ...initialExercise, sets: [{ ...initialSet }] } satisfies Exercise;
+					const toAdd = { ...initialExercise, sets: [{ ...initialSet }] } satisfies ExerciseData;
 					const exercises = [
 						...state.workout.exercises.map((e) => ({
 							...e,
@@ -153,7 +152,7 @@ const useWorkoutStore = create<WorkoutState>()(
 					};
 				});
 			},
-			updateExerciseSets: (index: number, setIndex: number, values: Partial<ExerciseSet>) => {
+			updateExerciseSets: (index: number, setIndex: number, values: Partial<ExerciseSetData>) => {
 				set((state) => {
 					const exercises = [...(state.workout.exercises ?? [])];
 

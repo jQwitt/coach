@@ -23,7 +23,6 @@ export const workouts_lifting_table = pgTable("WorkoutsLifting", {
 	timeStarted: date().notNull(),
 	timeCompleted: date().notNull(),
 	duration: varchar({ length: 50 }).notNull(),
-	exercisesSerial: varchar({ length: 255 }).array().notNull(),
 });
 
 export const workouts_lifting_relations = relations(workouts_lifting_table, ({ many }) => ({

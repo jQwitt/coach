@@ -7,7 +7,7 @@ import Header, { HeaderLevel } from "@/components/ui/header";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import useWorkoutStore from "@/hooks/stores/use-workout";
-import type { ExerciseSet } from "@/lib/types";
+import type { ExerciseSetData } from "@/lib/types";
 
 export default function SetsForm({
 	index,
@@ -18,14 +18,14 @@ export default function SetsForm({
 	index: number;
 	addSet: (index: number) => void;
 	removeSet: (index: number) => void;
-	updateSet: (index: number, setIndex: number, value: Partial<ExerciseSet>) => void;
+	updateSet: (index: number, setIndex: number, value: Partial<ExerciseSetData>) => void;
 }) {
 	const { workout } = useWorkoutStore();
 	const data = workout.exercises[index].sets;
 
 	const handleUpdate = (
 		setIndex: number,
-		{ key, value }: { key: keyof Omit<ExerciseSet, "metadata">; value: string },
+		{ key, value }: { key: keyof Omit<ExerciseSetData, "metadata">; value: string },
 	) => {
 		const cast = Number(value);
 		if (!Number.isNaN(cast)) {
