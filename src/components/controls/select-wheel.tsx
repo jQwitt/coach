@@ -10,7 +10,7 @@ interface VerticalScrollWheelProps {
 	step?: number;
 	id?: string;
 	onChange?: (value: number) => void;
-	className: string;
+	className?: string;
 }
 
 export function VerticalScrollWheel({
@@ -20,7 +20,7 @@ export function VerticalScrollWheel({
 	step = 1,
 	id,
 	onChange,
-	className,
+	className = "",
 }: VerticalScrollWheelProps) {
 	const [value, setValue] = React.useState(defaultValue);
 	const [isFocused, setIsFocused] = React.useState(false);

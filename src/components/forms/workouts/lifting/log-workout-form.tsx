@@ -1,5 +1,7 @@
 "use client";
 
+import * as React from "react";
+
 import { heading } from "@/app/fonts";
 import { VerticalScrollWheel } from "@/components/controls/select-wheel";
 import { Button } from "@/components/ui/button";
@@ -7,6 +9,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import Header, { HeaderLevel } from "@/components/ui/header";
 import useWorkoutStore from "@/hooks/stores/use-workout";
+import { useToast } from "@/hooks/use-toast";
 import { Check, Edit3, Plus } from "lucide-react";
 import PreviousExerciseCard from "./previous-exercise-card";
 
@@ -20,6 +23,18 @@ export default function LogWorkoutLiftingForm() {
 		removeExercise,
 	} = useWorkoutStore();
 
+	const { toast, dismiss, toasts } = useToast();
+	const toastError = React.useCallback(
+		(description: string) => {
+			toast({
+				title: "Whoops!",
+				description,
+				variant: "destructive",
+			});
+		},
+		[toast],
+	);
+
 	const exerciseLast = exercises.length - 1;
 	const currentExercise = exercises[exerciseLast];
 	const previousExercises = exercises.slice(0, exerciseLast);
@@ -27,6 +42,28 @@ export default function LogWorkoutLiftingForm() {
 	const setsLast = sets.length - 1;
 	const currentSet = sets[setsLast];
 	const { count, reps, weight } = currentSet;
+
+	const handleAddExercise = () => {
+		const { name, sets } = currentExercise;
+		if (!name.length) {
+			toastError("Please add a name to your exercise before saving.");
+			return;
+		}
+
+		for (const { count, reps } of sets) {
+			if (count < 1) {
+				toastError("Please add at least one set to your exercise before saving.");
+				return;
+			}
+			if (reps < 1) {
+				toastError("Please add at least one rep to your current set before saving.");
+				return;
+			}
+		}
+
+		dismiss(toasts[0]?.id);
+		addEmptyExercise();
+	};
 
 	const handleSubmitStart = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -125,7 +162,7 @@ export default function LogWorkoutLiftingForm() {
 					variant="outline"
 					className="w-full"
 					disabled={exercises.length >= 11}
-					onClick={() => addEmptyExercise()}
+					onClick={handleAddExercise}
 				>
 					<Plus className="h-4 w-4" />
 					Add to Workout
