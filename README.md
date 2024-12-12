@@ -4,11 +4,15 @@
 
 ### Develop 
 
-```json
-// set the environment, then run in dev mode
+```zsh
+# set the environment, then run in dev mode
 nvm use && pnpm i && pnpm dev
 
-// to 
+# to run checks (also run on commit / push)
+pnpm check && pnpm lint
+
+# to run tests
+pnpm cy:component 
 ```
 
 To run the debug profile from VS Code, navigate to `"Run and Debug"` and select the desired profile.
