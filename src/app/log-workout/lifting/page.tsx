@@ -52,6 +52,7 @@ export default function LogWorkoutLifting() {
 				<div className="lg:col-span-4 sm:col-span-2">
 					<LogWorkoutLiftingForm />
 				</div>
+
 				<div className="lg:col-span-5 sm:col-span-1">{/* <WorkoutVisualizer /> */}</div>
 				<div className="lg:col-span-4 sm:col-span-1">{/* <WorkoutPreviousExercises /> */}</div>
 				<div className="lg:col-span-4 sm:col-span-2">{/* <WorkoutStats /> */}</div>

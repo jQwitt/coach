@@ -12,7 +12,7 @@ export default function PreviousExerciseCard({
 	const { name, sets } = exercise;
 
 	return (
-		<Card {...props}>
+		<Card {...props} className="w-[40%]">
 			<CardContent className="group flex flex-col justify-between gap-1 -m-2 mt-2 relative pr-16">
 				<Button
 					className="absolute -top-3 right-1 hidden group-hover:flex"

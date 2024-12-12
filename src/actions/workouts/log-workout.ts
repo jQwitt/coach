@@ -38,7 +38,6 @@ export async function saveWorkoutLifting(
 				userId,
 				name,
 				...timing,
-				duration: "",
 			})
 			.returning({
 				id: schema.workouts_lifting_table.id,
