@@ -3,9 +3,9 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader } from "@/components/ui/card";
 import Header, { HeaderLevel } from "@/components/ui/header";
-import { formatDuration, fromIso, getDateParts } from "@/lib/encoding";
+import { fromIso, getDateParts } from "@/lib/encoding";
 import type { WorkoutLifting } from "@/lib/types";
-import { ArrowRight, Calendar, Clock, Hourglass } from "lucide-react";
+import { ArrowRight, Calendar, Clock } from "lucide-react";
 import { redirect } from "next/navigation";
 
 export default function WorkoutCard({
@@ -13,10 +13,9 @@ export default function WorkoutCard({
 }: {
 	data: WorkoutLifting;
 }) {
-	const { id, name, timeCompleted, duration } = data;
+	const { id, name, timeCompleted } = data;
 
 	const { numericDayMonthYear, hours } = getDateParts(fromIso(timeCompleted));
-	const formattedDuration = formatDuration(duration);
 
 	return (
 		<Card className="relative">
@@ -28,8 +27,6 @@ export default function WorkoutCard({
 						<p className="text-sm text-muted-foreground">{numericDayMonthYear}</p>
 						<Clock className="h-4 w-4" />
 						<p className="text-sm text-muted-foreground">{hours}</p>
-						<Hourglass className="h-4 w-4" />
-						<p className="text-sm text-muted-foreground">{formattedDuration}</p>
 					</div>
 				</div>
 				<Button onClick={() => redirect(`/analytics/${id}`)} variant="secondary" className="group">

@@ -93,3 +93,38 @@ export async function deleteExerciseForUser({ userId, id }: { userId: number; id
 
 	return true;
 }
+
+export async function getExercisesByWorkoutId({
+	userId,
+	workoutId,
+}: { userId: number; workoutId: number }) {
+	const result = await db
+		.select({
+			name: schema.user_lifting_exercises_table.name,
+			totalSets: schema.workouts_lifting_exercises_table.totalSets,
+			totalReps: schema.workouts_lifting_exercises_table.totalReps,
+			maxWeight: schema.workouts_lifting_exercises_table.maxWeight,
+			serializedSetData: schema.workouts_lifting_exercises_table.serializedSetData,
+		})
+		.from(schema.workouts_lifting_exercises_table)
+		.where(
+			and(
+				eq(schema.workouts_lifting_exercises_table.userId, userId),
+				eq(schema.workouts_lifting_exercises_table.workoutId, workoutId),
+			),
+		)
+		.leftJoin(
+			schema.user_lifting_exercises_table,
+			eq(
+				schema.workouts_lifting_exercises_table.exerciseId,
+				schema.user_lifting_exercises_table.id,
+			),
+		);
+
+	if (!result) {
+		console.log(`No workout with id: ${workoutId}!`);
+		return null;
+	}
+
+	return result;
+}

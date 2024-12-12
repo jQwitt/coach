@@ -96,3 +96,26 @@ export function formatDuration(minutes: string, options?: { detailed: boolean })
 
 	return `${m}m ${options?.detailed ? `${Math.floor(Number(s) * 60)}s` : ""}`;
 }
+
+export function getLongWeekday(weekday: string) {
+	switch (weekday) {
+		case "Mon":
+			return "Monday";
+		case "Tue":
+			return "Tuesday";
+		case "Wed":
+			return "Wednesday";
+		case "Thu":
+			return "Thursday";
+		case "Fri":
+			return "Friday";
+		case "Sat":
+			return "Saturday";
+		case "Sun":
+			return "Sunday";
+	}
+}
+
+export function formatHours(hours: string) {
+	return `${hours[0] === "0" ? "" : hours[0]}${hours.slice(1)}`;
+}

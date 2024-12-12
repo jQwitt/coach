@@ -1,7 +1,10 @@
-import { getWorkout } from "@/app/actions";
+import { getExercisesForWorkout, getWorkout } from "@/app/actions";
+import { Card, CardFooter, CardHeader } from "@/components/ui/card";
 import Header, { HeaderLevel } from "@/components/ui/header";
-import { fromIso, getDateParts } from "@/lib/encoding";
-import { Calendar, CalendarDays, Clock } from "lucide-react";
+import { formatDuration, formatHours, fromIso, getDateParts, getLongWeekday } from "@/lib/encoding";
+import { CalendarDays, Clock, Hash, Hourglass } from "lucide-react";
+import PageControls from "./components/page-controls";
+import WorkoutExerciseList from "./components/workout-exercise-list";
 import type { PageProps } from ".next/types/app/page";
 
 export default async function WorkoutAnalyticsPage({
@@ -10,31 +13,58 @@ export default async function WorkoutAnalyticsPage({
 	params: { workoutId: string };
 } & PageProps) {
 	const { workoutId } = await params;
-	const workout = await getWorkout({ id: workoutId });
+	const workout = await getWorkout({ workoutId });
+	const workoutExercises = await getExercisesForWorkout({ workoutId });
 
 	if (!workout || !workout.name) {
 		return <div>Error</div>;
 	}
 
-	const { name, date } = workout;
-	const { month, weekday, hours } = getDateParts(fromIso(date ?? ""));
+	const { name, timeCompleted, duration } = workout;
+	const { month, weekday, hours, numericDay, year } = getDateParts(fromIso(timeCompleted));
 
 	return (
-		<div>
+		<div className="space-y-4">
+			<PageControls />
 			<Header title={name} level={HeaderLevel.PAGE} />
 			<div className="space-y-2">
 				<div className="flex items-center gap-2">
-					<Calendar size={16} />
-					<p>{month}</p>
-				</div>
-				<div className="flex items-center gap-2">
 					<CalendarDays size={16} />
-					<p>{weekday}</p>
+					<p>{`${getLongWeekday(weekday)}, ${month} ${numericDay} ${year}`}</p>
 				</div>
 				<div className="flex items-center gap-2">
 					<Clock size={16} />
-					<p>{`${hours[0] === "0" ? "" : hours[0]}${hours.slice(1)}`}</p>
+					<p>{formatHours(hours)}</p>
 				</div>
+			</div>
+			<Header title="Insights" level={HeaderLevel.SECTION} />
+			<div className="grid grid-cols-3 md:grid-cols-6 gap-2 items-stretch">
+				<Card className="relative overflow-clip col-span-1">
+					<CardHeader className="flex flex-row items-center gap-2">
+						<Header title="Duration" level={HeaderLevel.SUB_SECTION} />
+					</CardHeader>
+					<CardFooter>
+						<p className="text-3xl font-semibold">{formatDuration(duration)}</p>
+					</CardFooter>
+					<div className="absolute -right-4 -bottom-4 opacity-10">
+						<Hourglass size={96} />
+					</div>
+				</Card>
+				<Card className="relative overflow-clip col-span-1">
+					<CardHeader className="flex flex-row items-center gap-2">
+						<Header title="Exercises" level={HeaderLevel.SUB_SECTION} />
+					</CardHeader>
+					<CardFooter>
+						<p className="text-3xl font-semibold">{workoutExercises?.length}</p>
+					</CardFooter>
+					<div className="absolute -right-4 -bottom-4 opacity-10">
+						<Hash size={96} />
+					</div>
+				</Card>
+			</div>
+			<Header title="Exercises" level={HeaderLevel.SECTION} />
+			<div>
+				<WorkoutExerciseList exercises={workoutExercises} />
 			</div>
 		</div>
 	);

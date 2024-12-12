@@ -13,12 +13,12 @@ export async function getWorkouts() {
 	return await getWorkoutsByUser({ userId });
 }
 
-export async function getWorkout({ id }: { id: string }) {
+export async function getWorkout({ workoutId }: { workoutId: string }) {
 	const { id: userId } = (await getCurrentUser()) ?? {};
 
 	if (!userId) {
 		return null;
 	}
 
-	return await getWorkoutById({ userId, id: Number(id) });
+	return await getWorkoutById({ userId, id: Number(workoutId) });
 }
