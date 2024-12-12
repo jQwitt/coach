@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { date, integer, pgTable, primaryKey, varchar } from "drizzle-orm/pg-core";
+import { integer, pgTable, primaryKey, varchar } from "drizzle-orm/pg-core";
 import { user_lifting_exercises_table } from "./exercises";
 import { user_tag_table } from "./tags";
 import { users_table } from "./users";
@@ -19,10 +19,10 @@ export const workouts_lifting_table = pgTable("WorkoutsLifting", {
 
 	// data fields
 	name: varchar({ length: 255 }).notNull(),
-	date: date().notNull(),
-	timeStarted: date().notNull(),
-	timeCompleted: date().notNull(),
-	duration: varchar({ length: 50 }).notNull(),
+	date: varchar({ length: 12 }).notNull(),
+	timeStarted: varchar({ length: 30 }).notNull(),
+	timeCompleted: varchar({ length: 30 }).notNull(),
+	duration: varchar({ length: 5 }).notNull(),
 });
 
 export const workouts_lifting_relations = relations(workouts_lifting_table, ({ many }) => ({

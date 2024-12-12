@@ -13,6 +13,7 @@ import useWorkoutStore from "@/hooks/stores/use-workout";
 import { useToast } from "@/hooks/use-toast";
 import { fromIso, timeStamp } from "@/lib/encoding";
 import { Check, Edit3, Loader2, Plus } from "lucide-react";
+import { redirect } from "next/navigation";
 import PreviousExerciseCard from "./previous-exercise-card";
 
 export default function LogWorkoutLiftingForm() {
@@ -82,6 +83,12 @@ export default function LogWorkoutLiftingForm() {
 		e.preventDefault();
 		setSubmitting(true);
 
+		// if the server fails to save, don't block a retry
+		const retry = setTimeout(() => {
+			setSubmitting(false);
+			toastError("Something went wrong on our end, please try again.");
+		}, 5000);
+
 		const timeCompleted = timeStamp();
 		const date = timeCompleted.split("T")[0];
 		const duration = (
@@ -97,7 +104,9 @@ export default function LogWorkoutLiftingForm() {
 			date,
 			duration,
 		});
-		setSubmitting(false);
+
+		clearTimeout(retry);
+		redirect("/dashboard");
 	};
 
 	return (
