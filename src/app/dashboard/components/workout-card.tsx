@@ -1,27 +1,22 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardFooter, CardHeader } from "@/components/ui/card";
+import { Card, CardHeader } from "@/components/ui/card";
 import Header, { HeaderLevel } from "@/components/ui/header";
-import { fromIso, getDateParts } from "@/lib/encoding";
+import { formatDuration, fromIso, getDateParts } from "@/lib/encoding";
 import type { WorkoutLifting } from "@/lib/types";
-import { ArrowRight, Calendar, ChevronDown, Clock, Edit, X } from "lucide-react";
+import { ArrowRight, Calendar, Clock, Hourglass } from "lucide-react";
 import { redirect } from "next/navigation";
-import * as React from "react";
 
 export default function WorkoutCard({
 	data,
 }: {
 	data: WorkoutLifting;
 }) {
-	const [details, setDetails] = React.useState(false);
+	const { id, name, timeCompleted, duration } = data;
 
-	const { name, date, id } = data;
-	if (!name || !date) {
-		return null;
-	}
-
-	const { numericDayMonthYear, hours } = getDateParts(fromIso(date));
+	const { numericDayMonthYear, hours } = getDateParts(fromIso(timeCompleted));
+	const formattedDuration = formatDuration(duration);
 
 	return (
 		<Card className="relative">
@@ -33,24 +28,15 @@ export default function WorkoutCard({
 						<p className="text-sm text-muted-foreground">{numericDayMonthYear}</p>
 						<Clock className="h-4 w-4" />
 						<p className="text-sm text-muted-foreground">{hours}</p>
+						<Hourglass className="h-4 w-4" />
+						<p className="text-sm text-muted-foreground">{formattedDuration}</p>
 					</div>
 				</div>
-				<Button variant="ghost" onClick={() => setDetails(!details)}>
-					{details ? <X /> : <ChevronDown />}
+				<Button onClick={() => redirect(`/analytics/${id}`)} variant="secondary" className="group">
+					Analytics
+					<ArrowRight className="group-hover:translate-x-1 transition-all ease-in duration-100" />
 				</Button>
 			</CardHeader>
-			{details && (
-				<CardFooter className="flex justify-between">
-					<Button variant="outline" onClick={() => redirect(`/analytics/${id}`)}>
-						Edit
-						<Edit />
-					</Button>
-					<Button onClick={() => redirect(`/analytics/${id}`)}>
-						View in Analytics
-						<ArrowRight />
-					</Button>
-				</CardFooter>
-			)}
 		</Card>
 	);
 }

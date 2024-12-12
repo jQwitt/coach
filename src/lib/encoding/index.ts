@@ -63,7 +63,7 @@ export const fromIso = (iso: string): Date => {
 
 export const getDateParts = (iso: Date) => {
 	const [numericDayMonthYear, hours] = iso
-		.toLocaleTimeString([], {
+		.toLocaleString([], {
 			year: "numeric",
 			month: "numeric",
 			day: "numeric",
@@ -84,3 +84,15 @@ export const getDateParts = (iso: Date) => {
 		timeZone,
 	};
 };
+
+export function formatDuration(minutes: string, options?: { detailed: boolean }) {
+	const cast = Number(minutes);
+
+	if (Number.isNaN(cast)) {
+		return "";
+	}
+
+	const [m, s] = minutes.split(".");
+
+	return `${m}m ${options?.detailed ? `${Math.floor(Number(s) * 60)}s` : ""}`;
+}

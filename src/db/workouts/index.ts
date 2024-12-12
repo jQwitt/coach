@@ -3,7 +3,7 @@ import db from "..";
 export async function getWorkoutsByUser({ userId }: { userId: number }) {
 	const workouts = await db.query.workouts_lifting_table.findMany({
 		where: (workouts, { eq }) => eq(workouts.userId, userId),
-		orderBy: (workouts, { desc }) => desc(workouts.date),
+		orderBy: (workouts, { desc }) => desc(workouts.timeCompleted),
 	});
 
 	if (!workouts) {
