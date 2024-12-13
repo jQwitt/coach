@@ -14,7 +14,6 @@ import { useToast } from "@/hooks/use-toast";
 import { fromIso, timeStamp } from "@/lib/encoding";
 import { Check, Edit3, Loader2, Plus } from "lucide-react";
 import { redirect } from "next/navigation";
-import PreviousExerciseCard from "./previous-exercise-card";
 
 export default function LogWorkoutLiftingForm() {
 	const {
@@ -235,26 +234,6 @@ export default function LogWorkoutLiftingForm() {
 						</Button>
 					</DialogContent>
 				</Dialog>
-			</div>
-			<div>
-				<Header title="Previous Exercises" level={HeaderLevel.SECTION} />
-				{previousExercises.length === 0 ? (
-					<div className="text-center my-6">
-						<p className="text-sm text-muted-foreground">
-							Exercises will appear here as you log them!
-						</p>
-					</div>
-				) : (
-					<div className="flex gap-2 overflow-x-scroll py-4">
-						{previousExercises.map((exercise, index) => (
-							<PreviousExerciseCard
-								key={`previous-exercise-${exercise.name}`}
-								exercise={exercise}
-								onRemove={() => removeExercise(index)}
-							/>
-						))}
-					</div>
-				)}
 			</div>
 		</form>
 	);

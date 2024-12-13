@@ -1,23 +1,16 @@
 "use client";
 
 import Image from "next/image";
-import * as React from "react";
 import Barbell from "../../../../public/images/dumbbell_black.png";
 
 import LogWorkoutLiftingForm from "@/components/forms/workouts/lifting/log-workout-form";
-import { Button } from "@/components/ui/button";
 import Header from "@/components/ui/header";
-
-enum Views {
-	CURRENT_WORKOUT = "current-workout",
-	STATS = "stats",
-}
+import PreviousExcersises from "./components/previous-exercises";
+import WorkoutVisualizer from "./components/workout-visualizer";
 
 export default function LogWorkoutLifting() {
-	const [view, setView] = React.useState<Views>(Views.CURRENT_WORKOUT);
-
 	return (
-		<div className=" max-w-4xl p-4 text-primary -mx-4">
+		<div className="max-w-4xl p-4 text-primary mx-auto">
 			<div className="items-center hidden md:flex">
 				<Image
 					src={Barbell}
@@ -29,33 +22,16 @@ export default function LogWorkoutLifting() {
 				<Header title="Weights" />
 			</div>
 
-			<div className="fixed bottom-0 right-0 justify-end p-4 gap-2 w-full md:hidden flex">
-				<Button
-					variant={"outline"}
-					className="w-1/2"
-					disabled={view === Views.CURRENT_WORKOUT}
-					onClick={() => setView(Views.CURRENT_WORKOUT)}
-				>
-					Your Workout
-				</Button>
-				<Button
-					variant={"outline"}
-					className="w-1/2"
-					disabled={view === Views.STATS}
-					onClick={() => setView(Views.STATS)}
-				>
-					Stats
-				</Button>
-			</div>
-
-			<div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-8">
-				<div className="lg:col-span-4 sm:col-span-2">
+			<div className="grid grid-cols-1 gap-x-4 gap-y-10 md:gap-y-4 md:grid-cols-9">
+				<div className="md:col-span-5 col-span-1">
 					<LogWorkoutLiftingForm />
 				</div>
-
-				<div className="lg:col-span-5 sm:col-span-1">{/* <WorkoutVisualizer /> */}</div>
-				<div className="lg:col-span-4 sm:col-span-1">{/* <WorkoutPreviousExercises /> */}</div>
-				<div className="lg:col-span-4 sm:col-span-2">{/* <WorkoutStats /> */}</div>
+				<div className="lg:col-span-4 md:col-span-3 col-span-1 sm:row-start-2">
+					<PreviousExcersises />
+				</div>
+				<div className="md:col-span-4 col-span-1">
+					<WorkoutVisualizer />
+				</div>
 			</div>
 		</div>
 	);
