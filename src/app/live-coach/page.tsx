@@ -1,6 +1,6 @@
 import { getCurrentUser } from "@/app/actions";
-import LiveCoachMessage from "@/components/messages/live-coach-message";
-import MessageInput from "@/components/messages/message-input";
+import LiveCoachMessage from "@/components/blocks/messages/live-coach-message";
+import MessageInput from "@/components/blocks/messages/message-input";
 import Header from "@/components/ui/header";
 
 export default async function LiveCoachPage() {
