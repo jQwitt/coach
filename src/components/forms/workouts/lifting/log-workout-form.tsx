@@ -4,7 +4,7 @@ import * as React from "react";
 
 import { saveWorkoutLifting } from "@/app/actions";
 import { heading } from "@/app/fonts";
-import { VerticalScrollWheel } from "@/components/controls/select-wheel";
+import { VerticalScrollWheelControlled } from "@/components/forms/workouts/lifting/select-wheel-controlled";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -145,9 +145,9 @@ export default function LogWorkoutLiftingForm() {
 							>
 								Count
 							</label>
-							<VerticalScrollWheel
+							<VerticalScrollWheelControlled
 								id="set-count"
-								defaultValue={count}
+								value={count}
 								max={40}
 								onChange={(value) => updateExerciseSets(exerciseLast, setsLast, { count: value })}
 							/>
@@ -156,9 +156,9 @@ export default function LogWorkoutLiftingForm() {
 							<label className={`${heading.className} tracking-widest text-2xl`} htmlFor="set-reps">
 								Reps.
 							</label>
-							<VerticalScrollWheel
+							<VerticalScrollWheelControlled
 								id="set-reps"
-								defaultValue={reps}
+								value={reps}
 								onChange={(value) => updateExerciseSets(exerciseLast, setsLast, { reps: value })}
 							/>
 						</div>
@@ -169,10 +169,10 @@ export default function LogWorkoutLiftingForm() {
 							>
 								Weight (lbs.)
 							</label>
-							<VerticalScrollWheel
+							<VerticalScrollWheelControlled
 								id="set-weight"
 								className="w-36"
-								defaultValue={weight}
+								value={weight}
 								step={0.5}
 								min={0}
 								max={1000}
