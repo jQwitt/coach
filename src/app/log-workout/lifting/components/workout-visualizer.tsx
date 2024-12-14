@@ -2,6 +2,7 @@
 
 import * as React from "react";
 
+import { HypertrophyRangeChart } from "@/components/charts";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
@@ -11,6 +12,7 @@ import { Line, LineChart } from "recharts";
 import { getRepsPerExercise, getSetsPerExercise } from "../helpers";
 
 enum Views {
+	HYPERTROPHY_RANGE = "hypertrophy-range",
 	TOTAL_REPS_PER_EXERCISE = "total-reps-per-exercise",
 	SETS_PER_EXERCISE = "sets-per-exercise",
 }
@@ -24,6 +26,11 @@ type ChartViews = {
 };
 
 const charts = {
+	[Views.HYPERTROPHY_RANGE]: {
+		label: "Hypertrophy Range",
+		dataKey: "reps",
+		buttonLabel: "Hypertrophy Range",
+	},
 	[Views.TOTAL_REPS_PER_EXERCISE]: {
 		label: "Total Reps per Exercise",
 		dataKey: "reps",
@@ -38,7 +45,7 @@ const charts = {
 
 export default function WorkoutVisualizer() {
 	const { workout } = useWorkoutStore();
-	const [view, setView] = React.useState<Views>(Views.TOTAL_REPS_PER_EXERCISE);
+	const [view, setView] = React.useState<Views>(Views.HYPERTROPHY_RANGE);
 
 	const previousExercises = workout.exercises.slice(0, -1);
 
@@ -60,33 +67,39 @@ export default function WorkoutVisualizer() {
 					</CardTitle>
 				</CardHeader>
 				<CardContent>
-					<ChartContainer
-						config={{
-							rate: {
-								label: charts[view]?.label,
-								color: "hsl(var(--chart-1))",
-							},
-						}}
-						className="h-1/2 w-full"
-					>
-						{data.length > 1 ? (
-							<LineChart data={data}>
-								<Line
-									type="monotone"
-									dataKey={charts[view].dataKey}
-									stroke="var(--color-rate)"
-									strokeWidth={2}
-								/>
-								<ChartTooltip content={<ChartTooltipContent />} />
-							</LineChart>
-						) : (
-							<div className="flex h-full flex-col justify-center">
-								<p className="text-center text-sm text-muted-foreground">
-									Data will be shown here as you workout!
-								</p>
-							</div>
-						)}
-					</ChartContainer>
+					{previousExercises.length > 0 ? (
+						<>
+							{view === Views.HYPERTROPHY_RANGE ? (
+								<HypertrophyRangeChart workout={workout} />
+							) : (
+								<ChartContainer
+									config={{
+										rate: {
+											label: charts[view]?.label,
+											color: "hsl(var(--chart-1))",
+										},
+									}}
+									className="h-1/2 w-full"
+								>
+									<LineChart data={data}>
+										<Line
+											type="monotone"
+											dataKey={charts[view].dataKey}
+											stroke="var(--color-rate)"
+											strokeWidth={2}
+										/>
+										<ChartTooltip content={<ChartTooltipContent />} />
+									</LineChart>
+								</ChartContainer>
+							)}
+						</>
+					) : (
+						<div className="flex min-h-[224px] flex-col justify-center">
+							<p className="text-center text-sm text-muted-foreground">
+								Data will be shown here as you workout!
+							</p>
+						</div>
+					)}
 					<div className="my-4 w-full">
 						<Header title="Views" level={HeaderLevel.SUB_SECTION} />
 						<div className="flex flex-wrap gap-4">
