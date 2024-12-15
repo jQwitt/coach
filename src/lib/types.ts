@@ -50,3 +50,14 @@ export type WorkoutLiftingExerciseData = Omit<
 	WorkoutLiftingExercise,
 	"userId" | "workoutId" | "exerciseId"
 > & { name: string | null };
+
+export type WorkoutAnalytics = {
+	count: number;
+	totalSets: number;
+	totalReps: number;
+	week: {
+		count: number;
+		totalSets: number;
+		totalReps: number;
+	};
+};
