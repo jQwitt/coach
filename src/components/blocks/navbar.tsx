@@ -16,24 +16,24 @@ export default function Navbar() {
 	const isDesktop = useMediaQuery({ query: "(min-width: 640px)" });
 
 	const navItems = [
-		{ name: "Coach", href: "/live-coach", icon: Rocket, selected: path.startsWith("/live-coach") },
+		{ name: "Coach", href: "/live-coach", icon: Rocket, selected: path.includes("/live-coach") },
 		{
 			name: "Dashboard",
 			href: "/dashboard",
 			icon: LayoutDashboard,
-			selected: path.startsWith("/dashboard"),
+			selected: path.includes("/dashboard"),
 		},
 		{
 			name: "Workout",
 			href: "/log-workout",
 			icon: ClipboardCheck,
-			selected: path.startsWith("/log-workout"),
+			selected: path.includes("/log-workout"),
 		},
 		{
 			name: "Analytics",
-			href: "/analytics",
+			href: "/analytics/range/week",
 			icon: BarChart2,
-			selected: path.startsWith("/analytics"),
+			selected: path.includes("/analytics"),
 		},
 		{ name: "Profile", href: "/profile", icon: User, selected: path.startsWith("/profile") },
 	];
@@ -58,7 +58,7 @@ export default function Navbar() {
 								<Link
 									key={item.name}
 									href={item.href}
-									className={`inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-muted-foreground transition duration-150 ease-in-out hover:border-foreground hover:text-foreground ${item.selected ? "border-foreground" : ""}`}
+									className={`inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-muted-foreground transition duration-150 ease-in-out hover:border-foreground hover:text-foreground ${item.selected ? "border-primary" : ""}`}
 								>
 									<item.icon className="mr-2 h-4 w-4" />
 									{item.name}
@@ -94,7 +94,7 @@ export default function Navbar() {
 							key={item.name}
 							href={item.href}
 							onClickCapture={() => setMobileMenuOpen(false)}
-							className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-muted-foreground transition duration-150 ease-in-out hover:border-foreground hover:bg-accent hover:text-foreground"
+							className={`block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-muted-foreground transition duration-150 ease-in-out hover:border-foreground hover:bg-accent hover:text-foreground ${item.selected ? "bg-muted" : ""}`}
 						>
 							<div className="flex items-center">
 								<item.icon className="mr-2 h-4 w-4" />

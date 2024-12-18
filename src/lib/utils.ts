@@ -13,9 +13,3 @@ export function toStringArray(value: ExerciseData[]) {
 export function hasForbiddenCharacters(value: string): boolean {
 	return !/^[A-Z0-9_\.\- ]*$/i.test(value);
 }
-
-export const CardSizes = {
-	SMALL: "col-span-2 lg:col-span-1",
-	MEDIUM: "col-span-3 lg:col-span-2",
-	LARGE: "col-span-6 lg:col-span-4",
-};

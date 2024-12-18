@@ -29,7 +29,11 @@ export default function WorkoutCard({
 						<p className="text-sm text-muted-foreground">{hours}</p>
 					</div>
 				</div>
-				<Button onClick={() => redirect(`/analytics/${id}`)} variant="secondary" className="group">
+				<Button
+					onClick={() => redirect(`/analytics/workout/${id}`)}
+					variant="secondary"
+					className="group"
+				>
 					Analytics
 					<ArrowRight className="group-hover:translate-x-1 transition-all ease-in duration-100" />
 				</Button>

@@ -14,7 +14,7 @@ export default function PageHeader() {
 				/>
 				Back
 			</Button>
-			<Button className="group" onClick={() => redirect("/analytics")}>
+			<Button className="group" onClick={() => redirect("/analytics/range/")}>
 				All Analytics
 				<ArrowRight
 					size={16}

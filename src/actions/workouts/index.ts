@@ -1,10 +1,10 @@
 "use server";
 
+import { toEndOfDay, toStartOfDay } from "@/app/analytics/helpers/date-ranges";
 import {
-	getVolumeSinceDate,
 	getWorkoutById,
 	getWorkoutsByUser,
-	getWorkoutsWithExercisesByUserSinceDate,
+	getWorkoutsWithExercisesByUserForDateRange,
 } from "@/db/workouts";
 import { getCurrentUser } from "../user";
 
@@ -18,36 +18,24 @@ export async function getWorkouts() {
 	return await getWorkoutsByUser({ userId });
 }
 
-export async function getWorkoutsWithExercises() {
+export async function getDetailedWorkoutsForDates({
+	startDate,
+	endDate,
+}: { startDate: string; endDate: string }) {
 	const { id: userId } = (await getCurrentUser()) ?? {};
 
 	if (!userId) {
 		return [];
 	}
 
-	const date = new Date("1970").toISOString();
+	const start = toStartOfDay(startDate);
+	const end = toEndOfDay(endDate);
 
-	return await getWorkoutsWithExercisesByUserSinceDate({ userId, date });
-}
-
-export async function getWorkoutsWithExercisesSince({ date }: { date: string }) {
-	const { id: userId } = (await getCurrentUser()) ?? {};
-
-	if (!userId) {
-		return [];
-	}
-
-	return await getWorkoutsWithExercisesByUserSinceDate({ userId, date });
-}
-
-export async function getVolumeSince({ startDate }: { startDate: string }) {
-	const { id: userId } = (await getCurrentUser()) ?? {};
-
-	if (!userId) {
-		return [];
-	}
-
-	return await getVolumeSinceDate({ userId });
+	return await getWorkoutsWithExercisesByUserForDateRange({
+		userId,
+		start,
+		end,
+	});
 }
 
 export async function getWorkout({ workoutId }: { workoutId: string }) {

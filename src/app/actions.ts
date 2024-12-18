@@ -10,11 +10,9 @@ import {
 	getCurrentUser as getCurrentUserAction,
 } from "../actions/user";
 import {
-	getVolumeSince as getVolumeSinceAction,
+	getDetailedWorkoutsForDates as getDetailedWorkoutsForDatesAction,
 	getWorkout as getWorkoutAction,
 	getWorkouts as getWorkoutsAction,
-	getWorkoutsWithExercises as getWorkoutsWithExercisesAction,
-	getWorkoutsWithExercisesSince as getWorkoutsWithExercisesSinceAction,
 } from "../actions/workouts";
 import { saveWorkoutLifting as saveWorkoutLiftingAction } from "../actions/workouts/log-workout";
 
@@ -29,8 +27,6 @@ export const getExercisesForWorkout = getExercisesForWorkoutAction;
 
 // WORKOUT ACTIONS
 export const getWorkouts = getWorkoutsAction;
-export const getWorkoutsWithExercises = getWorkoutsWithExercisesAction;
-export const getWorkoutsWithExercisesSince = getWorkoutsWithExercisesSinceAction;
+export const getDetailedWorkoutsForDates = getDetailedWorkoutsForDatesAction;
 export const getWorkout = getWorkoutAction;
-export const getVolumeSince = getVolumeSinceAction;
 export const saveWorkoutLifting = saveWorkoutLiftingAction;

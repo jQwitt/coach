@@ -1,4 +1,4 @@
-import { and, eq, gte, sum } from "drizzle-orm";
+import { and, eq, gte, lt } from "drizzle-orm";
 import db from "..";
 import schema from "../schema";
 
@@ -16,10 +16,11 @@ export async function getWorkoutsByUser({ userId }: { userId: number }) {
 	return workouts;
 }
 
-export async function getWorkoutsWithExercisesByUserSinceDate({
+export async function getWorkoutsWithExercisesByUserForDateRange({
 	userId,
-	date,
-}: { userId: number; date: string }) {
+	start,
+	end,
+}: { userId: number; start: string; end: string }) {
 	const result = await db
 		.select({
 			workoutId: schema.workouts_lifting_table.id,
@@ -33,7 +34,8 @@ export async function getWorkoutsWithExercisesByUserSinceDate({
 		.where(
 			and(
 				eq(schema.workouts_lifting_table.userId, userId),
-				gte(schema.workouts_lifting_table.timeCompleted, date),
+				gte(schema.workouts_lifting_table.timeCompleted, start),
+				lt(schema.workouts_lifting_table.timeCompleted, end),
 			),
 		)
 		.rightJoin(
@@ -64,35 +66,6 @@ export async function getWorkoutById({ userId, id }: { userId: number; id: numbe
 	if (!result) {
 		console.log(`No workout with id: ${id}!`);
 		return null;
-	}
-
-	return result;
-}
-
-export async function getVolumeSinceDate({
-	userId,
-	startDate = "1970-01-01T00:00:00Z",
-}: { userId: number; startDate?: string }) {
-	const result = db
-		.select({
-			totalSets: sum(schema.workouts_lifting_exercises_table.totalSets),
-			totalReps: sum(schema.workouts_lifting_exercises_table.totalReps),
-		})
-		.from(schema.workouts_lifting_table)
-		.leftJoin(
-			schema.workouts_lifting_exercises_table,
-			eq(schema.workouts_lifting_table.id, schema.workouts_lifting_exercises_table.workoutId),
-		)
-		.where(
-			and(
-				eq(schema.workouts_lifting_exercises_table.userId, userId),
-				gte(schema.workouts_lifting_table.timeCompleted, startDate),
-			),
-		);
-
-	if (!result) {
-		console.log(`No workouts for user: ${userId}!`);
-		return { totalSets: 0, totalReps: 0 };
 	}
 
 	return result;

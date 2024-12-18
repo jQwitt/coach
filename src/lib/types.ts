@@ -55,9 +55,13 @@ export type WorkoutAnalytics = {
 	count: number;
 	totalSets: number;
 	totalReps: number;
-	week: {
-		count: number;
-		totalSets: number;
-		totalReps: number;
-	};
 };
+
+const SupportedTimeSpans = {
+	day: "day",
+	week: "week",
+	month: "month",
+	year: "year",
+	"all-time": "all-time",
+};
+export type TimeSpan = keyof typeof SupportedTimeSpans;
