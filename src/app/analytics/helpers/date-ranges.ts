@@ -3,11 +3,13 @@ import type { TimeSpan } from "@/lib/types";
 
 const RANGE_DELIMITER = "..";
 
-export function parseDates(range: string): { startDate: string; endDate: string } {
+export function parseDates(params: Array<string>): { startDate: string; endDate: string } {
 	// if no range is provided, return all
-	if (!range) {
+	if (!params.length) {
 		return { startDate: getEpoch(), endDate: getDate() };
 	}
+
+	const range = params[0];
 
 	// if a range is provided, return the start and end dates
 	if (range.includes(RANGE_DELIMITER)) {
@@ -50,7 +52,7 @@ export function convertSpanToDate(span: TimeSpan) {
 
 export function toStartOfDay(toFormat: string) {
 	const date = new Date(toFormat);
-	date.setHours(0, 0, 0, 1);
+	date.setHours(0, 1, 0, 0);
 	return date.toISOString();
 }
 
@@ -58,4 +60,8 @@ export function toEndOfDay(toFormat: string) {
 	const date = new Date(toFormat);
 	date.setHours(23, 59, 59, 999);
 	return date.toISOString();
+}
+
+export function getNumericDate(date: Date) {
+	return date.toISOString().split("T")[0];
 }
