@@ -1,29 +1,49 @@
 import { getDate, getEpoch } from "@/lib/dates";
-import type { TimeSpan } from "@/lib/types";
+import { SupportedTimeSpans, type TimeSpan } from "@/lib/types";
 
 const RANGE_DELIMITER = "..";
 
-export function parseDates(params: Array<string>): { startDate: string; endDate: string } {
+export function parse(params: Array<string>) {
+	const result: {
+		startDate: string;
+		endDate: string;
+		increment: TimeSpan | null;
+	} = { startDate: getEpoch(), endDate: getDate(), increment: null };
+
 	// if no range is provided, return all
-	if (!params.length) {
-		return { startDate: getEpoch(), endDate: getDate() };
+	if (!params?.length) {
+		return result;
 	}
 
-	const range = params[0];
+	const [range, increment] = params;
+
+	// if a span is used as a range, convert it to a date range
+	if (range in SupportedTimeSpans) {
+		return {
+			...result,
+			startDate: convertSpanToDate(range as TimeSpan),
+		};
+	}
 
 	// if a range is provided, return the start and end dates
 	if (range.includes(RANGE_DELIMITER)) {
 		const [startDate, endDate] = range.split(RANGE_DELIMITER);
 
-		return { startDate, endDate };
+		return { ...result, startDate, endDate };
 	}
 
-	// otherwise interpret the range as just a start date
-	if (range.length) {
-		return { startDate: range, endDate: getDate() };
+	// if a span is provided, include the increment
+	if (increment in SupportedTimeSpans) {
+		if (increment === "all-time") {
+			return result;
+		}
+
+		result.increment = increment as TimeSpan;
+		return { ...result, startDate: convertSpanToDate(increment as TimeSpan) };
 	}
 
-	return { startDate: getDate(), endDate: getDate() };
+	// return a singe date given as the start date
+	return { ...result, startDate: getDate() };
 }
 
 export function convertSpanToDate(span: TimeSpan) {
@@ -64,4 +84,19 @@ export function toEndOfDay(toFormat: string) {
 
 export function getNumericDate(date: Date) {
 	return date.toISOString().split("T")[0];
+}
+
+export function offset(date: Date, increment: TimeSpan) {
+	switch (increment) {
+		case "day":
+			return new Date(date);
+		case "week":
+			return new Date(date.setDate(date.getDate() - 7));
+		case "month":
+			return new Date(date.setMonth(date.getMonth() - 1));
+		case "year":
+			return new Date(date.setFullYear(date.getFullYear() - 1));
+		default:
+			return date;
+	}
 }

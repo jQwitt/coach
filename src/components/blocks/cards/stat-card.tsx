@@ -5,9 +5,11 @@ import { TrendingUp } from "lucide-react";
 export default function StatCard({
 	title,
 	count,
-	increase,
+	highlight,
 	className,
-}: { title: string; count: number; increase?: number } & React.ComponentProps<typeof Card>) {
+}: { title: string; count: number; highlight?: string } & React.ComponentProps<typeof Card>) {
+	const isPositive = count > 0;
+
 	return (
 		<Card className={className}>
 			<CardHeader>
@@ -15,12 +17,15 @@ export default function StatCard({
 			</CardHeader>
 			<CardContent>
 				<div className="text-2xl font-extrabold">{count}</div>
-				{increase && (
-					<div className="flex items-center gap-1 text-green-500 font-bold">
-						<p className="text-xs">
-							<span className="font-bold">{increase}</span> this week
+				{highlight && (
+					<div
+						className={`flex items-center gap-1 font-bold ${isPositive ? "text-green-500" : "text-muted-foreground"}`}
+					>
+						<p className="text-xs font-bold">
+							{isPositive ? "+" : ""}
+							{highlight}
 						</p>
-						<TrendingUp size={16} />
+						{isPositive ? <TrendingUp size={16} /> : null}
 					</div>
 				)}
 			</CardContent>

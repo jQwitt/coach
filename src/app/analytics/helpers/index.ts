@@ -1,17 +1,31 @@
-export function getDateRangeISOs() {
-	const now = new Date();
-	const week = new Date(now);
-	week.setDate(week.getDate() - 7);
-	const month = new Date(now);
-	month.setMonth(month.getMonth() - 1);
-	const year = new Date(now);
-	year.setFullYear(year.getFullYear() - 1);
+import type { DetailedWorkoutReturn, TimeSpan, WorkoutVolume } from "@/lib/types";
 
-	return {
-		day: now.toISOString(),
-		week: week.toISOString(),
-		month: month.toISOString(),
-		year: year.toISOString(),
-		"all-time": new Date(0).toISOString(),
+export function getVolume(workouts: DetailedWorkoutReturn): WorkoutVolume {
+	const data = {
+		count: workouts.length,
+		totalSets: 0,
+		totalReps: 0,
 	};
+
+	for (const { totalSets, totalReps } of workouts) {
+		data.totalSets += totalSets ?? 0;
+		data.totalReps += totalReps ?? 0;
+	}
+
+	return data;
+}
+
+export function formatIncrement(span: TimeSpan | null) {
+	switch (span) {
+		case "day":
+			return "today";
+		case "week":
+			return "this week";
+		case "month":
+			return "this month";
+		case "year":
+			return "this year";
+		default:
+			return "";
+	}
 }

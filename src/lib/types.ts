@@ -51,13 +51,28 @@ export type WorkoutLiftingExerciseData = Omit<
 	"userId" | "workoutId" | "exerciseId"
 > & { name: string | null };
 
-export type WorkoutAnalytics = {
+export type WorkoutVolume = {
 	count: number;
 	totalSets: number;
 	totalReps: number;
 };
 
-const SupportedTimeSpans = {
+export type WorkoutAnalytics = {
+	currentVolume: WorkoutVolume;
+	previousVolume?: WorkoutVolume;
+	increment: TimeSpan | null;
+};
+
+export type DetailedWorkoutReturn = {
+	workoutId: number | null;
+	timeCompleted: string | null;
+	exerciseName: string;
+	totalSets: number | null;
+	totalReps: number | null;
+	maxWeight: string | null;
+}[];
+
+export const SupportedTimeSpans = {
 	day: "day",
 	week: "week",
 	month: "month",

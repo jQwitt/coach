@@ -11,6 +11,7 @@ import {
 } from "../actions/user";
 import {
 	getDetailedWorkoutsForDates as getDetailedWorkoutsForDatesAction,
+	getPreviousDetailedWorkoutsByIncrement as getPreviousDetailedWorkoutsByIncrementAction,
 	getWorkout as getWorkoutAction,
 	getWorkouts as getWorkoutsAction,
 } from "../actions/workouts";
@@ -28,5 +29,6 @@ export const getExercisesForWorkout = getExercisesForWorkoutAction;
 // WORKOUT ACTIONS
 export const getWorkouts = getWorkoutsAction;
 export const getDetailedWorkoutsForDates = getDetailedWorkoutsForDatesAction;
+export const getPreviousDetailedWorkoutsByIncrement = getPreviousDetailedWorkoutsByIncrementAction;
 export const getWorkout = getWorkoutAction;
 export const saveWorkoutLifting = saveWorkoutLiftingAction;

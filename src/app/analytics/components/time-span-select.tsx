@@ -38,7 +38,7 @@ export default function TimeSpanSelect() {
 
 	const handleSelect = (value: TimeSpan) => {
 		setTimeSpan(value);
-		redirect(`/analytics/range/${convertSpanToDate(value)}`);
+		redirect(`/analytics/range/${convertSpanToDate(value)}/${value}`);
 	};
 
 	return (
