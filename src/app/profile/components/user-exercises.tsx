@@ -3,9 +3,10 @@
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
+import type { UserExerciseLifting } from "@/lib/types";
 import * as React from "react";
 
-export default function UserData({ exerciseNames }: { exerciseNames: string[] }) {
+export default function UserExercises({ exercises }: { exercises: UserExerciseLifting[] }) {
 	const [isMounted, setIsMounted] = React.useState(false);
 	React.useEffect(() => {
 		setIsMounted(true);
@@ -16,7 +17,7 @@ export default function UserData({ exerciseNames }: { exerciseNames: string[] })
 	return (
 		<div className="flex flex-col gap-2">
 			<div className="flex justify-between items-center" suppressHydrationWarning>
-				<p className="text-muted-foreground text-sm">Collected Exercise Names</p>
+				<p className="text-muted-foreground text-sm">Your Exercises</p>
 				<Dialog>
 					<DialogTrigger asChild>
 						<Button size="sm" variant="outline">
@@ -24,13 +25,7 @@ export default function UserData({ exerciseNames }: { exerciseNames: string[] })
 						</Button>
 					</DialogTrigger>
 					<DialogContent>
-						<DialogTitle>Exercise Names</DialogTitle>
-						<div>
-							{exerciseNames?.map((name) => (
-								<p key={name}>{name}</p>
-							))}
-							{exerciseNames.length === 0 ? <p>No names</p> : null}
-						</div>
+						<DialogTitle>Exercises</DialogTitle>
 					</DialogContent>
 				</Dialog>
 			</div>

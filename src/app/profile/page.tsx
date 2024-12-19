@@ -3,7 +3,7 @@ import { getCurrentUser } from "@/app/actions";
 import UserControls from "@/components/blocks/user-controls";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import Header, { HeaderLevel } from "@/components/ui/header";
-import UserData from "./components/user-data";
+import UserExercises from "./components/user-exercises";
 
 export default async function Profile() {
 	const { firstName, lastName, email } = (await getCurrentUser()) || {};
@@ -28,7 +28,7 @@ export default async function Profile() {
 					<Header title="Data" level={HeaderLevel.SECTION} />
 				</CardHeader>
 				<CardContent>
-					<UserData exerciseNames={exercises.map(({ name }) => name) ?? []} />
+					<UserExercises exercises={exercises} />
 				</CardContent>
 			</Card>
 			<Card>

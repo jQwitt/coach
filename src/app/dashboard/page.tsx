@@ -11,11 +11,6 @@ export default async function Dashboard() {
 			<QuickActions />
 			<Header title="Recent Workouts" level={HeaderLevel.SECTION} className="my-1" />
 			<WorkoutsList workouts={workouts} />
-			{workouts.length === 0 && (
-				<div className="my-5 w-full text-center">
-					<p className="text-sm text-muted-foreground">Future workouts will appear here!</p>
-				</div>
-			)}
 		</div>
 	);
 }

@@ -37,6 +37,11 @@ export default function WorkoutsList({ workouts }: { workouts: WorkoutLifting[] 
 				{workouts?.map((workout) => {
 					return <WorkoutCard data={workout} key={`${workout.name}-${workout.id}`} />;
 				})}
+				{workouts.length === 0 && (
+					<div className="my-5 w-full text-center">
+						<p className="text-sm text-muted-foreground">Future workouts will appear here!</p>
+					</div>
+				)}
 			</div>
 		</>
 	);
