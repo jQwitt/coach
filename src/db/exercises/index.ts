@@ -46,10 +46,10 @@ export async function createExerciseForUser({
 }
 
 export async function updateExerciseForUser({
-	id,
+	userId,
+	exerciseId,
 	data,
-}: { id: number; data: Partial<UserExerciseLifting> }) {
-	const { userId } = data;
+}: { userId: number; exerciseId: number; data: Partial<UserExerciseLifting> }) {
 	if (!userId) {
 		return false;
 	}
@@ -62,7 +62,7 @@ export async function updateExerciseForUser({
 		.where(
 			and(
 				eq(schema.user_lifting_exercises_table.userId, userId),
-				eq(schema.user_lifting_exercises_table.id, id),
+				eq(schema.user_lifting_exercises_table.id, exerciseId),
 			),
 		)
 		.returning();
