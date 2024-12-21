@@ -1,6 +1,6 @@
 "use client";
 
-import { updateExercise } from "@/app/actions";
+import { createExercise, updateExercise } from "@/app/actions";
 import { Button } from "@/components/ui/button";
 import Header, { HeaderLevel } from "@/components/ui/header";
 import { Input } from "@/components/ui/input";
@@ -64,15 +64,20 @@ export default function UpdateUserExerciseForm({ data }: { data?: UserExerciseLi
 
 		const toUpdate = {
 			name: exerciseName,
-			primaryTarget: muscleGroup?.toString(),
-			detailedTargets: [(detailedMuscles ?? "").toString()],
-		} satisfies Partial<UserExerciseLifting>;
+			primaryTarget: muscleGroup?.toString() ?? "",
+			detailedTargets: [detailedMuscles?.toString() ?? ""],
+		} satisfies Omit<UserExerciseLifting, "id" | "userId">;
 
 		if (id) {
 			const result = await updateExercise({
 				exerciseId: id.toString(),
 				data: toUpdate,
 			});
+			if (result) {
+				setSubmitted(true);
+			}
+		} else {
+			const result = await createExercise({ data: toUpdate });
 			if (result) {
 				setSubmitted(true);
 			}
@@ -154,9 +159,9 @@ export default function UpdateUserExerciseForm({ data }: { data?: UserExerciseLi
 				</div>
 			</div>
 			{submitted ? (
-				<Button type="submit" className="w-full" disabled={submitting}>
+				<Button type="button" className="w-full" variant="secondary">
 					Done
-					<Check className="w-4 h-4 ml-2" />
+					<Check className="w-4 h-4" />
 				</Button>
 			) : (
 				<Button type="submit" className="w-full" disabled={submitting}>

@@ -1,5 +1,10 @@
 import { getCurrentUser } from "@/app/actions";
-import { getExercisesByUser, getExercisesByWorkoutId, updateExerciseForUser } from "@/db/exercises";
+import {
+	createExerciseForUser,
+	getExercisesByUser,
+	getExercisesByWorkoutId,
+	updateExerciseForUser,
+} from "@/db/exercises";
 import type { UserExerciseLifting } from "@/lib/types";
 
 export async function getExercises() {
@@ -20,6 +25,18 @@ export async function getExercisesForWorkout({ workoutId }: { workoutId: string 
 	}
 
 	return [];
+}
+
+export async function createExercise({
+	data,
+}: { data: Omit<UserExerciseLifting, "id" | "userId"> }) {
+	const user = await getCurrentUser();
+
+	if (user?.id) {
+		return await createExerciseForUser({ userId: user.id, data });
+	}
+
+	return false;
 }
 
 export async function updateExercise({
