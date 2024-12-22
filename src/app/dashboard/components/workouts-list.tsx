@@ -1,5 +1,6 @@
 "use client";
 
+import Header, { HeaderLevel } from "@/components/ui/header";
 import {
 	Select,
 	SelectContent,
@@ -22,6 +23,7 @@ export default function WorkoutsList({ workouts }: { workouts: WorkoutLifting[] 
 
 	return (
 		<>
+			<Header title="Recent Workouts" level={HeaderLevel.SECTION} className="my-1" />
 			<Select onValueChange={(value) => setSortBy(value as SortMethods)}>
 				<SelectTrigger className="w-[120px]">
 					<SelectValue placeholder="Newest" defaultValue={"newest"} />
