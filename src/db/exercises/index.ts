@@ -122,3 +122,34 @@ export async function getExercisesByWorkoutId({
 
 	return result;
 }
+
+export async function getExerciseHistoryForUser({
+	userId,
+	exerciseId,
+}: { userId: number; exerciseId: number }) {
+	const result = await db
+		.select({
+			timeCompleted: schema.workouts_lifting_table.timeCompleted,
+			totalSets: schema.workouts_lifting_exercises_table.totalSets,
+			totalReps: schema.workouts_lifting_exercises_table.totalReps,
+			maxWeight: schema.workouts_lifting_exercises_table.maxWeight,
+		})
+		.from(schema.workouts_lifting_exercises_table)
+		.where(
+			and(
+				eq(schema.workouts_lifting_exercises_table.userId, userId),
+				eq(schema.workouts_lifting_exercises_table.exerciseId, exerciseId),
+			),
+		)
+		.leftJoin(
+			schema.workouts_lifting_table,
+			eq(schema.workouts_lifting_exercises_table.workoutId, schema.workouts_lifting_table.id),
+		);
+
+	if (!result) {
+		console.log(`No exercise with id: ${exerciseId}!`);
+		return [];
+	}
+
+	return result;
+}

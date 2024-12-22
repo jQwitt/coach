@@ -2,6 +2,7 @@
 
 import {
 	createExercise as createExerciseAction,
+	getExerciseHistory as getExerciseHistoryAction,
 	getExercises as getExercisesAction,
 	getExercisesForWorkout as getExercisesForWorkoutAction,
 	updateExercise as updateExerciseAction,
@@ -29,6 +30,7 @@ export const getExercises = getExercisesAction;
 export const getExercisesForWorkout = getExercisesForWorkoutAction;
 export const createExercise = createExerciseAction;
 export const updateExercise = updateExerciseAction;
+export const getExerciseHistory = getExerciseHistoryAction;
 
 // WORKOUT ACTIONS
 export const getWorkouts = getWorkoutsAction;
