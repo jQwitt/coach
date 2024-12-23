@@ -1,57 +1,7 @@
-import type { ExerciseData, ExerciseSetData } from "../types";
+import type { ExerciseData } from "../types";
 
 const SPLIT = "$";
 const SET_SPLIT = "#";
-
-export const encodeExercisesAsStrings = (exercises: ExerciseData[]): string[] => {
-	const encoded = exercises.map((exercise) => {
-		const { name, sets } = exercise;
-		let result = `${name}`;
-
-		for (const set of sets) {
-			const { count, reps, weight } = set;
-			result += `${SPLIT}${count}${SET_SPLIT}${reps}${SET_SPLIT}${weight}`;
-		}
-
-		return result;
-	});
-
-	if (encoded.length === exercises.length) {
-		return encoded;
-	}
-
-	return [];
-};
-
-export const decodeStringsToExercises = (exercises: string[] | null): ExerciseData[] => {
-	if (!exercises?.length) {
-		return [];
-	}
-
-	const decoded = exercises.map((exercise) => {
-		const [name, ...sets] = exercise.split(SPLIT);
-
-		return {
-			name,
-			sets: sets.map((set) => {
-				const [count, reps, weight] = set.split(SET_SPLIT);
-
-				return {
-					count: Number(count),
-					reps: Number(reps),
-					weight: Number(weight),
-					metadata: {},
-				} satisfies ExerciseSetData;
-			}),
-		} satisfies ExerciseData;
-	});
-
-	if (decoded.length === exercises.length) {
-		return decoded;
-	}
-
-	return [];
-};
 
 export function encodeSets(exercise: ExerciseData) {
 	const { name, sets } = exercise;
