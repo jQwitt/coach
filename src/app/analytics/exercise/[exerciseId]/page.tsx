@@ -1,6 +1,7 @@
 import { getExercise, getExerciseHistory } from "@/app/actions";
 import Header from "@/components/ui/header";
 import ExerciseHistory from "./components/exercise-history";
+import SuggestOneRepMax from "./components/suggest-one-rep-max";
 import WeightOverTimeGraph from "./components/weight-over-time";
 import type { PageProps } from ".next/types/app/page";
 
@@ -22,6 +23,7 @@ export default async function AnalyticsExerciseLiftingPage({
 		<>
 			<Header title={exercise?.name} />
 			<WeightOverTimeGraph history={history} />
+			<SuggestOneRepMax history={history} />
 			<ExerciseHistory history={history} />
 		</>
 	);
