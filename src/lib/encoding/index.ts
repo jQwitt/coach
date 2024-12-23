@@ -53,6 +53,18 @@ export const decodeStringsToExercises = (exercises: string[] | null): ExerciseDa
 	return [];
 };
 
+export function encodeSets(exercise: ExerciseData) {
+	const { name, sets } = exercise;
+	let result = `${name}${SPLIT}`;
+
+	for (const set of sets) {
+		const { count, reps, weight } = set;
+		result += `${count}${SET_SPLIT}${reps}${SET_SPLIT}${weight}`;
+	}
+
+	return result;
+}
+
 export const timeStamp = (): string => {
 	return new Date().toISOString();
 };

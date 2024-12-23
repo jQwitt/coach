@@ -3,6 +3,7 @@
 import { getCurrentUser } from "@/app/actions";
 import db from "@/db";
 import schema from "@/db/schema";
+import { encodeSets } from "@/lib/encoding";
 import type { WorkoutLifting, WorkoutLiftingData } from "@/lib/types";
 
 export async function saveWorkoutLifting(
@@ -93,8 +94,12 @@ export async function saveWorkoutLifting(
 }
 
 function formatExerciseInfo(exercises: WorkoutLiftingData["exercises"]) {
-	const result: Record<string, { totalSets: number; totalReps: number; maxWeight: string }> = {};
-	for (const { name, sets } of exercises) {
+	const result: Record<
+		string,
+		{ totalSets: number; totalReps: number; maxWeight: string; serializedSetData: string[] }
+	> = {};
+	for (const exercise of exercises) {
+		const { name, sets } = exercise;
 		let totalSets = 0;
 		let totalReps = 0;
 		let maxWeight = -1;
@@ -105,7 +110,12 @@ function formatExerciseInfo(exercises: WorkoutLiftingData["exercises"]) {
 			maxWeight = Math.max(maxWeight, weight);
 		}
 
-		result[name] = { totalSets, totalReps, maxWeight: maxWeight.toString() };
+		result[name] = {
+			totalSets,
+			totalReps,
+			maxWeight: maxWeight.toString(),
+			serializedSetData: [encodeSets(exercise)],
+		};
 	}
 
 	return result;
