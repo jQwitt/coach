@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-import type { ExerciseData, ExerciseSetData, WorkoutLiftingData } from "@/lib/types";
+import type { ExerciseData, ExerciseSetData, MuscleGroups, WorkoutLiftingData } from "@/lib/types";
 import { hasForbiddenCharacters } from "@/lib/utils";
 
 interface WorkoutState {
@@ -10,6 +10,7 @@ interface WorkoutState {
 	addEmptyExercise: () => void;
 	removeExercise: (index: number) => void;
 	updateExerciseName: (index: number, name: string) => void;
+	updateExercisePrimaryTarget: (index: number, target: MuscleGroups) => void;
 	addSetToExercise: (index: number) => void;
 	removeSetFromExercise: (index: number) => void;
 	updateExerciseSets: (index: number, setIndex: number, values: Partial<ExerciseSetData>) => void;
@@ -25,6 +26,8 @@ const initialSet = {
 const initialExercise = {
 	name: "",
 	sets: [{ ...initialSet }],
+	primaryTarget: "FullBody",
+	detailedTargets: [],
 } satisfies ExerciseData;
 
 const initialWorkout = {
@@ -104,6 +107,24 @@ const useWorkoutStore = create<WorkoutState>()(
 					}
 
 					exercises[index].name = name;
+
+					return {
+						workout: {
+							...state.workout,
+							exercises,
+						},
+					};
+				});
+			},
+			updateExercisePrimaryTarget(index, target) {
+				set((state) => {
+					const exercises = [...(state.workout.exercises ?? [])];
+
+					if (index < 0 || index >= exercises.length) {
+						return state;
+					}
+
+					exercises[index].primaryTarget = target;
 
 					return {
 						workout: {

@@ -12,15 +12,23 @@ import Header, { HeaderLevel } from "@/components/ui/header";
 import useWorkoutStore from "@/hooks/stores/use-workout";
 import { useToast } from "@/hooks/use-toast";
 import { fromIso, timeStamp } from "@/lib/encoding";
-import type { ExercisesReturn } from "@/lib/types";
-import { Check, Edit3, Loader2, Plus, ScanText, X } from "lucide-react";
+import type { ExercisesReturn, MuscleGroups } from "@/lib/types";
+import { Check, Edit3, HelpCircle, Loader2, Plus, ScanText, X } from "lucide-react";
+import Link from "next/link";
 import { redirect } from "next/navigation";
+import MuscleGroupSelect from "../../controls/muscle-group-select";
 
 export default function LogWorkoutLiftingForm({
 	knownExercises,
 }: { knownExercises: ExercisesReturn }) {
-	const { workout, setWorkoutName, addEmptyExercise, updateExerciseSets, updateExerciseName } =
-		useWorkoutStore();
+	const {
+		workout,
+		setWorkoutName,
+		addEmptyExercise,
+		updateExerciseSets,
+		updateExerciseName,
+		updateExercisePrimaryTarget,
+	} = useWorkoutStore();
 
 	const { toast, dismiss, toasts } = useToast();
 	const toastError = React.useCallback(
@@ -38,6 +46,7 @@ export default function LogWorkoutLiftingForm({
 	const [submitting, setSubmitting] = React.useState(false);
 	const [autoCompleteList, setAutoCompleteList] = React.useState<ExercisesReturn>([]);
 	const [hideAutoComplete, setHideAutoComplete] = React.useState(false);
+	const [hasClickedAutoComplete, sethasClickedAutoComplete] = React.useState(false);
 
 	const { name, exercises } = workout;
 	const exerciseLast = exercises.length - 1;
@@ -150,6 +159,7 @@ export default function LogWorkoutLiftingForm({
 						value={exerciseName}
 						placeholder="Add an Exercise Name"
 						onChange={({ target: { value } }) => {
+							sethasClickedAutoComplete(false);
 							updateAutoCompleteList(value);
 							updateExerciseName(exerciseLast, value);
 						}}
@@ -172,7 +182,9 @@ export default function LogWorkoutLiftingForm({
 									className="flex justify-between items-center w-full hover:bg-muted rounded-sm p-1"
 									onClick={() => {
 										setAutoCompleteList([]);
+										sethasClickedAutoComplete(true);
 										updateExerciseName(exerciseLast, name);
+										updateExercisePrimaryTarget(exerciseLast, primaryTarget as MuscleGroups);
 									}}
 								>
 									<p className="text-primary">{name}</p>
@@ -226,6 +238,27 @@ export default function LogWorkoutLiftingForm({
 								inputMode="decimal"
 							/>
 						</div>
+					</div>
+					<div className="mt-8">
+						<label htmlFor="primaryTarget" className="text-sm text-muted-foreground">
+							Primary Muscle Group
+						</label>
+						<MuscleGroupSelect
+							disabled={hasClickedAutoComplete || autoCompleteList.length > 0}
+							value={currentExercise.primaryTarget}
+							onChange={(primaryTarget) => updateExercisePrimaryTarget(exerciseLast, primaryTarget)}
+						/>
+						{hasClickedAutoComplete && (
+							<div className="mt-4 text-xs text-muted-foreground flex gap-1 opacity-65">
+								<div className="flex gap-1 group">
+									<p>You can edit previously logged exercises on </p>
+									<Link href={"/profile"} className="group-hover:underline">
+										your profile
+									</Link>
+								</div>
+								<HelpCircle className="h-4 w-4" />
+							</div>
+						)}
 					</div>
 					<div>
 						{sets.slice(0, -1).map(({ count, reps, weight }, index) => (

@@ -35,6 +35,8 @@ export type WorkoutLiftingData = {
 export type ExerciseData = {
 	name: string;
 	sets: ExerciseSetData[];
+	primaryTarget: MuscleGroups;
+	detailedTargets: MusclesDetailed[];
 };
 export type ExerciseSetData = {
 	count: number;
