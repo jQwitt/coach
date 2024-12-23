@@ -1,6 +1,6 @@
-import type { DetailedWorkoutReturn, TimeSpan, WorkoutVolume } from "@/lib/types";
+import type { TimeSpan, WorkoutVolume, WorkoutsDetailedByDateReturn } from "@/lib/types";
 
-export function getVolume(workouts: DetailedWorkoutReturn): WorkoutVolume {
+export function getVolume(workouts: WorkoutsDetailedByDateReturn): WorkoutVolume {
 	const data = {
 		count: workouts.length,
 		totalSets: 0,
