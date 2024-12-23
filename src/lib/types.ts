@@ -80,3 +80,10 @@ export const SupportedTimeSpans = {
 	"all-time": "all-time",
 };
 export type TimeSpan = keyof typeof SupportedTimeSpans;
+
+export type ExerciseHistory = {
+	timeCompleted: string | null;
+	totalSets: number;
+	totalReps: number;
+	maxWeight: string;
+}[];

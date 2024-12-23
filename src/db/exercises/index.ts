@@ -153,3 +153,20 @@ export async function getExerciseHistoryForUser({
 
 	return result;
 }
+
+export async function getExerciseForUser({
+	userId,
+	exerciseId,
+}: { userId: number; exerciseId: number }) {
+	const result = await db.query.user_lifting_exercises_table.findFirst({
+		where: (exercises, { and, eq }) =>
+			and(eq(exercises.userId, userId), eq(exercises.id, exerciseId)),
+	});
+
+	if (!result) {
+		console.log(`No exercise with id: ${exerciseId}!`);
+		return null;
+	}
+
+	return result;
+}

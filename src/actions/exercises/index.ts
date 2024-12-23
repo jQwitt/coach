@@ -1,6 +1,7 @@
 import { getCurrentUser } from "@/app/actions";
 import {
 	createExerciseForUser,
+	getExerciseForUser,
 	getExerciseHistoryForUser,
 	getExercisesByUser,
 	getExercisesByWorkoutId,
@@ -16,6 +17,16 @@ export async function getExercises() {
 	}
 
 	return [];
+}
+
+export async function getExercise({ exerciseId }: { exerciseId: string }) {
+	const user = await getCurrentUser();
+
+	if (user?.id && Number.isSafeInteger(Number(exerciseId))) {
+		return await getExerciseForUser({ userId: user.id, exerciseId: Number(exerciseId) });
+	}
+
+	return null;
 }
 
 export async function getExercisesForWorkout({ workoutId }: { workoutId: string }) {
