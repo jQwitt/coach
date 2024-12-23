@@ -12,18 +12,15 @@ import Header, { HeaderLevel } from "@/components/ui/header";
 import useWorkoutStore from "@/hooks/stores/use-workout";
 import { useToast } from "@/hooks/use-toast";
 import { fromIso, timeStamp } from "@/lib/encoding";
-import { Check, Edit3, Loader2, Plus } from "lucide-react";
+import type { ExercisesReturn } from "@/lib/types";
+import { Check, Edit3, Loader2, Plus, ScanText, X } from "lucide-react";
 import { redirect } from "next/navigation";
 
-export default function LogWorkoutLiftingForm() {
-	const {
-		workout,
-		setWorkoutName,
-		addEmptyExercise,
-		updateExerciseSets,
-		updateExerciseName,
-		removeExercise,
-	} = useWorkoutStore();
+export default function LogWorkoutLiftingForm({
+	knownExercises,
+}: { knownExercises: ExercisesReturn }) {
+	const { workout, setWorkoutName, addEmptyExercise, updateExerciseSets, updateExerciseName } =
+		useWorkoutStore();
 
 	const { toast, dismiss, toasts } = useToast();
 	const toastError = React.useCallback(
@@ -39,6 +36,8 @@ export default function LogWorkoutLiftingForm() {
 
 	const [timeStarted] = React.useState(timeStamp());
 	const [submitting, setSubmitting] = React.useState(false);
+	const [autoCompleteList, setAutoCompleteList] = React.useState<ExercisesReturn>([]);
+	const [hideAutoComplete, setHideAutoComplete] = React.useState(false);
 
 	const { name, exercises } = workout;
 	const exerciseLast = exercises.length - 1;
@@ -69,6 +68,12 @@ export default function LogWorkoutLiftingForm() {
 
 		dismiss(toasts[0]?.id);
 		addEmptyExercise();
+	};
+
+	const updateAutoCompleteList = (query: string) => {
+		setAutoCompleteList(
+			knownExercises.filter(({ name }) => name.toLowerCase().includes(query.toLowerCase())),
+		);
 	};
 
 	const handleSubmitStart = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -123,18 +128,59 @@ export default function LogWorkoutLiftingForm() {
 				<Edit3 className="pointer-events-none absolute right-0 top-[25%] h-6 w-6 peer-focus:hidden" />
 			</div>
 			<Card>
-				<CardHeader className="mb-4">
+				<CardHeader className="relative">
+					<div>
+						{hideAutoComplete && (
+							<Button
+								size="sm"
+								variant="ghost"
+								className="absolute top-0 right-0"
+								onClick={() => setHideAutoComplete(false)}
+								type="button"
+							>
+								AutoComplete
+								<ScanText className="h-4 w-4" />
+							</Button>
+						)}
+					</div>
 					<input
 						name="name"
 						type="text"
 						className={`peer w-full border-b-2 border-gray-200 pb-1 pt-3 text-primary placeholder-primary transition-colors focus:border-primary focus:text-gray-400 focus:placeholder-gray-400 focus:outline-none ${heading.className} text-3xl`}
 						value={exerciseName}
 						placeholder="Add an Exercise Name"
-						onChange={(e) => {
-							// updateAutoCompleteList(e.target.value);
-							updateExerciseName(exerciseLast, e.target.value);
+						onChange={({ target: { value } }) => {
+							updateAutoCompleteList(value);
+							updateExerciseName(exerciseLast, value);
 						}}
 					/>
+					{!hideAutoComplete && autoCompleteList.length > 0 ? (
+						<Card className="absolute top-20 left-0 w-full p-4 bg-card h-fit z-10 pt-6">
+							<Button
+								size="icon"
+								variant="ghost"
+								className="absolute top-0 right-0"
+								onClick={() => setHideAutoComplete(true)}
+								type="button"
+							>
+								<X className="h-4 w-4" />
+							</Button>
+							{autoCompleteList.map(({ name, primaryTarget }) => (
+								<button
+									type="button"
+									key={name}
+									className="flex justify-between items-center w-full hover:bg-muted rounded-sm p-1"
+									onClick={() => {
+										setAutoCompleteList([]);
+										updateExerciseName(exerciseLast, name);
+									}}
+								>
+									<p className="text-primary">{name}</p>
+									<p className="text-xs text-muted-foreground">{primaryTarget}</p>
+								</button>
+							))}
+						</Card>
+					) : null}
 				</CardHeader>
 				<CardContent>
 					<div className="flex justify-around text-center gap-4 min-w-full">

@@ -1,3 +1,4 @@
+import type { getExercises } from "@/app/actions";
 import type schema from "@/db/schema";
 
 export type User = typeof schema.users_table.$inferSelect;
@@ -87,3 +88,5 @@ export type ExerciseHistory = {
 	totalReps: number;
 	maxWeight: string;
 }[];
+
+export type ExercisesReturn = Awaited<ReturnType<typeof getExercises>>;

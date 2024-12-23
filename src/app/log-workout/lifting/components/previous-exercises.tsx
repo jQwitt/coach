@@ -1,3 +1,5 @@
+"use client";
+
 import Header, { HeaderLevel } from "@/components/ui/header";
 import useWorkoutStore from "@/hooks/stores/use-workout";
 import PreviousExerciseCard from "./previous-exercise-card";

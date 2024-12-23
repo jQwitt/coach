@@ -1,14 +1,14 @@
-"use client";
-
-import Image from "next/image";
-import Barbell from "../../../../public/images/dumbbell_black.png";
-
+import { getExercises } from "@/app/actions";
 import LogWorkoutLiftingForm from "@/components/forms/workouts/lifting/log-workout-form";
 import Header from "@/components/ui/header";
+import Image from "next/image";
+import Barbell from "../../../../public/images/dumbbell_black.png";
 import PreviousExcersises from "./components/previous-exercises";
 import WorkoutVisualizer from "./components/workout-visualizer";
 
-export default function LogWorkoutLifting() {
+export default async function LogWorkoutLifting() {
+	const knownExercises = await getExercises();
+
 	return (
 		<div className="max-w-4xl p-4 text-primary mx-auto">
 			<div className="items-center hidden md:flex">
@@ -24,7 +24,7 @@ export default function LogWorkoutLifting() {
 
 			<div className="grid grid-cols-1 gap-x-4 gap-y-10 md:gap-y-4 md:grid-cols-9">
 				<div className="md:col-span-5 col-span-1">
-					<LogWorkoutLiftingForm />
+					<LogWorkoutLiftingForm knownExercises={knownExercises} />
 				</div>
 				<div className="lg:col-span-4 md:col-span-3 col-span-1 sm:row-start-2">
 					<PreviousExcersises />
