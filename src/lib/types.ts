@@ -1,4 +1,4 @@
-import type { getExercises } from "@/app/actions";
+import type { getDetailedWorkoutsForDates, getExercises } from "@/app/actions";
 import type schema from "@/db/schema";
 
 export type User = typeof schema.users_table.$inferSelect;
@@ -66,15 +66,6 @@ export type WorkoutAnalytics = {
 	increment: TimeSpan | null;
 };
 
-export type DetailedWorkoutReturn = {
-	workoutId: number | null;
-	timeCompleted: string | null;
-	exerciseName: string;
-	totalSets: number | null;
-	totalReps: number | null;
-	maxWeight: string | null;
-}[];
-
 export const SupportedTimeSpans = {
 	day: "day",
 	week: "week",
@@ -92,3 +83,4 @@ export type ExerciseHistory = {
 }[];
 
 export type ExercisesReturn = Awaited<ReturnType<typeof getExercises>>;
+export type WorkoutsDetailedByDateReturn = Awaited<ReturnType<typeof getDetailedWorkoutsForDates>>;

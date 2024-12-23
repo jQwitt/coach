@@ -5,6 +5,7 @@ import db from "@/db";
 import schema from "@/db/schema";
 import { encodeSets } from "@/lib/encoding";
 import type { WorkoutLifting, WorkoutLiftingData } from "@/lib/types";
+import { sql } from "drizzle-orm";
 
 export async function saveWorkoutLifting(
 	data: Pick<WorkoutLifting, "name" | "timeStarted" | "timeCompleted" | "date" | "duration"> &
@@ -52,15 +53,18 @@ export async function saveWorkoutLifting(
 		const upsertExercisesResult = await tx
 			.insert(schema.user_lifting_exercises_table)
 			.values(
-				exercises.map(({ name }) => ({
+				exercises.map(({ name, primaryTarget, detailedTargets }) => ({
 					userId,
 					name,
-					primaryTarget: "", // TODO: get target information
-					detailedTargets: [],
+					primaryTarget,
+					detailedTargets,
 				})),
 			)
-			.onConflictDoNothing({
+			.onConflictDoUpdate({
 				target: schema.user_lifting_exercises_table.name,
+				set: {
+					name: sql`excluded.name`,
+				},
 			})
 			.returning({
 				id: schema.user_lifting_exercises_table.id,
@@ -70,17 +74,16 @@ export async function saveWorkoutLifting(
 		// Add all link table entires
 		const { id: workoutId } = createWorkoutResult[0];
 		const exerciseInfoByName = formatExerciseInfo(exercises);
+		const insertWorkoutExercisesPayload = upsertExercisesResult.map(({ id: exerciseId, name }) => ({
+			userId,
+			workoutId,
+			exerciseId,
+			date: timing.date,
+			...exerciseInfoByName[name],
+		}));
 		const insertWorkoutExercisesResult = await tx
 			.insert(schema.workouts_lifting_exercises_table)
-			.values(
-				upsertExercisesResult.map(({ id: exerciseId, name }) => ({
-					userId,
-					workoutId,
-					exerciseId,
-					date: timing.date,
-					...exerciseInfoByName[name],
-				})),
-			)
+			.values(insertWorkoutExercisesPayload)
 			.returning({
 				id: schema.workouts_lifting_exercises_table.workoutId,
 			});

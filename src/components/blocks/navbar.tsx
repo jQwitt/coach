@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { timeStamp } from "@/lib/encoding";
 import { cn } from "@/lib/utils";
 import { BarChart2, ClipboardCheck, LayoutDashboard, Menu, Rocket, User, X } from "lucide-react";
 import Image from "next/image";
@@ -14,6 +15,7 @@ export default function Navbar() {
 	const path = usePathname();
 	const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 	const isDesktop = useMediaQuery({ query: "(min-width: 640px)" });
+	const date = timeStamp().split("T")[0];
 
 	const navItems = [
 		{ name: "Coach", href: "/live-coach", icon: Rocket, selected: path.includes("/live-coach") },
@@ -31,7 +33,7 @@ export default function Navbar() {
 		},
 		{
 			name: "Analytics",
-			href: "/analytics/range/week",
+			href: `/analytics/range/${date}/week`,
 			icon: BarChart2,
 			selected: path.includes("/analytics"),
 		},

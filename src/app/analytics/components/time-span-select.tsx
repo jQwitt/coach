@@ -42,7 +42,7 @@ export default function TimeSpanSelect() {
 	};
 
 	return (
-		<div className="fixed bottom-3 left-4 sm:left-6 md:relative md:left-0 bg-background flex flex-row gap-2">
+		<div className="fixed bottom-3 left-4 sm:left-6 md:left-auto  md:relative md:bottom-auto bg-background flex flex-row gap-2">
 			{preferSpan ? (
 				<Select onValueChange={handleSelect}>
 					<SelectTrigger className="w-[120px]">

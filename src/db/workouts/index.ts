@@ -26,6 +26,7 @@ export async function getWorkoutsWithExercisesByUserForDateRange({
 			workoutId: schema.workouts_lifting_table.id,
 			timeCompleted: schema.workouts_lifting_table.timeCompleted,
 			exerciseName: schema.user_lifting_exercises_table.name,
+			primaryTarget: schema.user_lifting_exercises_table.primaryTarget,
 			totalSets: schema.workouts_lifting_exercises_table.totalSets,
 			totalReps: schema.workouts_lifting_exercises_table.totalReps,
 			maxWeight: schema.workouts_lifting_exercises_table.maxWeight,

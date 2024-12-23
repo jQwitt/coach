@@ -1,8 +1,8 @@
 import { getDetailedWorkoutsForDates, getPreviousDetailedWorkoutsByIncrement } from "@/app/actions";
-import Header from "@/components/ui/header";
 import type { WorkoutAnalytics } from "@/lib/types";
-import { ChartColumn } from "lucide-react";
+import AnalyticsContrastExercises from "../../components/analytics-contrast-exercises";
 import AnalyticsQuickStats from "../../components/analytics-quick-stats";
+import AnalyticsVolumePerMuscleGroup from "../../components/analytics-volume-per-muscle-group";
 import { getVolume } from "../../helpers";
 import { parse } from "../../helpers/date-ranges";
 import type { PageProps } from ".next/types/app/page";
@@ -28,8 +28,9 @@ export default async function AnalyticsDateRagePage({
 
 	return (
 		<div className="space-y-4">
-			<Header title="Analytics" Icon={ChartColumn} />
 			<AnalyticsQuickStats data={data} />
+			{increment === "week" && <AnalyticsVolumePerMuscleGroup workouts={workouts} />}
+			<AnalyticsContrastExercises workouts={workouts} />
 		</div>
 	);
 }
