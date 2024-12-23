@@ -1,6 +1,6 @@
 import { ClerkProvider } from "@clerk/nextjs";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
-
 import { base } from "./fonts";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
@@ -31,6 +31,7 @@ export default async function RootLayout({
 }>) {
 	return (
 		<html lang="en">
+			<SpeedInsights />
 			<ClerkProvider>
 				<body className={`${base.className} bg-gray-100`}>
 					{children}
