@@ -18,7 +18,7 @@ export default function ExerciseList({ exercises }: { exercises: UserExerciseLif
 					<Card key={name} className="relative min-w-[45%] min-h-[160px] overflow-hidden">
 						<CardHeader>
 							<Header title={name} level={HeaderLevel.SUB_SECTION} />
-							<div>
+							<div className="min-h-[36px]">
 								<p className="text-sm text-muted-foreground font-bold">{primaryTarget}</p>
 								<p className="text-xs text-muted-foreground">{detailedTargets.join(", ")}</p>
 							</div>
