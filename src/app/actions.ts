@@ -8,6 +8,7 @@ import {
 	getExercisesForWorkout as getExercisesForWorkoutAction,
 	updateExercise as updateExerciseAction,
 } from "../actions/exercises";
+import { determineTrainingIntent as determineTrainingIntentAction } from "../actions/live-coach";
 import {
 	createUser as createUserAction,
 	deleteCurrentUser as deleteCurrentUserAction,
@@ -40,3 +41,6 @@ export const getDetailedWorkoutsForDates = getDetailedWorkoutsForDatesAction;
 export const getPreviousDetailedWorkoutsByIncrement = getPreviousDetailedWorkoutsByIncrementAction;
 export const getWorkout = getWorkoutAction;
 export const saveWorkoutLifting = saveWorkoutLiftingAction;
+
+// LIVE COACH
+export const determineTrainingIntent = determineTrainingIntentAction;

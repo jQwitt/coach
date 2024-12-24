@@ -20,7 +20,7 @@ export default function LiveCoachMessage({
 					</Avatar>
 				</div>
 			)}
-			<div className="col-span-7 flex flex-col space-y-1">
+			<div className="col-span-7 flex flex-col space-y-2">
 				{messages?.map((text, i) => {
 					const props = {
 						text,
