@@ -86,3 +86,21 @@ export type ExercisesReturn = Awaited<ReturnType<typeof getExercises>>;
 export type WorkoutsDetailedByDateReturn = Awaited<ReturnType<typeof getDetailedWorkoutsForDates>>;
 
 export type MessageDirection = "inbound" | "outbound";
+export type LiceCoachConversationMessage = {
+	direction: MessageDirection;
+	text: string;
+};
+export enum LiveCoachConversationPhase {
+	DETETMINE_INTENT = "determine_intent",
+	CONFIRM_INTENT = "confirm_intent",
+	FULFILL_INTENT = "fulfill_intent",
+}
+export enum LiveCoachSupportedActionsEnum {
+	DESIGN_WORKOUT = "design a workout",
+	VIEW_ANALYTICS = "view analytics",
+	SUGGEST_EXERCISE = "suggest an exercise",
+	DETERMINE_EXERCISE_WEIGHT = "determine exercise weight",
+}
+export const LiveCoachSupportedActions = (
+	Object.keys(LiveCoachSupportedActionsEnum) as Array<keyof typeof LiveCoachSupportedActionsEnum>
+).map((key) => ({ value: key, key: LiveCoachSupportedActionsEnum[key] }));

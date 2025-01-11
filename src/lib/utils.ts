@@ -11,5 +11,5 @@ export function toStringArray(value: ExerciseData[]) {
 }
 
 export function hasForbiddenCharacters(value: string): boolean {
-	return !/^[a-zA-Z0-9_.\- ]*$/.test(value);
+	return !/^[a-zA-Z0-9?_.\- ]*$/.test(value);
 }

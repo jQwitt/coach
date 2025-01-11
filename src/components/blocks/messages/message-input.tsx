@@ -4,6 +4,7 @@ import { determineTrainingIntent } from "@/app/actions";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { useConversation } from "@/hooks/stores/use-live-coach-conversation";
+import { LiveCoachConversationPhase } from "@/lib/types";
 import { Send } from "lucide-react";
 import * as React from "react";
 
@@ -15,17 +16,62 @@ export interface MessageInputProps {
 	};
 }
 
+const DELAY_MIME = 600;
+
 export default function MessageInput({ actions }: MessageInputProps) {
-	const { addOutboundMessage } = useConversation();
+	const {
+		conversation: { phase, isTyping },
+		setIsTyping,
+		addInboundMessage,
+		addOutboundMessage,
+		setPhase,
+	} = useConversation();
 	const [userMessage, setUserMessage] = React.useState("");
-	const [hasBeenCalled, setHasBeenCalled] = React.useState(false);
+	const [sendCount, setSendCount] = React.useState(0);
 
 	const handleSend = async () => {
 		addOutboundMessage(userMessage);
+		setSendCount((count) => count + 1);
 
-		if (!hasBeenCalled) {
-			const intent = determineTrainingIntent(userMessage);
-			setHasBeenCalled(true);
+		if (sendCount > 3) {
+			addInboundMessage("Sorry, you're currently limited to 3 messages per session");
+			return;
+		}
+
+		if (phase === LiveCoachConversationPhase.DETETMINE_INTENT) {
+			setIsTyping(true);
+			const insight = await determineTrainingIntent(userMessage);
+
+			// if no insights availble, ask again
+			if (!insight || !insight.intent) {
+				addInboundMessage("Sorry I didn't get that, what can I help you with?");
+				return;
+			}
+			setIsTyping(false);
+
+			const { intent, muscleGroup, exercise } = insight;
+			addInboundMessage(
+				`I think you're looking to ${intent}${exercise ? `, emphasizing ${exercise}` : ""}${exercise ? `, targeting ${muscleGroup}` : ""}, is that right?`,
+			);
+			setPhase(LiveCoachConversationPhase.CONFIRM_INTENT);
+		} else if (phase === LiveCoachConversationPhase.CONFIRM_INTENT) {
+			setIsTyping(true);
+
+			if (userMessage.match(/yes/gi)) {
+				setTimeout(() => {
+					setIsTyping(false);
+					addInboundMessage("Got it!");
+				}, DELAY_MIME);
+				setPhase(LiveCoachConversationPhase.FULFILL_INTENT);
+				setIsTyping(true);
+				return;
+			}
+
+			setTimeout(() => {
+				setIsTyping(false);
+				addInboundMessage("Sorry, I didn't get that, what can I help you with?");
+			}, DELAY_MIME);
+			setPhase(LiveCoachConversationPhase.DETETMINE_INTENT);
 		}
 
 		setUserMessage("");
@@ -42,7 +88,7 @@ export default function MessageInput({ actions }: MessageInputProps) {
 						value={userMessage}
 						onChange={(e) => setUserMessage(e.target.value)}
 						onKeyDown={(e) => {
-							if (e.key === "Enter" && userMessage.length > 20) handleSend();
+							if (e.key === "Enter") handleSend();
 						}}
 					/>
 					<Label
@@ -53,12 +99,7 @@ export default function MessageInput({ actions }: MessageInputProps) {
 					</Label>
 				</div>
 				<div>
-					<Button
-						size="icon"
-						className="rounded-full"
-						disabled={userMessage.length < 20}
-						onClick={handleSend}
-					>
+					<Button size="icon" className="rounded-full" disabled={isTyping} onClick={handleSend}>
 						<Send />
 					</Button>
 				</div>

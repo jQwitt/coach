@@ -72,9 +72,9 @@ export async function determineTrainingIntent(userMsg: string) {
 		presence_penalty: 0,
 	});
 
-	const trainingIntent = response.choices[0].message.tool_calls
+	const trainingIntents = response.choices[0].message.tool_calls
 		?.filter(({ function: { name } }) => name === "training_intent")
 		.map((call) => ({ ...JSON.parse(call.function.arguments) }));
 
-	return trainingIntent;
+	return trainingIntents?.[0]; // return first intent for the time being
 }
