@@ -16,6 +16,18 @@ export const getUserByAuthId = async ({ authId }: { authId: string }) => {
 	return foundUser;
 };
 
+export const emailIsRegistered = async ({ email }: { email: string }) => {
+	const foundUser = await db.query.users_table.findFirst({
+		where: (users, { eq }) => eq(users.email, email),
+	});
+
+	if (!foundUser) {
+		return false;
+	}
+
+	return true;
+};
+
 export const insertUser = async ({
 	authId,
 	email,

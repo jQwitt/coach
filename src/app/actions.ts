@@ -12,6 +12,7 @@ import { determineTrainingIntent as determineTrainingIntentAction } from "../act
 import {
 	createUser as createUserAction,
 	deleteCurrentUser as deleteCurrentUserAction,
+	emailExists as emailExistsAction,
 	getCurrentUser as getCurrentUserAction,
 } from "../actions/user";
 import {
@@ -26,6 +27,7 @@ import { saveWorkoutLifting as saveWorkoutLiftingAction } from "../actions/worko
 export const createUser = createUserAction;
 export const getCurrentUser = getCurrentUserAction;
 export const deleteCurrentUser = deleteCurrentUserAction;
+export const isRegistered = emailExistsAction;
 
 // EXERCISE ACTIONS
 export const getExercises = getExercisesAction;

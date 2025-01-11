@@ -1,6 +1,6 @@
 "use server";
 
-import { deleteUser, getUserByAuthId, insertUser } from "@/db/users";
+import { deleteUser, emailIsRegistered, getUserByAuthId, insertUser } from "@/db/users";
 import type { User } from "@/lib/types";
 import { clerkClient, currentUser } from "@clerk/nextjs/server";
 
@@ -66,4 +66,8 @@ export const deleteCurrentUser = async () => {
 	}
 
 	return false;
+};
+
+export const emailExists = async (email: string) => {
+	return await emailIsRegistered({ email });
 };

@@ -1,6 +1,6 @@
 "use client";
 
-import { createUser } from "@/app/actions";
+import { createUser, isRegistered } from "@/app/actions";
 import Alert from "@/components/blocks/error-alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,7 +8,6 @@ import Header from "@/components/ui/header";
 import { Input } from "@/components/ui/input";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { Label } from "@/components/ui/label";
-import { useToast } from "@/hooks/use-toast";
 import { useSignUp } from "@clerk/nextjs";
 import type { ClerkAPIError } from "@clerk/types";
 import { ArrowRight, Loader2 } from "lucide-react";
@@ -31,7 +30,6 @@ export default function SignUpPage() {
 	const [errorLink, setErrorLink] = React.useState({ text: "", link: "" });
 
 	const { signUp, isLoaded, setActive } = useSignUp();
-	const { toast } = useToast();
 
 	const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -46,6 +44,11 @@ export default function SignUpPage() {
 
 		if (signUp) {
 			try {
+				const previouslyRegistered = await isRegistered(emailData);
+				if (previouslyRegistered) {
+					throw new Error("This email address has already been registered.");
+				}
+
 				await signUp.create({
 					emailAddress: emailData,
 					password: passwordData,
@@ -61,7 +64,6 @@ export default function SignUpPage() {
 				setErrorMessage("");
 			} catch (e) {
 				const error = Object(e) as ClerkAPIError;
-				console.log(error.message);
 				const { message = "Something went wrong" } = error;
 				setErrorMessage(message);
 			}
@@ -78,6 +80,11 @@ export default function SignUpPage() {
 		if (!isLoaded) {
 			return;
 		}
+
+		setIsSubmitting(true);
+		const submitTimout = setTimeout(() => {
+			setIsSubmitting(false);
+		}, 4000);
 
 		if (signUp) {
 			try {
@@ -106,11 +113,21 @@ export default function SignUpPage() {
 					});
 				}
 			} catch (e) {
-				console.error(e);
+				const error = Object(e) as ClerkAPIError;
+				const { message = "Something went wrong" } = error;
+				if (message.match(/"users_email_unique"/gi)) {
+					setErrorMessage("This email address has already been registered.");
+				} else {
+					setErrorMessage(message);
+				}
+				setPendingVerification(false);
 			}
 		} else {
 			console.warn("clerk: signUp is undefined");
 		}
+
+		clearTimeout(submitTimout);
+		setIsSubmitting(false);
 	};
 
 	return (
@@ -151,8 +168,18 @@ export default function SignUpPage() {
 							</InputOTPGroup>
 						</InputOTP>
 						<div className="my-5">
-							<Button className="w-full" type="submit">
-								{"Verify"}
+							<Button className="w-full" type="submit" disabled={isSubmitting}>
+								{isSubmitting ? (
+									<Loader2 className="animate-spin" />
+								) : (
+									<>
+										{"Verify"}
+										<ArrowRight
+											size={16}
+											className="transition-all ease-in duration-100 group-hover:translate-x-2"
+										/>
+									</>
+								)}
 							</Button>
 						</div>
 					</form>
