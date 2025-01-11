@@ -89,7 +89,14 @@ export type MessageDirection = "inbound" | "outbound";
 export type LiceCoachConversationMessage = {
 	direction: MessageDirection;
 	text: string;
+	info?: LiveCoachConversationMessageInfo;
 };
+export type LiveCoachConversationMessageInfo = {
+	title: string;
+	description: string;
+	data: string;
+};
+
 export enum LiveCoachConversationPhase {
 	DETETMINE_INTENT = "determine_intent",
 	CONFIRM_INTENT = "confirm_intent",

@@ -26,7 +26,7 @@ export default function LiveCoachMessage({ userFirstName }: { userFirstName?: st
 		if (!conversation.conversationStarted) {
 			setIsTyping(true);
 			setTimeout(() => {
-				addInboundMessage(`Hi ${userFirstName}! How can I help you today?`);
+				addInboundMessage({ text: `Hi ${userFirstName}! How can I help you today?` });
 				setIsTyping(false);
 			}, DELAY_MIME);
 		}
@@ -36,7 +36,7 @@ export default function LiveCoachMessage({ userFirstName }: { userFirstName?: st
 	return (
 		<div className="min-w-full flex flex-col gap-1">
 			{isMounted &&
-				messages?.map(({ direction, text }, i) => {
+				messages?.map(({ direction, text, ...other }, i) => {
 					const newGroup =
 						previousMessageDirection !== null && previousMessageDirection !== direction;
 					const props = {
@@ -44,6 +44,7 @@ export default function LiveCoachMessage({ userFirstName }: { userFirstName?: st
 						direction,
 						ear: newGroup,
 						className: newGroup ? "mt-2" : "",
+						...other,
 					} satisfies MessageProps;
 
 					previousMessageDirection = direction;

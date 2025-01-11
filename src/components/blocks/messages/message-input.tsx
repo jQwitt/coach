@@ -34,9 +34,9 @@ export default function MessageInput({ actions }: MessageInputProps) {
 		setSendCount((count) => count + 1);
 
 		if (sendCount > 3) {
-			addInboundMessage(
-				"You've hit the daily limit on messages to your coach. To increase your limit, upgrade your plan.",
-			);
+			addInboundMessage({
+				text: "You've hit the daily limit on messages to your coach. To increase your limit, upgrade your plan.",
+			});
 			return;
 		}
 
@@ -46,15 +46,20 @@ export default function MessageInput({ actions }: MessageInputProps) {
 
 			// if no insights availble, ask again
 			if (!insight || !insight.intent) {
-				addInboundMessage("Sorry I didn't get that, what can I help you with?");
+				addInboundMessage({ text: "Sorry I didn't get that, what can I help you with?" });
 				return;
 			}
 			setIsTyping(false);
 
 			const { intent, muscleGroup, exercise } = insight;
-			addInboundMessage(
-				`I think you're looking to ${intent}${exercise ? `, emphasizing ${exercise}` : ""}${exercise ? `, targeting ${muscleGroup}` : ""}, is that right?`,
-			);
+			addInboundMessage({
+				text: `I think you're looking to ${intent}${exercise ? `, emphasizing ${exercise}` : ""}${exercise ? `, targeting ${muscleGroup}` : ""}, is that right?`,
+				info: {
+					title: "AI Info",
+					description: "OpenAI's model returned the following insights based on your message:",
+					data: insight,
+				},
+			});
 			setPhase(LiveCoachConversationPhase.CONFIRM_INTENT);
 		} else if (phase === LiveCoachConversationPhase.CONFIRM_INTENT) {
 			setIsTyping(true);
@@ -62,7 +67,7 @@ export default function MessageInput({ actions }: MessageInputProps) {
 			if (userMessage.match(/yes/gi)) {
 				setTimeout(() => {
 					setIsTyping(false);
-					addInboundMessage("Got it!");
+					addInboundMessage({ text: "Got it!" });
 				}, DELAY_MIME);
 				setPhase(LiveCoachConversationPhase.FULFILL_INTENT);
 				setIsTyping(true);
@@ -71,7 +76,7 @@ export default function MessageInput({ actions }: MessageInputProps) {
 
 			setTimeout(() => {
 				setIsTyping(false);
-				addInboundMessage("Sorry, I didn't get that, what can I help you with?");
+				addInboundMessage({ text: "Sorry, I didn't get that, what can I help you with?" });
 			}, DELAY_MIME);
 			setPhase(LiveCoachConversationPhase.DETETMINE_INTENT);
 		}
