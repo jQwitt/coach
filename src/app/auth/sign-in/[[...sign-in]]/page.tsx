@@ -8,16 +8,19 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useSignIn } from "@clerk/nextjs";
 import type { ClerkAPIError } from "@clerk/types";
+import { ArrowRight, Loader2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import * as React from "react";
 import Barbell from "../../../../../public/images/dumbbell_black.png";
+
 export default function SignInPage() {
 	const [emailData, setEmailData] = React.useState("");
 	const [passwordData, setPasswordData] = React.useState("");
 	const [errorMessage, setErrorMessage] = React.useState("");
 	const [errorLink, setErrorLink] = React.useState({ text: "", link: "" });
-	const submitDisabled = !emailData || !passwordData;
+	const [isSubmitting, setIsSubmitting] = React.useState(false);
+	const submitDisabled = !emailData || !passwordData || isSubmitting;
 
 	const { signIn, isLoaded, setActive } = useSignIn();
 
@@ -26,6 +29,11 @@ export default function SignInPage() {
 		if (!isLoaded) {
 			return;
 		}
+
+		setIsSubmitting(true);
+		const submitTimeout = setTimeout(() => {
+			setIsSubmitting(false);
+		}, 2000);
 
 		if (signIn) {
 			try {
@@ -39,6 +47,7 @@ export default function SignInPage() {
 						session: signIn.createdSessionId,
 						redirectUrl: "/dashboard",
 					});
+					return;
 				}
 			} catch (e) {
 				const error = Object(e) as ClerkAPIError;
@@ -54,6 +63,8 @@ export default function SignInPage() {
 		} else {
 			console.warn("clerk: signUp is undefined");
 		}
+		clearTimeout(submitTimeout);
+		setIsSubmitting(false);
 	};
 
 	return (
@@ -100,12 +111,22 @@ export default function SignInPage() {
 					</div>
 					<div className="flex flex-col gap-2">
 						<Button
-							className="w-full"
+							className="w-full group"
 							type="submit"
 							disabled={submitDisabled}
 							variant={submitDisabled ? "secondary" : "default"}
 						>
-							{"Continue Training!"}
+							{isSubmitting ? (
+								<Loader2 className="animate-spin" />
+							) : (
+								<>
+									{"Continue Training!"}
+									<ArrowRight
+										size={16}
+										className="transition-all ease-in duration-100 group-hover:translate-x-2"
+									/>
+								</>
+							)}
 						</Button>
 						<div className="flex flex-col items-center gap-2">
 							<Link href="/auth/reset-password">

@@ -1,13 +1,17 @@
 "use client";
 
 import { createUser } from "@/app/actions";
+import Alert from "@/components/blocks/error-alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import Header from "@/components/ui/header";
 import { Input } from "@/components/ui/input";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
 import { useSignUp } from "@clerk/nextjs";
+import type { ClerkAPIError } from "@clerk/types";
+import { ArrowRight, Loader2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import * as React from "react";
@@ -18,16 +22,27 @@ export default function SignUpPage() {
 	const [passwordData, setPasswordData] = React.useState("");
 	const [firstNameData, setFirstNameData] = React.useState("");
 	const [lastNameData, setLastNameData] = React.useState("");
+
 	const [pendingVerification, setPendingVerification] = React.useState(false);
 	const [verificationCode, setVerificationCode] = React.useState("");
 
+	const [isSubmitting, setIsSubmitting] = React.useState(false);
+	const [errorMessage, setErrorMessage] = React.useState("");
+	const [errorLink, setErrorLink] = React.useState({ text: "", link: "" });
+
 	const { signUp, isLoaded, setActive } = useSignUp();
+	const { toast } = useToast();
 
 	const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		if (!isLoaded) {
 			return;
 		}
+
+		setIsSubmitting(true);
+		const submitTimout = setTimeout(() => {
+			setIsSubmitting(false);
+		}, 4000);
 
 		if (signUp) {
 			try {
@@ -39,13 +54,23 @@ export default function SignUpPage() {
 				await signUp.prepareEmailAddressVerification({
 					strategy: "email_code",
 				});
+
 				setPendingVerification(true);
+				clearTimeout(submitTimout);
+				setIsSubmitting(false);
+				setErrorMessage("");
 			} catch (e) {
-				console.error(e);
+				const error = Object(e) as ClerkAPIError;
+				console.log(error.message);
+				const { message = "Something went wrong" } = error;
+				setErrorMessage(message);
 			}
 		} else {
 			console.warn("clerk: signUp is undefined");
 		}
+
+		clearTimeout(submitTimout);
+		setIsSubmitting(false);
 	};
 
 	const onProcessVerify = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -89,7 +114,7 @@ export default function SignUpPage() {
 	};
 
 	return (
-		<Card className="h-[70vh] w-full max-w-md">
+		<Card className="w-full max-w-md">
 			<CardHeader className="border-b-2">
 				<CardTitle className="text-2xl flex items-center gap-2">
 					<Header title="Sign Up" />
@@ -100,6 +125,14 @@ export default function SignUpPage() {
 				</CardDescription>
 			</CardHeader>
 			<CardContent className="py-5">
+				{errorMessage.length ? (
+					<Alert
+						message={errorMessage}
+						className="mb-2"
+						linkRoute={errorLink.link}
+						linkText={errorLink.text}
+					/>
+				) : null}
 				{pendingVerification ? (
 					<form onSubmit={onProcessVerify}>
 						<Label htmlFor="verificationCode">Verification Code</Label>
@@ -171,8 +204,22 @@ export default function SignUpPage() {
 							</div>
 						</div>
 						<div>
-							<Button className="w-full" type="submit" disabled={pendingVerification}>
-								{"Start training!"}
+							<Button
+								className="w-full group"
+								type="submit"
+								disabled={pendingVerification || isSubmitting}
+							>
+								{isSubmitting ? (
+									<Loader2 className="animate-spin" />
+								) : (
+									<>
+										{"Start training!"}
+										<ArrowRight
+											size={16}
+											className="transition-all ease-in duration-100 group-hover:translate-x-2"
+										/>
+									</>
+								)}
 							</Button>
 							<div className="mt-5 flex justify-center">
 								<Link href="/auth/sign-in">
