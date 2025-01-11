@@ -33,7 +33,7 @@ export default async function RootLayout({
 		<html lang="en">
 			<SpeedInsights />
 			<ClerkProvider>
-				<body className={`${base.className} bg-gray-100`}>
+				<body className={`${base.className} bg-background`}>
 					{children}
 					<Toaster />
 				</body>

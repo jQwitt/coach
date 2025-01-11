@@ -80,7 +80,7 @@ export default function MessageInput({ actions }: MessageInputProps) {
 	};
 
 	return (
-		<div className="min-w-full px-5">
+		<div className="min-w-full">
 			<div className="flex justify-between gap-2">
 				<div className="relative w-full">
 					<input
