@@ -34,7 +34,9 @@ export default function MessageInput({ actions }: MessageInputProps) {
 		setSendCount((count) => count + 1);
 
 		if (sendCount > 3) {
-			addInboundMessage("Sorry, you're currently limited to 3 messages per session");
+			addInboundMessage(
+				"You've hit the daily limit on messages to your coach. To increase your limit, upgrade your plan.",
+			);
 			return;
 		}
 

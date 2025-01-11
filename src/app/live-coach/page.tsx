@@ -8,13 +8,15 @@ export default async function LiveCoachPage() {
 	const { firstName } = (await getCurrentUser()) || {};
 
 	return (
-		<div suppressHydrationWarning>
-			<Header title="Live Coach" />
-			<p className="-mt-4 text-xs text-muted-foreground">
-				Live Coach is an AI fitness companion and personal trainer. You can ask it questions about
-				your fitness goals, workouts, and progress to optimize your training.
-			</p>
-			<div className="mt-6 flex flex-col items-start gap-1">
+		<div suppressHydrationWarning className="flex flex-col justify-end min-h-[70dvh]">
+			<div className="-mx-4 px-4 pb-2 sticky top-16 z-10 bg-background shadow-sm">
+				<Header title="Live Coach" />
+				<p className="-mt-4 text-xs text-muted-foreground">
+					Live Coach is an AI fitness companion and personal trainer. You can ask it questions about
+					your fitness goals, workouts, and progress to optimize your training.
+				</p>
+			</div>
+			<div className="mt-6">
 				<LiveCoachConversation userFirstName={firstName} />
 			</div>
 			<div className="fixed bottom-5 w-full max-w-3xl pr-10">

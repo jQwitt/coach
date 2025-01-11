@@ -94,6 +94,7 @@ export enum LiveCoachConversationPhase {
 	DETETMINE_INTENT = "determine_intent",
 	CONFIRM_INTENT = "confirm_intent",
 	FULFILL_INTENT = "fulfill_intent",
+	END_CONVERSATION = "end_conversation",
 }
 export enum LiveCoachSupportedActionsEnum {
 	DESIGN_WORKOUT = "design a workout",
