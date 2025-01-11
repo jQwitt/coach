@@ -3,6 +3,7 @@
 import { determineTrainingIntent } from "@/app/actions";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { useConversation } from "@/hooks/stores/use-live-coach-conversation";
 import { Send } from "lucide-react";
 import * as React from "react";
 
@@ -15,10 +16,13 @@ export interface MessageInputProps {
 }
 
 export default function MessageInput({ actions }: MessageInputProps) {
+	const { addOutboundMessage } = useConversation();
 	const [userMessage, setUserMessage] = React.useState("");
 	const [hasBeenCalled, setHasBeenCalled] = React.useState(false);
 
 	const handleSend = async () => {
+		addOutboundMessage(userMessage);
+
 		if (!hasBeenCalled) {
 			const intent = determineTrainingIntent(userMessage);
 			setHasBeenCalled(true);
@@ -59,8 +63,8 @@ export default function MessageInput({ actions }: MessageInputProps) {
 					</Button>
 				</div>
 			</div>
-			<div className="mt-3 flex gap-2 overflow-x-scroll">
-				{Object.entries(actions ?? {})?.map(([action, { fullfillment }]) => (
+			<div className="hidden mt-3 flex gap-2 overflow-x-scroll">
+				{Object.entries(actions ?? {})?.map(([action]) => (
 					<Button
 						variant="outline"
 						className="rounded-full border"

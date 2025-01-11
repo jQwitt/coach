@@ -84,3 +84,5 @@ export type ExerciseHistory = {
 
 export type ExercisesReturn = Awaited<ReturnType<typeof getExercises>>;
 export type WorkoutsDetailedByDateReturn = Awaited<ReturnType<typeof getDetailedWorkoutsForDates>>;
+
+export type MessageDirection = "inbound" | "outbound";
