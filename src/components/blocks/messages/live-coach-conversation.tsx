@@ -1,16 +1,26 @@
 "use client";
 
 import { useConversation } from "@/hooks/stores/use-live-coach-conversation";
-import type { MessageDirection } from "@/lib/types";
+import { LiveCoachConversationPhase, type MessageDirection } from "@/lib/types";
 import { Dot } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 import * as React from "react";
 import { Message, type MessageProps } from "./message";
 
 const DELAY_MIME = 500;
 
 export default function LiveCoachMessage({ userFirstName }: { userFirstName?: string }) {
-	const { conversation, setIsTyping, startConversation, addInboundMessage } = useConversation();
+	const params = useSearchParams();
+	const { conversation, setIsTyping, setPhase, startConversation, addInboundMessage } =
+		useConversation();
 	const { conversationStarted, isTyping } = conversation;
+
+	const foundIntent = params.get("intent");
+	const parsdIntent = foundIntent
+		?.trim()
+		.split("")
+		.filter((c) => c !== '"')
+		.join("");
 
 	const { messages } = conversation;
 	let previousMessageDirection: MessageDirection | null = null;
@@ -26,7 +36,16 @@ export default function LiveCoachMessage({ userFirstName }: { userFirstName?: st
 		if (!conversation.conversationStarted) {
 			setIsTyping(true);
 			setTimeout(() => {
-				addInboundMessage({ text: `Hi ${userFirstName}! How can I help you today?` });
+				addInboundMessage({ text: `Hi ${userFirstName}!` });
+				if (parsdIntent) {
+					addInboundMessage({
+						text: `You're looking to ${parsdIntent}, is that right?`,
+					});
+					setPhase(LiveCoachConversationPhase.CONFIRM_INTENT);
+				} else {
+					addInboundMessage({ text: "How can I help you today?" });
+				}
+
 				setIsTyping(false);
 			}, DELAY_MIME);
 		}
