@@ -26,7 +26,7 @@ export function Message({
 	}>) {
 	return (
 		<div
-			className={`${ear ? (direction === "inbound" ? "rounded-bl-none " : "rounded-br-none ") : ""} ${direction === "inbound" ? "self-start " : "self-end bg-black text-white"} relative text-sm max-w-[75%] w-fit shadow-md rounded-md outline outline-1 outline-slate-300 px-3 py-1 pb-2 ${className}`}
+			className={`${ear ? (direction === "inbound" ? "rounded-bl-none " : "rounded-br-none ") : ""} ${direction === "inbound" ? "self-start " : "self-end bg-black text-white"} relative text-sm max-w-[75%] w-fit shadow-md rounded-md outline outline-1 outline-slate-300 px-3 py-2 ${className}`}
 		>
 			{text}
 			{children}
