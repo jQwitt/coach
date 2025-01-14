@@ -75,7 +75,7 @@ export default function MessageInput({ actions }: MessageInputProps) {
 
 			const { intent, muscleGroup, exercise } = insight;
 			addInboundMessage({
-				text: `I think you're looking to ${intent}${exercise ? `, emphasizing ${exercise}` : ""}${muscleGroup ? `, targeting ${muscleGroup !== "none"}` : ""}, is that right?`,
+				text: `I think you're looking to ${intent}${exercise ? `, emphasizing ${exercise}` : ""}${muscleGroup ? `, targeting ${muscleGroup !== "none" ? muscleGroup : ""}` : ""}, is that right?`,
 				info: {
 					title: "AI Info",
 					description: "OpenAI's model returned the following insights based on your message:",
