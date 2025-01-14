@@ -83,8 +83,8 @@ export default function MessageInput({ actions }: MessageInputProps) {
 				setTimeout(() => {
 					setIsTyping(false);
 					addInboundMessage({ text: "Got it!" });
+					setPhase(LiveCoachConversationPhase.FULFILL_INTENT);
 				}, DELAY_MIME);
-				setPhase(LiveCoachConversationPhase.FULFILL_INTENT);
 				return;
 			}
 
@@ -98,7 +98,7 @@ export default function MessageInput({ actions }: MessageInputProps) {
 		setUserMessage("");
 	};
 
-	const fulfill = () => {
+	const fulfill = async () => {
 		setIsTyping(true);
 		setBlockInput(true);
 
@@ -106,7 +106,16 @@ export default function MessageInput({ actions }: MessageInputProps) {
 			if (insight.intent === LiveCoachSupportedActionsEnum.DESIGN_WORKOUT) {
 				designWorkout(insight);
 			} else if (insight.intent === LiveCoachSupportedActionsEnum.VIEW_ANALYTICS) {
-				viewAnalytics(insight);
+				const res = await viewAnalytics(insight);
+				if (res?.url) {
+					addInboundMessage({ text: `You can view the analytics here! ${res.url}` });
+				} else {
+					addInboundMessage({
+						text: `I counldn't find any analytics for ${insight.exercise} in your workout history.`,
+					});
+
+					// TODO: Recover Intent
+				}
 			} else if (insight.intent === LiveCoachSupportedActionsEnum.DETERMINE_EXERCISE_WEIGHT) {
 				determineExerciseWeight(insight);
 			} else if (insight.intent === LiveCoachSupportedActionsEnum.SUGGEST_EXERCISE) {

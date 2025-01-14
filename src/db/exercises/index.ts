@@ -170,3 +170,13 @@ export async function getExerciseForUser({
 
 	return result;
 }
+
+export async function findExerciseByName({
+	userId,
+	exerciseName,
+}: { userId: number; exerciseName: string }) {
+	return await db.query.user_lifting_exercises_table.findFirst({
+		where: (exercises, { and, eq, ilike }) =>
+			and(eq(exercises.userId, userId), ilike(exercises.name, exerciseName)),
+	});
+}
