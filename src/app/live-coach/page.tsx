@@ -12,7 +12,7 @@ export default async function LiveCoachPage() {
 	];
 
 	return (
-		<div suppressHydrationWarning className="flex flex-col justify-end min-h-[70dvh]">
+		<div suppressHydrationWarning className="flex flex-col justify-end min-h-[70dvh] pb-14">
 			<div className="-mx-4 px-4 pb-2 sticky top-16 z-10 bg-background shadow-sm">
 				<Header title="Live Coach" />
 				<p className="-mt-4 text-xs text-muted-foreground">
@@ -20,7 +20,7 @@ export default async function LiveCoachPage() {
 					your fitness goals, workouts, and progress to optimize your training.
 				</p>
 			</div>
-			<div className="mt-6 pb-14">
+			<div className="mt-6">
 				<LiveCoachConversation userFirstName={firstName} />
 			</div>
 			<div className="fixed bottom-0 w-full max-w-3xl bg-white -mx-4 p-4 pt-6">

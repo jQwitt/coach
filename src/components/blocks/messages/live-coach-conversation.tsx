@@ -63,7 +63,7 @@ export default function LiveCoachConversation({ userFirstName }: { userFirstName
 	}, [isMounted, messages.length]);
 
 	return (
-		<div className="min-w-full flex flex-col gap-1">
+		<div className="min-w-full flex flex-col gap-1 max-h-[80dvh]">
 			{isMounted &&
 				messages?.map(({ direction, text, ...other }, i) => {
 					const newGroup =
