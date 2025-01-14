@@ -103,12 +103,17 @@ export default function MessageInput({ actions }: MessageInputProps) {
 		setBlockInput(true);
 
 		if (phase === LiveCoachConversationPhase.FULFILL_INTENT) {
-			if (insight.intent === LiveCoachSupportedActionsEnum.DESIGN_WORKOUT) {
+			const { intent, exercise } = insight;
+
+			if (intent === LiveCoachSupportedActionsEnum.DESIGN_WORKOUT) {
 				designWorkout(insight);
-			} else if (insight.intent === LiveCoachSupportedActionsEnum.VIEW_ANALYTICS) {
+			} else if (intent === LiveCoachSupportedActionsEnum.VIEW_ANALYTICS) {
 				const res = await viewAnalytics(insight);
 				if (res?.url) {
-					addInboundMessage({ text: `You can view the analytics here! ${res.url}` });
+					addInboundMessage({
+						text: `Click the button below to view your analytics for ${exercise} as requested`,
+						action: { text: "View Analytics", url: res.url },
+					});
 				} else {
 					addInboundMessage({
 						text: `I counldn't find any analytics for ${insight.exercise} in your workout history.`,
@@ -116,9 +121,9 @@ export default function MessageInput({ actions }: MessageInputProps) {
 
 					// TODO: Recover Intent
 				}
-			} else if (insight.intent === LiveCoachSupportedActionsEnum.DETERMINE_EXERCISE_WEIGHT) {
+			} else if (intent === LiveCoachSupportedActionsEnum.DETERMINE_EXERCISE_WEIGHT) {
 				determineExerciseWeight(insight);
-			} else if (insight.intent === LiveCoachSupportedActionsEnum.SUGGEST_EXERCISE) {
+			} else if (intent === LiveCoachSupportedActionsEnum.SUGGEST_EXERCISE) {
 				suggestExercise(insight);
 			} else {
 				// handle case where intent is not supported

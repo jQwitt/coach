@@ -1,8 +1,9 @@
-import {
-	type LiceCoachConversationMessage,
-	type LiveCoachConversationMessageInfo,
-	LiveCoachConversationPhase,
+import type {
+	LiceCoachConversationMessage,
+	LiveCoachConversationMessageAction,
+	LiveCoachConversationMessageInfo,
 } from "@/lib/types";
+import { LiveCoachConversationPhase } from "@/lib/types";
 import { create } from "zustand";
 
 interface LiveCoachConversationState {
@@ -15,10 +16,11 @@ interface LiveCoachConversationState {
 	setIsTyping: (isTyping: boolean) => void;
 	startConversation: () => void;
 	addOutboundMessage: (text: string) => void;
-	addInboundMessage: ({
-		text,
-		info,
-	}: { text: string; info?: LiveCoachConversationMessageInfo }) => void;
+	addInboundMessage: (params: {
+		text: string;
+		info?: LiveCoachConversationMessageInfo;
+		action?: LiveCoachConversationMessageAction;
+	}) => void;
 	setPhase: (phase: LiveCoachConversationPhase) => void;
 }
 
@@ -48,7 +50,7 @@ export const useConversation = create<LiveCoachConversationState>()((set) => ({
 			},
 		}));
 	},
-	addInboundMessage({ text, info }) {
+	addInboundMessage({ text, info, action }) {
 		set((state) => {
 			const toSet: LiveCoachConversationMessageInfo = {
 				title: "",
@@ -60,7 +62,10 @@ export const useConversation = create<LiveCoachConversationState>()((set) => ({
 			return {
 				conversation: {
 					...state.conversation,
-					messages: [...state.conversation.messages, { direction: "inbound", text, info: toSet }],
+					messages: [
+						...state.conversation.messages,
+						{ direction: "inbound", text, info: toSet, action },
+					],
 				},
 			};
 		});

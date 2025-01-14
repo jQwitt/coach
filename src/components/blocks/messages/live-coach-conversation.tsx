@@ -5,11 +5,11 @@ import { LiveCoachConversationPhase, type MessageDirection } from "@/lib/types";
 import { Dot } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import * as React from "react";
-import { Message, type MessageProps } from "./message";
+import { LiveCoachMessage, type LiveCoachMessageProps } from "./live-coach-message";
 
 const DELAY_MIME = 500;
 
-export default function LiveCoachMessage({ userFirstName }: { userFirstName?: string }) {
+export default function LiveCoachConversation({ userFirstName }: { userFirstName?: string }) {
 	const params = useSearchParams();
 	const { conversation, setIsTyping, setPhase, startConversation, addInboundMessage } =
 		useConversation();
@@ -64,18 +64,18 @@ export default function LiveCoachMessage({ userFirstName }: { userFirstName?: st
 						ear: newGroup,
 						className: newGroup ? "mt-2" : "",
 						...other,
-					} satisfies MessageProps;
+					} satisfies LiveCoachMessageProps;
 
 					previousMessageDirection = direction;
 
-					return <Message {...props} key={`coach-live-message-${i}`} />;
+					return <LiveCoachMessage {...props} key={`coach-live-message-${i}`} />;
 				})}
 			{isTyping ? (
-				<Message direction="inbound" text="" className="flex">
+				<LiveCoachMessage direction="inbound" text="" className="flex">
 					<Dot className="-mx-2 -mb-1 animate-bounce" />
 					<Dot className="-mx-2 -mb-1 animate-bounce delay-100" />
 					<Dot className="-mx-2 -mb-1 animate-bounce delay-200" />
-				</Message>
+				</LiveCoachMessage>
 			) : null}
 		</div>
 	);
