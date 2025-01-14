@@ -112,3 +112,8 @@ export enum LiveCoachSupportedActionsEnum {
 export const LiveCoachSupportedActions = (
 	Object.keys(LiveCoachSupportedActionsEnum) as Array<keyof typeof LiveCoachSupportedActionsEnum>
 ).map((key) => ({ value: key, key: LiveCoachSupportedActionsEnum[key] }));
+
+export type LiveCoachFulfillmentFunction<T> = (insight: {
+	muscleGroup: string;
+	exercise: string;
+}) => Promise<T>;

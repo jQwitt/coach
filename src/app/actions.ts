@@ -8,7 +8,13 @@ import {
 	getExercisesForWorkout as getExercisesForWorkoutAction,
 	updateExercise as updateExerciseAction,
 } from "../actions/exercises";
-import { determineTrainingIntent as determineTrainingIntentAction } from "../actions/live-coach";
+import {
+	designWorkout as designWorkoutAction,
+	determineExerciseWeight as determineExerciseWeightAction,
+	determineTrainingIntent as determineTrainingIntentAction,
+	suggestExercise as suggestExerciseAction,
+	viewAnalytics as viewAnalyticsAction,
+} from "../actions/live-coach";
 import {
 	createUser as createUserAction,
 	deleteCurrentUser as deleteCurrentUserAction,
@@ -46,3 +52,7 @@ export const saveWorkoutLifting = saveWorkoutLiftingAction;
 
 // LIVE COACH
 export const determineTrainingIntent = determineTrainingIntentAction;
+export const designWorkout = designWorkoutAction;
+export const determineExerciseWeight = determineExerciseWeightAction;
+export const suggestExercise = suggestExerciseAction;
+export const viewAnalytics = viewAnalyticsAction;

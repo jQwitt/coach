@@ -1,10 +1,16 @@
 "use client";
 
-import { determineTrainingIntent } from "@/app/actions";
+import {
+	designWorkout,
+	determineExerciseWeight,
+	determineTrainingIntent,
+	suggestExercise,
+	viewAnalytics,
+} from "@/app/actions";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { useConversation } from "@/hooks/stores/use-live-coach-conversation";
-import { LiveCoachConversationPhase } from "@/lib/types";
+import { LiveCoachConversationPhase, LiveCoachSupportedActionsEnum } from "@/lib/types";
 import { Send } from "lucide-react";
 import * as React from "react";
 
@@ -28,6 +34,14 @@ export default function MessageInput({ actions }: MessageInputProps) {
 	} = useConversation();
 	const [userMessage, setUserMessage] = React.useState("");
 	const [sendCount, setSendCount] = React.useState(0);
+	const [insight, setInsight] = React.useState({ intent: "", muscleGroup: "", exercise: "" });
+	const [blockInput, setBlockInput] = React.useState(false);
+
+	React.useEffect(() => {
+		if (phase === LiveCoachConversationPhase.FULFILL_INTENT) {
+			fulfill();
+		}
+	}, [phase]);
 
 	const handleSend = async () => {
 		addOutboundMessage(userMessage);
@@ -53,7 +67,7 @@ export default function MessageInput({ actions }: MessageInputProps) {
 
 			const { intent, muscleGroup, exercise } = insight;
 			addInboundMessage({
-				text: `I think you're looking to ${intent}${exercise ? `, emphasizing ${exercise}` : ""}${exercise ? `, targeting ${muscleGroup}` : ""}, is that right?`,
+				text: `I think you're looking to ${intent}${exercise ? `, emphasizing ${exercise}` : ""}${muscleGroup ? `, targeting ${muscleGroup}` : ""}, is that right?`,
 				info: {
 					title: "AI Info",
 					description: "OpenAI's model returned the following insights based on your message:",
@@ -61,6 +75,7 @@ export default function MessageInput({ actions }: MessageInputProps) {
 				},
 			});
 			setPhase(LiveCoachConversationPhase.CONFIRM_INTENT);
+			setInsight(insight);
 		} else if (phase === LiveCoachConversationPhase.CONFIRM_INTENT) {
 			setIsTyping(true);
 
@@ -70,7 +85,6 @@ export default function MessageInput({ actions }: MessageInputProps) {
 					addInboundMessage({ text: "Got it!" });
 				}, DELAY_MIME);
 				setPhase(LiveCoachConversationPhase.FULFILL_INTENT);
-				setIsTyping(true);
 				return;
 			}
 
@@ -82,6 +96,30 @@ export default function MessageInput({ actions }: MessageInputProps) {
 		}
 
 		setUserMessage("");
+	};
+
+	const fulfill = () => {
+		setIsTyping(true);
+		setBlockInput(true);
+
+		if (phase === LiveCoachConversationPhase.FULFILL_INTENT) {
+			if (insight.intent === LiveCoachSupportedActionsEnum.DESIGN_WORKOUT) {
+				designWorkout(insight);
+			} else if (insight.intent === LiveCoachSupportedActionsEnum.VIEW_ANALYTICS) {
+				viewAnalytics(insight);
+			} else if (insight.intent === LiveCoachSupportedActionsEnum.DETERMINE_EXERCISE_WEIGHT) {
+				determineExerciseWeight(insight);
+			} else if (insight.intent === LiveCoachSupportedActionsEnum.SUGGEST_EXERCISE) {
+				suggestExercise(insight);
+			} else {
+				// handle case where intent is not supported
+				addInboundMessage({
+					text: "I'm sorry, I can't currently do this, but I'll keep learning!",
+				});
+			}
+		}
+
+		setIsTyping(false);
 	};
 
 	return (
@@ -97,6 +135,7 @@ export default function MessageInput({ actions }: MessageInputProps) {
 						onKeyDown={(e) => {
 							if (e.key === "Enter") handleSend();
 						}}
+						disabled={blockInput}
 					/>
 					<Label
 						htmlFor="userMessageInput"
@@ -106,7 +145,12 @@ export default function MessageInput({ actions }: MessageInputProps) {
 					</Label>
 				</div>
 				<div>
-					<Button size="icon" className="rounded-full" disabled={isTyping} onClick={handleSend}>
+					<Button
+						size="icon"
+						className="rounded-full"
+						disabled={isTyping || blockInput}
+						onClick={handleSend}
+					>
 						<Send />
 					</Button>
 				</div>
