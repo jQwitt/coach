@@ -14,7 +14,7 @@ export default function LogWorkout() {
 	};
 
 	return (
-		<div className="flex flex-col -m-4 py-6">
+		<div className="flex flex-col -m-4">
 			<button
 				type="button"
 				className={workout.className}
@@ -23,14 +23,17 @@ export default function LogWorkout() {
 				<BicepsFlexed className={workout.icon.className} />
 				<Header title="Weight Lifting" />
 			</button>
-			<button type="button" className={workout.className}>
-				<Bike className={`${workout.icon.className} stroke-[2.25px]`} />
-				<Header title="Cycling" />
-			</button>
-			<button type="button" className={workout.className}>
-				<Mountain className={workout.icon.className} />
-				<Header title="Climbing" />
-			</button>
+
+			<div className="opacity-50 pointer-events-none">
+				<button type="button" className={workout.className}>
+					<Bike className={`${workout.icon.className} stroke-[2.25px]`} />
+					<Header title="Cycling" />
+				</button>
+				<button type="button" className={workout.className}>
+					<Mountain className={workout.icon.className} />
+					<Header title="Climbing" />
+				</button>
+			</div>
 		</div>
 	);
 }
