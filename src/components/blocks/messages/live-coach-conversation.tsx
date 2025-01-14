@@ -8,6 +8,7 @@ import * as React from "react";
 import { LiveCoachMessage, type LiveCoachMessageProps } from "./live-coach-message";
 
 const DELAY_MIME = 500;
+const LAST_MSG_ID = "coach-live-message-last";
 
 export default function LiveCoachConversation({ userFirstName }: { userFirstName?: string }) {
 	const params = useSearchParams();
@@ -52,6 +53,15 @@ export default function LiveCoachConversation({ userFirstName }: { userFirstName
 		startConversation();
 	}, [conversationStarted]);
 
+	React.useEffect(() => {
+		if (isMounted && messages.length) {
+			const last = document.getElementById(LAST_MSG_ID);
+			if (last) {
+				last.scrollIntoView({ behavior: "smooth" });
+			}
+		}
+	}, [isMounted, messages.length]);
+
 	return (
 		<div className="min-w-full flex flex-col gap-1">
 			{isMounted &&
@@ -59,6 +69,7 @@ export default function LiveCoachConversation({ userFirstName }: { userFirstName
 					const newGroup =
 						previousMessageDirection !== null && previousMessageDirection !== direction;
 					const props = {
+						id: i === messages.length - 1 ? LAST_MSG_ID : "",
 						text,
 						direction,
 						ear: newGroup,

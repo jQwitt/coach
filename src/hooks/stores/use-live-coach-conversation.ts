@@ -12,9 +12,11 @@ interface LiveCoachConversationState {
 		isTyping: boolean;
 		phase: LiveCoachConversationPhase;
 		messages: LiceCoachConversationMessage[];
+		fulfillmentStarted: boolean;
 	};
 	setIsTyping: (isTyping: boolean) => void;
 	startConversation: () => void;
+	setFullfillmentStarted: (fulfillmentStarted: boolean) => void;
 	addOutboundMessage: (text: string) => void;
 	addInboundMessage: (params: {
 		text: string;
@@ -28,8 +30,9 @@ export const useConversation = create<LiveCoachConversationState>()((set) => ({
 	conversation: {
 		conversationStarted: false,
 		isTyping: false,
-		phase: LiveCoachConversationPhase.DETETMINE_INTENT,
+		phase: LiveCoachConversationPhase.DETERMINE_INTENT,
 		messages: [],
+		fulfillmentStarted: false,
 	},
 	setIsTyping(isTyping) {
 		set((state) => ({ conversation: { ...state.conversation, isTyping } }));
@@ -39,6 +42,14 @@ export const useConversation = create<LiveCoachConversationState>()((set) => ({
 			conversation: {
 				...state.conversation,
 				conversationStarted: true,
+			},
+		}));
+	},
+	setFullfillmentStarted(fulfillmentStarted) {
+		set((state) => ({
+			conversation: {
+				...state.conversation,
+				fulfillmentStarted,
 			},
 		}));
 	},

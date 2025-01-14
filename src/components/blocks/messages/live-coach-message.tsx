@@ -18,6 +18,7 @@ export interface LiveCoachMessageProps {
 	className?: string;
 	info?: LiveCoachConversationMessageInfo;
 	action?: LiveCoachConversationMessageAction;
+	id?: string;
 }
 
 export function LiveCoachMessage({
@@ -28,6 +29,7 @@ export function LiveCoachMessage({
 	info = undefined,
 	children,
 	className,
+	id,
 }: LiveCoachMessageProps &
 	Readonly<{
 		children?: React.ReactNode;
@@ -38,6 +40,7 @@ export function LiveCoachMessage({
 		<>
 			<div
 				className={`${ear ? (direction === "inbound" ? "rounded-bl-none " : "rounded-br-none ") : ""} ${direction === "inbound" ? "self-start " : "self-end bg-black text-white"} relative text-sm w-fit max-w-[75%] shadow-md rounded-md outline outline-1 outline-slate-300 px-3 py-2 ${info?.title ? "pb-6" : ""} ${className}`}
+				id={id}
 			>
 				{text}
 				{children}

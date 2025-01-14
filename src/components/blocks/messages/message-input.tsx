@@ -1,12 +1,6 @@
 "use client";
 
-import {
-	designWorkout,
-	determineExerciseWeight,
-	determineTrainingIntent,
-	suggestExercise,
-	viewAnalytics,
-} from "@/app/actions";
+import { determineTrainingIntent, viewAnalytics } from "@/app/actions";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { useConversation } from "@/hooks/stores/use-live-coach-conversation";
@@ -15,27 +9,27 @@ import { Send } from "lucide-react";
 import * as React from "react";
 
 export interface MessageInputProps {
-	actions?: {
-		[action: string]: {
-			fullfillment?: (input: string) => Promise<string>;
-		};
-	};
+	actions?: Array<{
+		key: LiveCoachSupportedActionsEnum;
+		text: string;
+	}>;
 }
 
 const DELAY_MIME = 600;
 
 export default function MessageInput({ actions }: MessageInputProps) {
 	const {
-		conversation: { phase, isTyping },
+		conversation: { phase, isTyping, fulfillmentStarted },
 		setIsTyping,
 		addInboundMessage,
 		addOutboundMessage,
 		setPhase,
+		setFullfillmentStarted,
 	} = useConversation();
 	const [userMessage, setUserMessage] = React.useState("");
 	const [sendCount, setSendCount] = React.useState(0);
 	const [insight, setInsight] = React.useState({ intent: "", muscleGroup: "", exercise: "" });
-	const [blockInput, setBlockInput] = React.useState(false);
+	const [actionInProgress, setActionInProgress] = React.useState(false);
 
 	React.useEffect(() => {
 		if (phase === LiveCoachConversationPhase.FULFILL_INTENT) {
@@ -47,14 +41,15 @@ export default function MessageInput({ actions }: MessageInputProps) {
 		addOutboundMessage(userMessage);
 		setSendCount((count) => count + 1);
 
-		if (sendCount > 3) {
+		if (sendCount > 2) {
 			addInboundMessage({
 				text: "You've hit the daily limit on messages to your coach. To increase your limit, upgrade your plan.",
 			});
+			setUserMessage("");
 			return;
 		}
 
-		if (phase === LiveCoachConversationPhase.DETETMINE_INTENT) {
+		if (phase === LiveCoachConversationPhase.DETERMINE_INTENT) {
 			setIsTyping(true);
 			const insight = await determineTrainingIntent(userMessage);
 
@@ -76,6 +71,7 @@ export default function MessageInput({ actions }: MessageInputProps) {
 			});
 			setPhase(LiveCoachConversationPhase.CONFIRM_INTENT);
 			setInsight(insight);
+			setActionInProgress(true);
 		} else if (phase === LiveCoachConversationPhase.CONFIRM_INTENT) {
 			setIsTyping(true);
 
@@ -92,7 +88,10 @@ export default function MessageInput({ actions }: MessageInputProps) {
 				setIsTyping(false);
 				addInboundMessage({ text: "Sorry, I didn't get that, what can I help you with?" });
 			}, DELAY_MIME);
-			setPhase(LiveCoachConversationPhase.DETETMINE_INTENT);
+			setPhase(LiveCoachConversationPhase.DETERMINE_INTENT);
+		} else if (phase === LiveCoachConversationPhase.PROMPT_ACTION_INTENT) {
+			setInsight((prev) => ({ ...prev, exercise: userMessage }));
+			setPhase(LiveCoachConversationPhase.FULFILL_INTENT);
 		}
 
 		setUserMessage("");
@@ -100,14 +99,12 @@ export default function MessageInput({ actions }: MessageInputProps) {
 
 	const fulfill = async () => {
 		setIsTyping(true);
-		setBlockInput(true);
 
-		if (phase === LiveCoachConversationPhase.FULFILL_INTENT) {
+		if (phase === LiveCoachConversationPhase.FULFILL_INTENT && !fulfillmentStarted) {
+			setFullfillmentStarted(true);
 			const { intent, exercise } = insight;
 
-			if (intent === LiveCoachSupportedActionsEnum.DESIGN_WORKOUT) {
-				designWorkout(insight);
-			} else if (intent === LiveCoachSupportedActionsEnum.VIEW_ANALYTICS) {
+			if (intent === LiveCoachSupportedActionsEnum.VIEW_ANALYTICS) {
 				const res = await viewAnalytics(insight);
 				if (res?.url) {
 					addInboundMessage({
@@ -121,19 +118,48 @@ export default function MessageInput({ actions }: MessageInputProps) {
 
 					// TODO: Recover Intent
 				}
-			} else if (intent === LiveCoachSupportedActionsEnum.DETERMINE_EXERCISE_WEIGHT) {
-				determineExerciseWeight(insight);
-			} else if (intent === LiveCoachSupportedActionsEnum.SUGGEST_EXERCISE) {
-				suggestExercise(insight);
+				// } else if (intent === LiveCoachSupportedActionsEnum.DESIGN_WORKOUT) {
+				// 	designWorkout(insight);
+				// } else if (intent === LiveCoachSupportedActionsEnum.VIEW_ANALYTICS) {
+				// 	const res = await viewAnalytics(insight);
+				// 	if (res?.url) {
+				// 		addInboundMessage({
+				// 			text: `Click the button below to view your analytics for ${exercise} as requested`,
+				// 			action: { text: "View Analytics", url: res.url },
+				// 		});
+				// 	} else {
+				// 		addInboundMessage({
+				// 			text: `I counldn't find any analytics for ${insight.exercise} in your workout history.`,
+				// 		});
+
+				// 		// TODO: Recover Intent
+				// 	}
+				// } else if (intent === LiveCoachSupportedActionsEnum.DETERMINE_EXERCISE_WEIGHT) {
+				// 	determineExerciseWeight(insight);
+				// } else if (intent === LiveCoachSupportedActionsEnum.SUGGEST_EXERCISE) {
+				// 	suggestExercise(insight);
 			} else {
 				// handle case where intent is not supported
 				addInboundMessage({
-					text: "I'm sorry, I can't currently do this, but I'll keep learning!",
+					text: "I'm sorry, I can't currently do this, but I'll keep learning :)",
 				});
 			}
 		}
 
 		setIsTyping(false);
+	};
+
+	const onActionClick = async ({ action }: { action: LiveCoachSupportedActionsEnum }) => {
+		setPhase(LiveCoachConversationPhase.PROMPT_ACTION_INTENT);
+		setActionInProgress(true);
+		addOutboundMessage(action);
+
+		if (action === LiveCoachSupportedActionsEnum.VIEW_ANALYTICS) {
+			setInsight((prev) => ({ ...prev, intent: LiveCoachSupportedActionsEnum.VIEW_ANALYTICS }));
+			addInboundMessage({
+				text: "What exercise would you like to view analytics for?",
+			});
+		}
 	};
 
 	return (
@@ -149,7 +175,6 @@ export default function MessageInput({ actions }: MessageInputProps) {
 						onKeyDown={(e) => {
 							if (e.key === "Enter") handleSend();
 						}}
-						disabled={blockInput}
 					/>
 					<Label
 						htmlFor="userMessageInput"
@@ -159,25 +184,21 @@ export default function MessageInput({ actions }: MessageInputProps) {
 					</Label>
 				</div>
 				<div>
-					<Button
-						size="icon"
-						className="rounded-full"
-						disabled={isTyping || blockInput}
-						onClick={handleSend}
-					>
+					<Button size="icon" className="rounded-full" disabled={isTyping} onClick={handleSend}>
 						<Send />
 					</Button>
 				</div>
 			</div>
-			<div className="hidden mt-3 flex gap-2 overflow-x-scroll">
-				{Object.entries(actions ?? {})?.map(([action]) => (
+			<div className="mt-3 flex gap-2 overflow-x-none">
+				{actions?.map(({ key, text }) => (
 					<Button
 						variant="outline"
 						className="rounded-full border"
-						key={`action-${action}`}
-						disabled
+						key={`action-${key}`}
+						onClick={() => onActionClick({ action: key })}
+						disabled={actionInProgress || fulfillmentStarted}
 					>
-						{action}
+						{text}
 					</Button>
 				))}
 			</div>
