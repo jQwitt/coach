@@ -4,7 +4,7 @@ import type {
 	LiveCoachConversationMessageAction,
 	LiveCoachConversationMessageInfo,
 	MessageDirection,
-} from "@/lib/types/live-coach/types";
+} from "@/lib/types/live-coach";
 import { create } from "zustand";
 
 interface LiveCoachConversationState {
