@@ -4,6 +4,7 @@ import { determineTrainingIntent, viewAnalytics } from "@/app/actions";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { useConversation } from "@/hooks/stores/use-live-coach-conversation";
+import { useLiveCoachController } from "@/hooks/use-live-coach-controller";
 import { LiveCoachConversationPhase, LiveCoachSupportedActionsEnum } from "@/lib/types/live-coach";
 import { Send } from "lucide-react";
 import * as React from "react";
@@ -34,6 +35,7 @@ export default function MessageInput({ actions }: MessageInputProps) {
 		setPhase,
 		setFullfillmentStarted,
 	} = useConversation();
+	const { handleOutboundMessage } = useLiveCoachController();
 	const [userMessage, setUserMessage] = React.useState("");
 	const [insight, setInsight] = React.useState({ intent: "", muscleGroup: "", exercise: "" });
 	const [actionInProgress, setActionInProgress] = React.useState(false);
@@ -47,9 +49,7 @@ export default function MessageInput({ actions }: MessageInputProps) {
 	}, [phase]);
 
 	const handleSend = async () => {
-		if (userMessage.length) {
-			addOutboundMessage(userMessage);
-		}
+		handleOutboundMessage({ message: userMessage });
 
 		if (phase === LiveCoachConversationPhase.DETERMINE_INTENT) {
 			setIsTyping(true);

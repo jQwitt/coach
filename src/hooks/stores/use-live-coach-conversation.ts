@@ -14,7 +14,8 @@ interface LiveCoachConversationState {
 		phase: LiveCoachConversationPhase;
 		messages: LiceCoachConversationMessage[];
 		fulfillmentStarted: boolean;
-		intent?: string;
+		intent: string;
+		sentCount: number;
 	};
 	setIsTyping: (isTyping: boolean) => void;
 	startConversationWithIntent: (params: { userFirstName?: string; intent: string }) => void;
@@ -37,6 +38,7 @@ export const useConversation = create<LiveCoachConversationState>()((set) => ({
 		messages: [],
 		fulfillmentStarted: false,
 		intent: "",
+		sentCount: 0,
 	},
 	setIsTyping(isTyping) {
 		set((state) => ({ conversation: { ...state.conversation, isTyping } }));
@@ -86,12 +88,17 @@ export const useConversation = create<LiveCoachConversationState>()((set) => ({
 		}));
 	},
 	addOutboundMessage(text) {
-		set((state) => ({
-			conversation: {
-				...state.conversation,
-				messages: [...state.conversation.messages, { direction: "outbound", text }],
-			},
-		}));
+		set((state) => {
+			const _sentCount = state.conversation.sentCount + 1;
+
+			return {
+				conversation: {
+					...state.conversation,
+					sentCount: _sentCount,
+					messages: [...state.conversation.messages, { direction: "outbound", text }],
+				},
+			};
+		});
 	},
 	addInboundMessage({ text, info, action }) {
 		set((state) => {
