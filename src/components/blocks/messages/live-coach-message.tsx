@@ -6,7 +6,7 @@ import type {
 	LiveCoachConversationMessageAction,
 	LiveCoachConversationMessageInfo,
 	MessageDirection,
-} from "@/lib/types";
+} from "@/lib/types/live-coach";
 import { ArrowRight, HelpCircle, Loader2 } from "lucide-react";
 import { redirect } from "next/navigation";
 import * as React from "react";

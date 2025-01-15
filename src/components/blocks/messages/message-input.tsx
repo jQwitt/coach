@@ -4,7 +4,7 @@ import { determineTrainingIntent, viewAnalytics } from "@/app/actions";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { useConversation } from "@/hooks/stores/use-live-coach-conversation";
-import { LiveCoachConversationPhase, LiveCoachSupportedActionsEnum } from "@/lib/types";
+import { LiveCoachConversationPhase, LiveCoachSupportedActionsEnum } from "@/lib/types/live-coach";
 import { Send } from "lucide-react";
 import * as React from "react";
 
@@ -16,14 +16,14 @@ export interface MessageInputProps {
 }
 
 const DELAY_MIME = 500;
-const inputLabels = {
+const inputLabels: Record<LiveCoachConversationPhase, string> = {
 	[LiveCoachConversationPhase.DETERMINE_INTENT]: "Try 'View analytics for bench press'",
 	[LiveCoachConversationPhase.CONFIRM_INTENT]: "Yes or No",
 	[LiveCoachConversationPhase.PROMPT_ACTION_INTENT]: "Let's get a bit more info about your goal",
 	[LiveCoachConversationPhase.FULFILL_INTENT]: "Working on it...",
 	[LiveCoachConversationPhase.PROMPT_FULFILLMENT_SUCCESS]: "How'd it go?",
 	[LiveCoachConversationPhase.END_CONVERSATION]: "Thanks for talking with coach!",
-} satisfies Record<LiveCoachConversationPhase, string>;
+};
 
 export default function MessageInput({ actions }: MessageInputProps) {
 	const {
@@ -200,7 +200,7 @@ export default function MessageInput({ actions }: MessageInputProps) {
 						htmlFor="userMessageInput"
 						className="pointer-events-none absolute -top-3.5 left-0 text-sm text-gray-600 transition-all peer-placeholder-shown:top-2 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:-top-3.5 peer-focus:text-sm peer-focus:text-gray-600"
 					>
-						{inputLabels[phase]}
+						{inputLabels[phase as LiveCoachConversationPhase]}
 					</Label>
 				</div>
 				<div>

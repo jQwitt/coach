@@ -1,10 +1,10 @@
+import { LiveCoachConversationPhase } from "@/lib/types/live-coach";
 import type {
 	LiceCoachConversationMessage,
 	LiveCoachConversationMessageAction,
 	LiveCoachConversationMessageInfo,
-} from "@/lib/types";
-import { LiveCoachConversationPhase } from "@/lib/types";
-import type { MessageDirection } from "@/lib/types/live-coach";
+	MessageDirection,
+} from "@/lib/types/live-coach/types";
 import { create } from "zustand";
 
 interface LiveCoachConversationState {
@@ -17,7 +17,6 @@ interface LiveCoachConversationState {
 		intent?: string;
 	};
 	setIsTyping: (isTyping: boolean) => void;
-	startConversation: () => void;
 	startConversationWithIntent: (params: { userFirstName?: string; intent: string }) => void;
 	setFullfillmentStarted: (fulfillmentStarted: boolean) => void;
 	addOutboundMessage: (text: string) => void;
@@ -40,14 +39,6 @@ export const useConversation = create<LiveCoachConversationState>()((set) => ({
 	},
 	setIsTyping(isTyping) {
 		set((state) => ({ conversation: { ...state.conversation, isTyping } }));
-	},
-	startConversation() {
-		set((state) => ({
-			conversation: {
-				...state.conversation,
-				conversationStarted: true,
-			},
-		}));
 	},
 	startConversationWithIntent({ userFirstName, intent }) {
 		set((state) => {

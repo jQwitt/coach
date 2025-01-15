@@ -2,7 +2,7 @@ import { getCurrentUser } from "@/app/actions";
 import LiveCoachConversation from "@/components/blocks/messages/live-coach-conversation";
 import MessageInput from "@/components/blocks/messages/message-input";
 import Header from "@/components/ui/header";
-import { LiveCoachSupportedActionsEnum } from "@/lib/types";
+import { LiveCoachSupportedActionsEnum } from "@/lib/types/live-coach";
 
 export default async function LiveCoachPage() {
 	const { firstName } = (await getCurrentUser()) || {};
