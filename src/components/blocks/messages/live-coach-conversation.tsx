@@ -5,31 +5,21 @@ import {
 	SCROLL_TO_LAST_ID,
 } from "@/components/controllers/live-coach-controller";
 import { useConversation } from "@/hooks/stores/use-live-coach-conversation";
+import { getNamedSearchParams } from "@/lib/client-utils";
 import { Dot } from "lucide-react";
-import { useSearchParams } from "next/navigation";
 import * as React from "react";
 import { LiveCoachMessage, type LiveCoachMessageProps } from "./live-coach-message";
 
-const LAST_MSG_ID = "coach-live-message-last";
-
 export default function LiveCoachConversation({ userFirstName }: { userFirstName?: string }) {
-	const params = useSearchParams();
 	const { conversation, startConversationWithIntent, setIsTyping } = useConversation();
 	const { isTyping, messages, conversationStarted } = conversation;
-
-	const foundIntent = params.get("intent");
-	const parsedIntent =
-		foundIntent
-			?.trim()
-			.split("")
-			.filter((c) => c !== '"')
-			.join("") ?? "";
+	const { intent } = getNamedSearchParams("intent");
 
 	// want to mimic the delay of a human typing
 	React.useEffect(() => {
 		const timeout = setTimeout(() => {
 			setIsTyping(false);
-			startConversationWithIntent({ userFirstName, intent: parsedIntent });
+			startConversationWithIntent({ userFirstName, intent });
 		}, LIVE_COACH_DELAY_MIME);
 
 		if (!conversationStarted) {
@@ -37,7 +27,7 @@ export default function LiveCoachConversation({ userFirstName }: { userFirstName
 		} else {
 			clearTimeout(timeout);
 		}
-	}, [setIsTyping, startConversationWithIntent, userFirstName, parsedIntent, conversationStarted]);
+	}, [setIsTyping, startConversationWithIntent, userFirstName, intent, conversationStarted]);
 
 	return (
 		<div className="min-w-full flex flex-col gap-1 max-h-[80dvh]" suppressHydrationWarning>

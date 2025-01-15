@@ -67,7 +67,9 @@ export const useConversation = create<LiveCoachConversationState>()((set) => ({
 					},
 					{
 						direction: "inbound" as MessageDirection,
-						text: "How can I help you today?",
+						text: intent
+							? `I think you're looking to ${intent}, is that right?`
+							: "How can I help you today?",
 					},
 				);
 			}
