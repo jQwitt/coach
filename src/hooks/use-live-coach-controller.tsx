@@ -1,6 +1,6 @@
 "use client";
 
-import { determineTrainingIntent, viewAnalytics } from "@/app/actions";
+import { determineExerciseWeight, determineTrainingIntent, viewAnalytics } from "@/app/actions";
 import {
 	LIVE_COACH_DELAY_MIME,
 	MESSAGE_LIMIT,
@@ -8,6 +8,7 @@ import {
 import { useConversation } from "@/hooks/stores/use-live-coach-conversation";
 import {
 	type LiveCoachConversationMessageAction,
+	type LiveCoachConversationMessageInfo,
 	LiveCoachConversationPhase,
 	LiveCoachSupportedActionsEnum,
 } from "@/lib/types/live-coach";
@@ -26,13 +27,27 @@ export function useLiveCoachController() {
 	} = useConversation();
 
 	const mimeTyping = React.useCallback(
-		(text: string, options?: { action?: LiveCoachConversationMessageAction }) => {
+		(
+			text: string,
+			options?: {
+				action?: LiveCoachConversationMessageAction;
+				info?: LiveCoachConversationMessageInfo;
+			},
+		) => {
 			setIsTyping(true);
 			setTimeout(() => {
-				let payload: { text: string; action?: LiveCoachConversationMessageAction } = { text };
+				let payload: {
+					text: string;
+					action?: LiveCoachConversationMessageAction;
+					info?: LiveCoachConversationMessageInfo;
+				} = { text };
 				if (options?.action) {
 					payload = { ...payload, action: options.action };
 				}
+				if (options?.info) {
+					payload = { ...payload, info: options.info };
+				}
+
 				addInboundMessage(payload);
 				setIsTyping(false);
 			}, LIVE_COACH_DELAY_MIME);
@@ -48,55 +63,63 @@ export function useLiveCoachController() {
 
 			if (intent === LiveCoachSupportedActionsEnum.VIEW_ANALYTICS) {
 				const res = await viewAnalytics(intentContext);
+
 				if (res?.url) {
-					addInboundMessage({
-						text: `Click the button below to view your analytics for ${exercise} as requested`,
+					mimeTyping(`Click the button below to view your analytics for ${exercise} as requested`, {
 						action: { text: "View Analytics", url: res.url },
 					});
 				} else {
-					addInboundMessage({
-						text: `I counldn't find any analytics for ${exercise} in your workout history.`,
+					mimeTyping(`I counldn't find any analytics for ${exercise} in your workout history.`, {
 						action: { text: "Log a Workout", url: "/log-workout/lifting" },
 					});
-
-					// TODO: Recover Intent
 				}
-				// } else if (intent === LiveCoachSupportedActionsEnum.DESIGN_WORKOUT) {
-				// 	designWorkout(insight);
-				// } else if (intent === LiveCoachSupportedActionsEnum.VIEW_ANALYTICS) {
-				// 	const res = await viewAnalytics(insight);
-				// 	if (res?.url) {
-				// 		addInboundMessage({
-				// 			text: `Click the button below to view your analytics for ${exercise} as requested`,
-				// 			action: { text: "View Analytics", url: res.url },
-				// 		});
-				// 	} else {
-				// 		addInboundMessage({
-				// 			text: `I counldn't find any analytics for ${insight.exercise} in your workout history.`,
-				// 		});
+			} else if (intent === LiveCoachSupportedActionsEnum.DETERMINE_EXERCISE_WEIGHT) {
+				const res = await determineExerciseWeight(intentContext);
 
-				// 		// TODO: Recover Intent
-				// 	}
-				// } else if (intent === LiveCoachSupportedActionsEnum.DETERMINE_EXERCISE_WEIGHT) {
-				// 	determineExerciseWeight(insight);
+				if (res?.isOrm && res.oneRepMax && res.last && res.id) {
+					// case where their ORM can be easily calculated
+					mimeTyping(
+						`Looking at your ${exercise} history, you last logged at least 10 reps. at ${res.last} lbs`,
+						{},
+					);
+					mimeTyping(
+						`Based on this, I've calculated your One Rep Max to be ${res.oneRepMax} lbs!`,
+						{
+							info: {
+								title: "How is this calculated",
+								description:
+									"This formula was taken from https://personaltrainertoday.com/calculating-a-clients-1rm, we recommend following their safety guidlines, as ORM's aren't totally precise",
+								data: "",
+							},
+							action: { text: "More Info", url: `/analytics/exercise/${res.id}` },
+						},
+					);
+				} else if (!res?.isOrm && res?.last) {
+					// case where a user needs to log more reps to calculate their ORM
+					mimeTyping(
+						`Looking at your ${exercise} history, your most recent weight was ${res.last} lbs.`,
+					);
+					mimeTyping(
+						"In order to calculate your One Rep Max, I need you to log at least 10 reps of this exercise.",
+						{ action: { text: "Log a Workout", url: "/log-workout/lifting" } },
+					);
+				} else {
+					mimeTyping(`I counldn't find any analytics for ${exercise} in your workout history.`, {
+						action: { text: "Log a Workout", url: "/log-workout/lifting" },
+					});
+				}
+
+				// } else if (intent === LiveCoachSupportedActionsEnum.DESIGN_WORKOUT) {
+				// 	const res = await designWorkout(intentContext);
 				// } else if (intent === LiveCoachSupportedActionsEnum.SUGGEST_EXERCISE) {
-				// 	suggestExercise(insight);
+				// 	const res = suggestExercise(intentContext);
 			} else {
 				mimeTyping("I'm sorry, I can't currently do this, but I'll keep learning :)");
 			}
-		}
 
-		setPhase(LiveCoachConversationPhase.END_CONVERSATION);
-		setIsTyping(false);
-	}, [
-		mimeTyping,
-		addInboundMessage,
-		fulfillmentStarted,
-		intentContext,
-		setFullfillmentStarted,
-		setIsTyping,
-		setPhase,
-	]);
+			setPhase(LiveCoachConversationPhase.END_CONVERSATION);
+		}
+	}, [mimeTyping, fulfillmentStarted, intentContext, setFullfillmentStarted, setPhase]);
 
 	React.useLayoutEffect(() => {
 		if (phase === LiveCoachConversationPhase.FULFILL_INTENT) {
