@@ -1,6 +1,5 @@
 "use client";
 
-import { determineTrainingIntent, viewAnalytics } from "@/app/actions";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { useConversation } from "@/hooks/stores/use-live-coach-conversation";
@@ -33,7 +32,6 @@ export default function MessageInput({ actions }: MessageInputProps) {
 		addInboundMessage,
 		addOutboundMessage,
 		setPhase,
-		setFullfillmentStarted,
 	} = useConversation();
 	const { handleOutboundMessage } = useLiveCoachController();
 	const [userMessage, setUserMessage] = React.useState("");
@@ -42,116 +40,9 @@ export default function MessageInput({ actions }: MessageInputProps) {
 	const disableSend =
 		actionInProgress || fulfillmentStarted || phase === LiveCoachConversationPhase.END_CONVERSATION;
 
-	React.useEffect(() => {
-		if (phase === LiveCoachConversationPhase.FULFILL_INTENT) {
-			fulfill();
-		}
-	}, [phase]);
-
 	const handleSend = async () => {
-		handleOutboundMessage({ message: userMessage });
-
-		if (phase === LiveCoachConversationPhase.DETERMINE_INTENT) {
-			setIsTyping(true);
-			const insight = await determineTrainingIntent(userMessage);
-
-			// if no insights availble, ask again
-			if (!insight || !insight.intent) {
-				addInboundMessage({ text: "Sorry I didn't get that, what can I help you with?" });
-				return;
-			}
-			setIsTyping(false);
-
-			const { intent, muscleGroup, exercise } = insight;
-			addInboundMessage({
-				text: `I think you're looking to ${intent}${exercise ? `, emphasizing ${exercise}` : ""}${muscleGroup ? `, targeting ${muscleGroup !== "none" ? muscleGroup : ""}` : ""}, is that right?`,
-				info: {
-					title: "AI Info",
-					description: "OpenAI's model returned the following insights based on your message:",
-					data: insight,
-				},
-			});
-			setPhase(LiveCoachConversationPhase.CONFIRM_INTENT);
-			setInsight(insight);
-			setActionInProgress(true);
-		} else if (phase === LiveCoachConversationPhase.CONFIRM_INTENT) {
-			setIsTyping(true);
-
-			if (userMessage.match(/yes/gi)) {
-				setTimeout(() => {
-					setIsTyping(false);
-					setUserMessage("");
-					addInboundMessage({ text: "Got it!" });
-					setPhase(LiveCoachConversationPhase.FULFILL_INTENT);
-				}, DELAY_MIME);
-				return;
-			}
-
-			setTimeout(() => {
-				setIsTyping(false);
-				addInboundMessage({ text: "Sorry, I didn't get that, what can I help you with?" });
-			}, DELAY_MIME);
-			setPhase(LiveCoachConversationPhase.DETERMINE_INTENT);
-		} else if (phase === LiveCoachConversationPhase.PROMPT_ACTION_INTENT) {
-			setInsight((prev) => ({ ...prev, exercise: userMessage }));
-			setPhase(LiveCoachConversationPhase.FULFILL_INTENT);
-		}
-
+		await handleOutboundMessage({ message: userMessage });
 		setUserMessage("");
-	};
-
-	const fulfill = async () => {
-		setIsTyping(true);
-
-		if (phase === LiveCoachConversationPhase.FULFILL_INTENT && !fulfillmentStarted) {
-			setFullfillmentStarted(true);
-			const { intent, exercise } = insight;
-
-			if (intent === LiveCoachSupportedActionsEnum.VIEW_ANALYTICS) {
-				const res = await viewAnalytics(insight);
-				if (res?.url) {
-					addInboundMessage({
-						text: `Click the button below to view your analytics for ${exercise} as requested`,
-						action: { text: "View Analytics", url: res.url },
-					});
-				} else {
-					addInboundMessage({
-						text: `I counldn't find any analytics for ${insight.exercise} in your workout history.`,
-						action: { text: "Log a Workout", url: "/log-workout/lifting" },
-					});
-
-					// TODO: Recover Intent
-				}
-				// } else if (intent === LiveCoachSupportedActionsEnum.DESIGN_WORKOUT) {
-				// 	designWorkout(insight);
-				// } else if (intent === LiveCoachSupportedActionsEnum.VIEW_ANALYTICS) {
-				// 	const res = await viewAnalytics(insight);
-				// 	if (res?.url) {
-				// 		addInboundMessage({
-				// 			text: `Click the button below to view your analytics for ${exercise} as requested`,
-				// 			action: { text: "View Analytics", url: res.url },
-				// 		});
-				// 	} else {
-				// 		addInboundMessage({
-				// 			text: `I counldn't find any analytics for ${insight.exercise} in your workout history.`,
-				// 		});
-
-				// 		// TODO: Recover Intent
-				// 	}
-				// } else if (intent === LiveCoachSupportedActionsEnum.DETERMINE_EXERCISE_WEIGHT) {
-				// 	determineExerciseWeight(insight);
-				// } else if (intent === LiveCoachSupportedActionsEnum.SUGGEST_EXERCISE) {
-				// 	suggestExercise(insight);
-			} else {
-				// handle case where intent is not supported
-				addInboundMessage({
-					text: "I'm sorry, I can't currently do this, but I'll keep learning :)",
-				});
-			}
-		}
-
-		setPhase(LiveCoachConversationPhase.END_CONVERSATION);
-		setIsTyping(false);
 	};
 
 	const onActionClick = async ({ action }: { action: LiveCoachSupportedActionsEnum }) => {
