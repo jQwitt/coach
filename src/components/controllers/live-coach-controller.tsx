@@ -5,6 +5,7 @@ import * as React from "react";
 
 export const LIVE_COACH_DELAY_MIME = 200;
 export const SCROLL_TO_LAST_ID = "coach-live-message-last";
+export const MESSAGE_LIMIT = 2;
 
 export function LiveCoachController() {
 	const {
@@ -16,7 +17,10 @@ export function LiveCoachController() {
 		setIsMounted(true);
 	}, []);
 
-	React.useEffect(() => {
+	/**
+	 * AUTOSCROLL
+	 */
+	React.useLayoutEffect(() => {
 		// wait to autoScroll until mounted and there are messages
 		if (isMounted && messages.length) {
 			const last = document.getElementById(SCROLL_TO_LAST_ID);
@@ -26,5 +30,5 @@ export function LiveCoachController() {
 		}
 	}, [isMounted, messages.length]);
 
-	return null;
+	return <p className="hidden">LiveCoachController</p>;
 }

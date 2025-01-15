@@ -1,4 +1,4 @@
-import type { LiveCoachFulfillmentFunction } from "@/lib/types";
+import type { LiveCoachFulfillmentFunction } from "@/lib/types/live-coach";
 import { getExerciseForUserByName } from "../exercises";
 
 export const viewAnalytics: LiveCoachFulfillmentFunction<{ url: string } | null> = async ({

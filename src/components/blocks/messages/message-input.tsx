@@ -35,7 +35,6 @@ export default function MessageInput({ actions }: MessageInputProps) {
 		setFullfillmentStarted,
 	} = useConversation();
 	const [userMessage, setUserMessage] = React.useState("");
-	const [sendCount, setSendCount] = React.useState(0);
 	const [insight, setInsight] = React.useState({ intent: "", muscleGroup: "", exercise: "" });
 	const [actionInProgress, setActionInProgress] = React.useState(false);
 	const disableSend =
@@ -47,19 +46,9 @@ export default function MessageInput({ actions }: MessageInputProps) {
 		}
 	}, [phase]);
 
-	React.useEffect(() => {
-		if (sendCount > 2) {
-			addInboundMessage({
-				text: "You've hit the daily limit on messages to your coach. To increase your limit, upgrade your plan.",
-			});
-			return;
-		}
-	}, [sendCount, addInboundMessage]);
-
 	const handleSend = async () => {
 		if (userMessage.length) {
 			addOutboundMessage(userMessage);
-			setSendCount((count) => count + 1);
 		}
 
 		if (phase === LiveCoachConversationPhase.DETERMINE_INTENT) {

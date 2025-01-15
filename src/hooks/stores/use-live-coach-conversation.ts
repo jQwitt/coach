@@ -18,6 +18,7 @@ interface LiveCoachConversationState {
 	};
 	setIsTyping: (isTyping: boolean) => void;
 	startConversationWithIntent: (params: { userFirstName?: string; intent: string }) => void;
+
 	setFullfillmentStarted: (fulfillmentStarted: boolean) => void;
 	addOutboundMessage: (text: string) => void;
 	addInboundMessage: (params: {
@@ -75,6 +76,7 @@ export const useConversation = create<LiveCoachConversationState>()((set) => ({
 			};
 		});
 	},
+
 	setFullfillmentStarted(fulfillmentStarted) {
 		set((state) => ({
 			conversation: {

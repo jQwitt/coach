@@ -1,3 +1,5 @@
+export * from "./types";
+
 export enum LiveCoachConversationPhase {
 	/**
 	 * DETERMINE_INTENT
