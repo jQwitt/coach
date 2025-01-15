@@ -1,5 +1,6 @@
 import type { getDetailedWorkoutsForDates, getExercises } from "@/app/actions";
 import type schema from "@/db/schema";
+import type { MessageDirection } from "./types/live-coach";
 
 export type User = typeof schema.users_table.$inferSelect;
 export type UserTag = typeof schema.user_tag_table.$inferSelect;
@@ -85,7 +86,6 @@ export type ExerciseHistory = {
 export type ExercisesReturn = Awaited<ReturnType<typeof getExercises>>;
 export type WorkoutsDetailedByDateReturn = Awaited<ReturnType<typeof getDetailedWorkoutsForDates>>;
 
-export type MessageDirection = "inbound" | "outbound";
 export type LiceCoachConversationMessage = {
 	direction: MessageDirection;
 	text: string;

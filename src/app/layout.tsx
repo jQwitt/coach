@@ -3,6 +3,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import { base } from "./fonts";
 import "./globals.css";
+import { LiveCoachController } from "@/components/controllers/live-coach-controller";
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
@@ -34,6 +35,7 @@ export default async function RootLayout({
 			<SpeedInsights />
 			<ClerkProvider>
 				<body className={`${base.className} bg-background`}>
+					<LiveCoachController />
 					{children}
 					<Toaster />
 				</body>
