@@ -1,4 +1,5 @@
 import { integer, pgTable, varchar } from "drizzle-orm/pg-core";
+import { plans_table } from "./plans";
 import { user_tag_table } from "./tags";
 
 export const users_table = pgTable("Users", {
@@ -17,4 +18,7 @@ export const users_table = pgTable("Users", {
 	firstName: varchar({ length: 50 }).notNull(),
 	lastName: varchar({ length: 50 }),
 	email: varchar({ length: 100 }).notNull().unique(),
+
+	// payment fields
+	plan: integer().references(() => plans_table.id),
 });
