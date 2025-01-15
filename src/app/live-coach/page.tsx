@@ -9,6 +9,10 @@ export default async function LiveCoachPage() {
 
 	const quickActions = [
 		{ key: LiveCoachSupportedActionsEnum.VIEW_ANALYTICS, text: "View Analytics" },
+		{
+			key: LiveCoachSupportedActionsEnum.DETERMINE_EXERCISE_WEIGHT,
+			text: "Determine Exercise Weight",
+		},
 	];
 
 	return (

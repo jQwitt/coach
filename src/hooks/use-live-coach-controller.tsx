@@ -76,14 +76,12 @@ export function useLiveCoachController() {
 			} else if (intent === LiveCoachSupportedActionsEnum.DETERMINE_EXERCISE_WEIGHT) {
 				const res = await determineExerciseWeight(intentContext);
 
-				if (res?.isOrm && res.oneRepMax && res.last && res.id) {
+				if (res?.oneRepMax.length) {
 					// case where their ORM can be easily calculated
 					mimeTyping(
-						`Looking at your ${exercise} history, you last logged at least 10 reps. at ${res.last} lbs`,
-						{},
-					);
-					mimeTyping(
-						`Based on this, I've calculated your One Rep Max to be ${res.oneRepMax} lbs!`,
+						`Looking at your ${exercise} history, you last logged at least 10 reps at ${res.last} lbs, nice.
+						\n\n
+						Based on this, I've calculated your One Rep Max to be ${res.oneRepMax} lbs!`,
 						{
 							info: {
 								title: "How is this calculated",
@@ -91,10 +89,18 @@ export function useLiveCoachController() {
 									"This formula was taken from https://personaltrainertoday.com/calculating-a-clients-1rm, we recommend following their safety guidlines, as ORM's aren't totally precise",
 								data: "",
 							},
-							action: { text: "More Info", url: `/analytics/exercise/${res.id}` },
 						},
 					);
-				} else if (!res?.isOrm && res?.last) {
+					mimeTyping(
+						`I recommend your working sets to be around ${res.recommended} lbs. to best target hypertrophy.`,
+						{
+							action: {
+								text: "Log a Workout",
+								url: "/log-workout/lifting",
+							},
+						},
+					);
+				} else if (res?.last.length) {
 					// case where a user needs to log more reps to calculate their ORM
 					mimeTyping(
 						`Looking at your ${exercise} history, your most recent weight was ${res.last} lbs.`,
@@ -224,6 +230,14 @@ export function useLiveCoachController() {
 						intent: LiveCoachSupportedActionsEnum.VIEW_ANALYTICS,
 					});
 					mimeTyping("What exercise would you like to view analytics for?");
+				}, LIVE_COACH_DELAY_MIME);
+			} else if (action === LiveCoachSupportedActionsEnum.DETERMINE_EXERCISE_WEIGHT) {
+				setTimeout(() => {
+					setIntentContext({
+						...intentContext,
+						intent: LiveCoachSupportedActionsEnum.DETERMINE_EXERCISE_WEIGHT,
+					});
+					mimeTyping("What exercise would you like calculate?");
 				}, LIVE_COACH_DELAY_MIME);
 			}
 		},

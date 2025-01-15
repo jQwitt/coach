@@ -21,7 +21,8 @@ export interface MessageInputProps {
 const inputLabels: Record<LiveCoachConversationPhase, string> = {
 	[LiveCoachConversationPhase.DETERMINE_INTENT]: "Try 'View analytics for bench press'",
 	[LiveCoachConversationPhase.CONFIRM_INTENT]: "Yes or No",
-	[LiveCoachConversationPhase.PROMPT_ACTION_INTENT]: "Let's get a bit more info about your goal",
+	[LiveCoachConversationPhase.PROMPT_ACTION_INTENT]:
+		"Try an exercise you've logged, i.e. 'Bench Press'",
 	[LiveCoachConversationPhase.FULFILL_INTENT]: "Working on it...",
 	[LiveCoachConversationPhase.PROMPT_FULFILLMENT_SUCCESS]: "How'd it go?",
 	[LiveCoachConversationPhase.END_CONVERSATION]: "Thanks for talking with coach!",

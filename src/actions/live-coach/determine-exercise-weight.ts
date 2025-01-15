@@ -3,7 +3,7 @@ import type { LiveCoachFulfillmentFunction } from "@/lib/types/live-coach";
 import { getExerciseForUserByName } from "../exercises";
 
 export const determineExerciseWeight: LiveCoachFulfillmentFunction<
-	{ id: string; isOrm: boolean; last: string; oneRepMax: number | null } | null
+	{ id: string; last: string; oneRepMax: string; recommended: string } | null
 > = async ({ exercise }) => {
 	if (!exercise.length) {
 		return null;
@@ -24,9 +24,21 @@ export const determineExerciseWeight: LiveCoachFulfillmentFunction<
 	}, 0);
 
 	if (!mostRecentWeightForTenReps && history.length) {
-		return { id: exerciseId, isOrm: false, last: history[0].maxWeight, oneRepMax: null };
+		const recommended = String(Number(history[0]?.maxWeight) - 20);
+		return {
+			id: exerciseId,
+			last: history[0].maxWeight,
+			oneRepMax: "",
+			recommended,
+		};
 	}
 
 	const oneRepMax = Math.floor(mostRecentWeightForTenReps / 0.7498);
-	return { id: exerciseId, isOrm: true, last: String(mostRecentWeightForTenReps), oneRepMax };
+	const recommended = String(Math.ceil(oneRepMax * 0.75));
+	return {
+		id: exerciseId,
+		last: String(mostRecentWeightForTenReps),
+		oneRepMax: String(oneRepMax),
+		recommended,
+	};
 };
