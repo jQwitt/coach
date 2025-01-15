@@ -24,6 +24,7 @@ interface LiveCoachConversationState {
 	setIsTyping: (isTyping: boolean) => void;
 	startConversationWithIntent: (params: { userFirstName?: string; intent: string }) => void;
 	setIntentContext: (params: { intent: string; muscleGroup: string; exercise: string }) => void;
+	resetIntentContext: () => void;
 	setFullfillmentStarted: (fulfillmentStarted: boolean) => void;
 	addOutboundMessage: (text: string) => void;
 	addInboundMessage: (params: {
@@ -97,6 +98,18 @@ export const useConversation = create<LiveCoachConversationState>()((set) => ({
 			conversation: {
 				...state.conversation,
 				intentContext,
+			},
+		}));
+	},
+	resetIntentContext() {
+		set((state) => ({
+			conversation: {
+				...state.conversation,
+				intentContext: {
+					intent: "",
+					muscleGroup: "",
+					exercise: "",
+				},
 			},
 		}));
 	},

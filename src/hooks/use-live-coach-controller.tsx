@@ -6,7 +6,11 @@ import {
 	MESSAGE_LIMIT,
 } from "@/components/controllers/live-coach-controller";
 import { useConversation } from "@/hooks/stores/use-live-coach-conversation";
-import { LiveCoachConversationPhase, LiveCoachSupportedActionsEnum } from "@/lib/types/live-coach";
+import {
+	type LiveCoachConversationMessageAction,
+	LiveCoachConversationPhase,
+	LiveCoachSupportedActionsEnum,
+} from "@/lib/types/live-coach";
 import * as React from "react";
 
 export function useLiveCoachController() {
@@ -16,23 +20,29 @@ export function useLiveCoachController() {
 		addInboundMessage,
 		setIsTyping,
 		setIntentContext,
+		resetIntentContext,
 		setPhase,
 		setFullfillmentStarted,
 	} = useConversation();
 
 	const mimeTyping = React.useCallback(
-		(f: () => void) => {
+		(text: string, options?: { action?: LiveCoachConversationMessageAction }) => {
 			setIsTyping(true);
 			setTimeout(() => {
-				f?.();
+				let payload: { text: string; action?: LiveCoachConversationMessageAction } = { text };
+				if (options?.action) {
+					payload = { ...payload, action: options.action };
+				}
+				addInboundMessage(payload);
 				setIsTyping(false);
 			}, LIVE_COACH_DELAY_MIME);
 		},
-		[setIsTyping],
+		[setIsTyping, addInboundMessage],
 	);
 
 	const fulfill = React.useCallback(async () => {
 		if (!fulfillmentStarted) {
+			mimeTyping("Working on it...");
 			setFullfillmentStarted(true);
 			const { intent, exercise } = intentContext;
 
@@ -72,15 +82,14 @@ export function useLiveCoachController() {
 				// } else if (intent === LiveCoachSupportedActionsEnum.SUGGEST_EXERCISE) {
 				// 	suggestExercise(insight);
 			} else {
-				addInboundMessage({
-					text: "I'm sorry, I can't currently do this, but I'll keep learning :)",
-				});
+				mimeTyping("I'm sorry, I can't currently do this, but I'll keep learning :)");
 			}
 		}
 
 		setPhase(LiveCoachConversationPhase.END_CONVERSATION);
 		setIsTyping(false);
 	}, [
+		mimeTyping,
 		addInboundMessage,
 		fulfillmentStarted,
 		intentContext,
@@ -104,14 +113,14 @@ export function useLiveCoachController() {
 			addOutboundMessage(message);
 
 			if (sentCount > MESSAGE_LIMIT) {
-				mimeTyping(() =>
-					addInboundMessage({
-						text: "You've reached your daily message limit with the Live Coach. Please upgrade your plan to send more messages!",
+				mimeTyping(
+					"You've reached your daily message limit with the Live Coach. Please upgrade your plan to send more messages!",
+					{
 						action: {
 							url: "/profile/plan",
 							text: "Upgrade Plan",
 						},
-					}),
+					},
 				);
 				return;
 			}
@@ -122,9 +131,7 @@ export function useLiveCoachController() {
 
 				// if no insights availble, ask again
 				if (!insight || !insight.intent) {
-					mimeTyping(() =>
-						addInboundMessage({ text: "Sorry I didn't get that, what can I help you with?" }),
-					);
+					mimeTyping("Sorry I didn't get that, what can I help you with?");
 					return;
 				}
 
@@ -145,49 +152,40 @@ export function useLiveCoachController() {
 			} else if (phase === LiveCoachConversationPhase.CONFIRM_INTENT) {
 				if (message.match(/yes/gi)) {
 					setPhase(LiveCoachConversationPhase.FULFILL_INTENT);
-
-					mimeTyping(() => {
-						addInboundMessage({ text: "Working on it..." });
-					});
 					return;
 				}
 
 				setPhase(LiveCoachConversationPhase.DETERMINE_INTENT);
-				mimeTyping(() => {
-					addInboundMessage({
-						text: "Sorry, I didn't get that, what can I help you with?",
-					});
-				});
+				mimeTyping("Sorry, I didn't get that, what can I help you with?");
 			} else if (phase === LiveCoachConversationPhase.PROMPT_ACTION_INTENT) {
 				setIntentContext({ ...intentContext, exercise: message });
-				mimeTyping(() => {
-					setPhase(LiveCoachConversationPhase.FULFILL_INTENT);
-				});
+				setPhase(LiveCoachConversationPhase.FULFILL_INTENT);
 			} else if (phase === LiveCoachConversationPhase.PROMPT_URL_INTENT) {
-				setIntentContext({ ...intentContext, intent: message });
-				setPhase(LiveCoachConversationPhase.CONFIRM_URL_INTENT);
-				mimeTyping(() => {
-					addInboundMessage({
-						text: `What exercise do you want to ${intentContext.intent} for?`,
-					});
-				});
+				if (message.match(/yes/gi)) {
+					setPhase(LiveCoachConversationPhase.CONFIRM_URL_INTENT);
+					mimeTyping(`What exercise do you want to ${intentContext.intent} for?`);
+					return;
+				}
+
+				setPhase(LiveCoachConversationPhase.DETERMINE_INTENT);
+				resetIntentContext();
+				mimeTyping("What can I assist you with?");
 			} else if (phase === LiveCoachConversationPhase.CONFIRM_URL_INTENT) {
 				setIntentContext({ ...intentContext, exercise: message });
-				mimeTyping(() => {
-					setPhase(LiveCoachConversationPhase.FULFILL_INTENT);
-				});
+				setPhase(LiveCoachConversationPhase.FULFILL_INTENT);
 			}
 		},
 		[
+			setIsTyping,
 			mimeTyping,
 			addInboundMessage,
 			addOutboundMessage,
-			phase,
 			sentCount,
-			setIsTyping,
+			phase,
 			setPhase,
 			intentContext,
 			setIntentContext,
+			resetIntentContext,
 		],
 	);
 
@@ -202,15 +200,11 @@ export function useLiveCoachController() {
 						...intentContext,
 						intent: LiveCoachSupportedActionsEnum.VIEW_ANALYTICS,
 					});
-					mimeTyping(() =>
-						addInboundMessage({
-							text: "What exercise would you like to view analytics for?",
-						}),
-					);
+					mimeTyping("What exercise would you like to view analytics for?");
 				}, LIVE_COACH_DELAY_MIME);
 			}
 		},
-		[setPhase, addInboundMessage, addOutboundMessage, mimeTyping, intentContext, setIntentContext],
+		[setPhase, addOutboundMessage, mimeTyping, intentContext, setIntentContext],
 	);
 
 	return { handleOutboundMessage, handleActionClick };

@@ -18,14 +18,17 @@ export interface MessageInputProps {
 	}>;
 }
 
-// const inputLabels: Record<LiveCoachConversationPhase, string> = {
-// 	[LiveCoachConversationPhase.DETERMINE_INTENT]: "Try 'View analytics for bench press'",
-// 	[LiveCoachConversationPhase.CONFIRM_INTENT]: "Yes or No",
-// 	[LiveCoachConversationPhase.PROMPT_ACTION_INTENT]: "Let's get a bit more info about your goal",
-// 	[LiveCoachConversationPhase.FULFILL_INTENT]: "Working on it...",
-// 	[LiveCoachConversationPhase.PROMPT_FULFILLMENT_SUCCESS]: "How'd it go?",
-// 	[LiveCoachConversationPhase.END_CONVERSATION]: "Thanks for talking with coach!",
-// };
+const inputLabels: Record<LiveCoachConversationPhase, string> = {
+	[LiveCoachConversationPhase.DETERMINE_INTENT]: "Try 'View analytics for bench press'",
+	[LiveCoachConversationPhase.CONFIRM_INTENT]: "Yes or No",
+	[LiveCoachConversationPhase.PROMPT_ACTION_INTENT]: "Let's get a bit more info about your goal",
+	[LiveCoachConversationPhase.FULFILL_INTENT]: "Working on it...",
+	[LiveCoachConversationPhase.PROMPT_FULFILLMENT_SUCCESS]: "How'd it go?",
+	[LiveCoachConversationPhase.END_CONVERSATION]: "Thanks for talking with coach!",
+	[LiveCoachConversationPhase.PROMPT_URL_INTENT]: "Yes or No",
+	[LiveCoachConversationPhase.CONFIRM_URL_INTENT]:
+		"Try an exercise you've logged, i.e. 'Bench Press'",
+};
 
 export default function MessageInput({ actions }: MessageInputProps) {
 	const {
@@ -65,8 +68,7 @@ export default function MessageInput({ actions }: MessageInputProps) {
 						htmlFor="userMessageInput"
 						className="pointer-events-none absolute -top-3.5 left-0 text-sm text-gray-600 transition-all peer-placeholder-shown:top-2 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:-top-3.5 peer-focus:text-sm peer-focus:text-gray-600"
 					>
-						{/* {inputLabels[phase as LiveCoachConversationPhase]} */}
-						{"Tell the coach something..."}
+						{inputLabels[phase as LiveCoachConversationPhase]}
 					</Label>
 				</div>
 				<div>
