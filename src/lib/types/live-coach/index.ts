@@ -48,6 +48,20 @@ export enum LiveCoachConversationPhase {
 	PROMPT_ACTION_INTENT = "prompt_action_intent",
 
 	/**
+	 * PROMPT_URL_INTENT
+	 *
+	 * Indicates that the user is being prompted to complete the missing data that wasn't supplied in the URL
+	 */
+	PROMPT_URL_INTENT = "prompt_url_intent",
+
+	/**
+	 * CONFIRM_URL_INTENT
+	 *
+	 * Indicates that the user is appoving the completed request context before fulfillment
+	 */
+	CONFIRM_URL_INTENT = "confirm_url_intent",
+
+	/**
 	 * FULFILL_INTENT
 	 *
 	 * Indicates that an action is being performed, after correctly intuited by code and approved by the user.

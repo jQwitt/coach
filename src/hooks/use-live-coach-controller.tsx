@@ -11,28 +11,27 @@ import * as React from "react";
 
 export function useLiveCoachController() {
 	const {
-		conversation: { sentCount, phase, fulfillmentStarted },
+		conversation: { sentCount, phase, fulfillmentStarted, intentContext },
 		addOutboundMessage,
 		addInboundMessage,
 		setIsTyping,
+		setIntentContext,
 		setPhase,
 		setFullfillmentStarted,
 	} = useConversation();
-	const [intentContext, setIntentContext] = React.useState({
-		intent: "",
-		muscleGroup: "",
-		exercise: "",
-	});
 
-	const mimeTyping = (f: () => void) => {
-		setIsTyping(true);
-		setTimeout(() => {
-			f?.();
-			setIsTyping(false);
-		}, LIVE_COACH_DELAY_MIME);
-	};
+	const mimeTyping = React.useCallback(
+		(f: () => void) => {
+			setIsTyping(true);
+			setTimeout(() => {
+				f?.();
+				setIsTyping(false);
+			}, LIVE_COACH_DELAY_MIME);
+		},
+		[setIsTyping],
+	);
 
-	const fulfill = async () => {
+	const fulfill = React.useCallback(async () => {
 		if (!fulfillmentStarted) {
 			setFullfillmentStarted(true);
 			const { intent, exercise } = intentContext;
@@ -81,78 +80,138 @@ export function useLiveCoachController() {
 
 		setPhase(LiveCoachConversationPhase.END_CONVERSATION);
 		setIsTyping(false);
-	};
+	}, [
+		addInboundMessage,
+		fulfillmentStarted,
+		intentContext,
+		setFullfillmentStarted,
+		setIsTyping,
+		setPhase,
+	]);
 
-	const handleOutboundMessage = async ({ message }: { message: string }) => {
-		if (!message.length) {
-			return;
+	React.useLayoutEffect(() => {
+		if (phase === LiveCoachConversationPhase.FULFILL_INTENT) {
+			fulfill();
 		}
+	}, [phase, fulfill]);
 
-		addOutboundMessage(message);
+	const handleOutboundMessage = React.useCallback(
+		async ({ message }: { message: string }) => {
+			if (!message.length) {
+				return;
+			}
 
-		if (sentCount > MESSAGE_LIMIT) {
-			mimeTyping(() =>
-				addInboundMessage({
-					text: "You've reached your daily message limit with the Live Coach. Please upgrade your plan to send more messages!",
-					action: {
-						url: "/profile/plan",
-						text: "Upgrade Plan",
-					},
-				}),
-			);
-			return;
-		}
+			addOutboundMessage(message);
 
-		if (phase === LiveCoachConversationPhase.DETERMINE_INTENT) {
-			setIsTyping(true);
-			const insight = await determineTrainingIntent(message);
-
-			// if no insights availble, ask again
-			if (!insight || !insight.intent) {
+			if (sentCount > MESSAGE_LIMIT) {
 				mimeTyping(() =>
-					addInboundMessage({ text: "Sorry I didn't get that, what can I help you with?" }),
+					addInboundMessage({
+						text: "You've reached your daily message limit with the Live Coach. Please upgrade your plan to send more messages!",
+						action: {
+							url: "/profile/plan",
+							text: "Upgrade Plan",
+						},
+					}),
 				);
 				return;
 			}
 
-			const { intent, muscleGroup, exercise } = insight;
-			setIntentContext(insight);
-			setPhase(LiveCoachConversationPhase.CONFIRM_INTENT);
-			setIsTyping(false);
+			if (phase === LiveCoachConversationPhase.DETERMINE_INTENT) {
+				setIsTyping(true);
+				const insight = await determineTrainingIntent(message);
 
-			// no need to mime, have to await earlier API call
-			addInboundMessage({
-				text: `I think you're looking to ${intent}${exercise ? `, emphasizing ${exercise}` : ""}${muscleGroup ? `, targeting ${muscleGroup !== "none" ? muscleGroup : ""}` : ""}, is that right?`,
-				info: {
-					title: "AI Info",
-					description: "OpenAI's model returned the following insights based on your message:",
-					data: insight,
-				},
-			});
-		} else if (phase === LiveCoachConversationPhase.CONFIRM_INTENT) {
-			if (message.match(/yes/gi)) {
-				setPhase(LiveCoachConversationPhase.FULFILL_INTENT);
+				// if no insights availble, ask again
+				if (!insight || !insight.intent) {
+					mimeTyping(() =>
+						addInboundMessage({ text: "Sorry I didn't get that, what can I help you with?" }),
+					);
+					return;
+				}
+
+				const { intent, muscleGroup, exercise } = insight;
+				setIntentContext(insight);
+				setPhase(LiveCoachConversationPhase.CONFIRM_INTENT);
 				setIsTyping(false);
 
-				mimeTyping(() => {
-					addInboundMessage({ text: "Got it!" });
-				});
-				await fulfill();
-				return;
-			}
-
-			setPhase(LiveCoachConversationPhase.DETERMINE_INTENT);
-			mimeTyping(() => {
+				// no need to mime, have to await earlier API call
 				addInboundMessage({
-					text: "Sorry, I didn't get that, what can I help you with?",
+					text: `I think you're looking to ${intent}${exercise ? `, emphasizing ${exercise}` : ""}${muscleGroup ? `, targeting ${muscleGroup !== "none" ? muscleGroup : ""}` : ""}, is that right?`,
+					info: {
+						title: "AI Info",
+						description: "OpenAI's model returned the following insights based on your message:",
+						data: insight,
+					},
 				});
-			});
-		}
-		// } else if (phase === LiveCoachConversationPhase.PROMPT_ACTION_INTENT) {
-		// 	setIntentContext((prev) => ({ ...prev, exercise: message }));
-		// 	setPhase(LiveCoachConversationPhase.FULFILL_INTENT);
-		// }
-	};
+			} else if (phase === LiveCoachConversationPhase.CONFIRM_INTENT) {
+				if (message.match(/yes/gi)) {
+					setPhase(LiveCoachConversationPhase.FULFILL_INTENT);
 
-	return { handleOutboundMessage };
+					mimeTyping(() => {
+						addInboundMessage({ text: "Working on it..." });
+					});
+					return;
+				}
+
+				setPhase(LiveCoachConversationPhase.DETERMINE_INTENT);
+				mimeTyping(() => {
+					addInboundMessage({
+						text: "Sorry, I didn't get that, what can I help you with?",
+					});
+				});
+			} else if (phase === LiveCoachConversationPhase.PROMPT_ACTION_INTENT) {
+				setIntentContext({ ...intentContext, exercise: message });
+				mimeTyping(() => {
+					setPhase(LiveCoachConversationPhase.FULFILL_INTENT);
+				});
+			} else if (phase === LiveCoachConversationPhase.PROMPT_URL_INTENT) {
+				setIntentContext({ ...intentContext, intent: message });
+				setPhase(LiveCoachConversationPhase.CONFIRM_URL_INTENT);
+				mimeTyping(() => {
+					addInboundMessage({
+						text: `What exercise do you want to ${intentContext.intent} for?`,
+					});
+				});
+			} else if (phase === LiveCoachConversationPhase.CONFIRM_URL_INTENT) {
+				setIntentContext({ ...intentContext, exercise: message });
+				mimeTyping(() => {
+					setPhase(LiveCoachConversationPhase.FULFILL_INTENT);
+				});
+			}
+		},
+		[
+			mimeTyping,
+			addInboundMessage,
+			addOutboundMessage,
+			phase,
+			sentCount,
+			setIsTyping,
+			setPhase,
+			intentContext,
+			setIntentContext,
+		],
+	);
+
+	const handleActionClick = React.useCallback(
+		({ action }: { action: LiveCoachSupportedActionsEnum }) => {
+			setPhase(LiveCoachConversationPhase.PROMPT_ACTION_INTENT);
+			addOutboundMessage(action);
+
+			if (action === LiveCoachSupportedActionsEnum.VIEW_ANALYTICS) {
+				setTimeout(() => {
+					setIntentContext({
+						...intentContext,
+						intent: LiveCoachSupportedActionsEnum.VIEW_ANALYTICS,
+					});
+					mimeTyping(() =>
+						addInboundMessage({
+							text: "What exercise would you like to view analytics for?",
+						}),
+					);
+				}, LIVE_COACH_DELAY_MIME);
+			}
+		},
+		[setPhase, addInboundMessage, addOutboundMessage, mimeTyping, intentContext, setIntentContext],
+	);
+
+	return { handleOutboundMessage, handleActionClick };
 }

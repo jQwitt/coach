@@ -14,12 +14,16 @@ interface LiveCoachConversationState {
 		phase: LiveCoachConversationPhase;
 		messages: LiceCoachConversationMessage[];
 		fulfillmentStarted: boolean;
-		intent: string;
+		intentContext: {
+			intent: string;
+			muscleGroup: string;
+			exercise: string;
+		};
 		sentCount: number;
 	};
 	setIsTyping: (isTyping: boolean) => void;
 	startConversationWithIntent: (params: { userFirstName?: string; intent: string }) => void;
-
+	setIntentContext: (params: { intent: string; muscleGroup: string; exercise: string }) => void;
 	setFullfillmentStarted: (fulfillmentStarted: boolean) => void;
 	addOutboundMessage: (text: string) => void;
 	addInboundMessage: (params: {
@@ -37,7 +41,11 @@ export const useConversation = create<LiveCoachConversationState>()((set) => ({
 		phase: LiveCoachConversationPhase.DETERMINE_INTENT,
 		messages: [],
 		fulfillmentStarted: false,
-		intent: "",
+		intentContext: {
+			intent: "",
+			muscleGroup: "",
+			exercise: "",
+		},
 		sentCount: 0,
 	},
 	setIsTyping(isTyping) {
@@ -72,13 +80,26 @@ export const useConversation = create<LiveCoachConversationState>()((set) => ({
 				conversation: {
 					...state.conversation,
 					conversationStarted: true,
-					intent,
+					intentContext: {
+						...state.conversation.intentContext,
+						intent,
+					},
 					messages,
+					phase: intent
+						? LiveCoachConversationPhase.PROMPT_URL_INTENT
+						: LiveCoachConversationPhase.DETERMINE_INTENT,
 				},
 			};
 		});
 	},
-
+	setIntentContext(intentContext) {
+		set((state) => ({
+			conversation: {
+				...state.conversation,
+				intentContext,
+			},
+		}));
+	},
 	setFullfillmentStarted(fulfillmentStarted) {
 		set((state) => ({
 			conversation: {
