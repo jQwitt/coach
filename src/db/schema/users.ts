@@ -20,5 +20,7 @@ export const users_table = pgTable("Users", {
 	email: varchar({ length: 100 }).notNull().unique(),
 
 	// payment fields
-	plan: integer().references(() => plans_table.id),
+	plan: integer()
+		.references(() => plans_table.id)
+		.default(1),
 });
