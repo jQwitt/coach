@@ -20,7 +20,9 @@ interface LiveCoachConversationState {
 			exercise: string;
 		};
 		sentCount: number;
+		limited: boolean;
 	};
+	limit: () => void;
 	setIsTyping: (isTyping: boolean) => void;
 	startConversationWithIntent: (params: { userFirstName?: string; intent: string }) => void;
 	setIntentContext: (params: { intent: string; muscleGroup: string; exercise: string }) => void;
@@ -48,6 +50,14 @@ export const useConversation = create<LiveCoachConversationState>()((set) => ({
 			exercise: "",
 		},
 		sentCount: 0,
+		limited: false,
+	},
+	limit() {
+		set((state) => {
+			return {
+				conversation: { ...state.conversation, limited: true },
+			};
+		});
 	},
 	setIsTyping(isTyping) {
 		set((state) => ({ conversation: { ...state.conversation, isTyping } }));

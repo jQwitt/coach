@@ -3,14 +3,13 @@
 import {
 	determineExerciseWeight,
 	determineTrainingIntent,
+	isConversationLimitReached,
 	logConversation,
 	viewAnalytics,
 } from "@/app/actions";
-import {
-	LIVE_COACH_DELAY_MIME,
-	MESSAGE_LIMIT,
-} from "@/components/controllers/live-coach-controller";
+import { LIVE_COACH_DELAY_MIME } from "@/components/controllers/live-coach-controller";
 import { useConversation } from "@/hooks/stores/use-live-coach-conversation";
+import { yesterday } from "@/lib/dates";
 import { timeStamp } from "@/lib/encoding";
 import {
 	type LiveCoachConversationMessageAction,
@@ -22,7 +21,7 @@ import * as React from "react";
 
 export function useLiveCoachController() {
 	const {
-		conversation: { sentCount, phase, fulfillmentStarted, intentContext },
+		conversation: { phase, fulfillmentStarted, intentContext, limited },
 		addOutboundMessage,
 		addInboundMessage,
 		setIsTyping,
@@ -30,7 +29,23 @@ export function useLiveCoachController() {
 		resetIntentContext,
 		setPhase,
 		setFullfillmentStarted,
+		limit,
 	} = useConversation();
+	const [hasCheckedLimit, setHasCheckedLimit] = React.useState(false);
+
+	React.useEffect(() => {
+		verify();
+	}, []);
+
+	const verify = React.useCallback(async () => {
+		if (!hasCheckedLimit) {
+			setHasCheckedLimit(true);
+			const isLimited = await isConversationLimitReached(yesterday());
+			if (isLimited) {
+				limit();
+			}
+		}
+	}, [hasCheckedLimit, limit]);
 
 	const mimeTyping = React.useCallback(
 		(
@@ -148,9 +163,9 @@ export function useLiveCoachController() {
 
 			addOutboundMessage(message);
 
-			if (sentCount > MESSAGE_LIMIT) {
+			if (limited) {
 				mimeTyping(
-					"You've reached your daily message limit with the Live Coach. Please upgrade your plan to send more messages!",
+					"You've reached your daily conversation limit. Please upgrade your plan to continue using Live Coach, or wait until tomorrow.",
 					{
 						action: {
 							url: "/profile/plan",
@@ -212,11 +227,11 @@ export function useLiveCoachController() {
 			}
 		},
 		[
+			limited,
 			setIsTyping,
 			mimeTyping,
 			addInboundMessage,
 			addOutboundMessage,
-			sentCount,
 			phase,
 			setPhase,
 			intentContext,
