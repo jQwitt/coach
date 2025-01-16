@@ -37,7 +37,7 @@ export default function MessageInput({ actions }: MessageInputProps) {
 	} = useConversation();
 	const { handleOutboundMessage, handleActionClick } = useLiveCoachController();
 	const [userMessage, setUserMessage] = React.useState("");
-	const conversationClosed = limited || phase === LiveCoachConversationPhase.END_CONVERSATION;
+	const conversationClosed = phase === LiveCoachConversationPhase.END_CONVERSATION;
 	const disabledInput = isTyping || fulfillmentStarted || conversationClosed;
 
 	const handleSend = async () => {
