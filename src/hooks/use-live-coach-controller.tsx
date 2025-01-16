@@ -245,6 +245,19 @@ export function useLiveCoachController() {
 			setPhase(LiveCoachConversationPhase.PROMPT_ACTION_INTENT);
 			addOutboundMessage(action);
 
+			if (limited) {
+				mimeTyping(
+					"You've reached your daily conversation limit. Please upgrade your plan to continue using Live Coach, or wait until tomorrow.",
+					{
+						action: {
+							url: "/profile/plan",
+							text: "Upgrade Plan",
+						},
+					},
+				);
+				return;
+			}
+
 			if (action === LiveCoachSupportedActionsEnum.VIEW_ANALYTICS) {
 				setTimeout(() => {
 					setIntentContext({
@@ -263,7 +276,7 @@ export function useLiveCoachController() {
 				}, LIVE_COACH_DELAY_MIME);
 			}
 		},
-		[setPhase, addOutboundMessage, mimeTyping, intentContext, setIntentContext],
+		[setPhase, addOutboundMessage, mimeTyping, intentContext, setIntentContext, limited],
 	);
 
 	return { handleOutboundMessage, handleActionClick };
