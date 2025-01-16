@@ -1,4 +1,4 @@
-import { integer, pgTable, varchar } from "drizzle-orm/pg-core";
+import { boolean, integer, pgTable, varchar } from "drizzle-orm/pg-core";
 import { plans_table } from "./plans";
 import { user_tag_table } from "./tags";
 
@@ -23,4 +23,15 @@ export const users_table = pgTable("Users", {
 	plan: integer()
 		.references(() => plans_table.id)
 		.default(1),
+});
+
+export const users_conversation_table = pgTable("UsersLiveCoachConversations", {
+	conversationId: integer().generatedByDefaultAsIdentity().primaryKey(),
+	userId: integer()
+		.references(() => users_table.id, { onDelete: "cascade" })
+		.notNull(),
+
+	date: varchar({ length: 50 }).notNull(),
+	intent: varchar({ length: 50 }).notNull(),
+	fulfilled: boolean().default(false),
 });

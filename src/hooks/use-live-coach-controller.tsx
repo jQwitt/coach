@@ -1,11 +1,17 @@
 "use client";
 
-import { determineExerciseWeight, determineTrainingIntent, viewAnalytics } from "@/app/actions";
+import {
+	determineExerciseWeight,
+	determineTrainingIntent,
+	logConversation,
+	viewAnalytics,
+} from "@/app/actions";
 import {
 	LIVE_COACH_DELAY_MIME,
 	MESSAGE_LIMIT,
 } from "@/components/controllers/live-coach-controller";
 import { useConversation } from "@/hooks/stores/use-live-coach-conversation";
+import { timeStamp } from "@/lib/encoding";
 import {
 	type LiveCoachConversationMessageAction,
 	type LiveCoachConversationMessageInfo,
@@ -124,6 +130,7 @@ export function useLiveCoachController() {
 			}
 
 			setPhase(LiveCoachConversationPhase.END_CONVERSATION);
+			await logConversation({ date: timeStamp(), intent });
 		}
 	}, [mimeTyping, fulfillmentStarted, intentContext, setFullfillmentStarted, setPhase]);
 

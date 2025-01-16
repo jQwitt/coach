@@ -12,7 +12,7 @@ export const workouts_lifting_table = pgTable("WorkoutsLifting", {
 		.references(() => users_table.id, { onDelete: "cascade" })
 		.notNull(),
 	tags: integer()
-		.references(() => user_tag_table.id, { onDelete: "cascade" })
+		.references(() => user_tag_table.id)
 		.array()
 		.notNull()
 		.default([]),

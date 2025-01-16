@@ -15,7 +15,10 @@ import {
 	suggestExercise as suggestExerciseAction,
 	viewAnalytics as viewAnalyticsAction,
 } from "../actions/live-coach";
-import { getPlanInfo as getPlanInfoAction } from "../actions/plans";
+import {
+	getPlanInfo as getPlanInfoAction,
+	logConversation as logConversationAction,
+} from "../actions/plans";
 import {
 	createUser as createUserAction,
 	deleteCurrentUser as deleteCurrentUserAction,
@@ -60,3 +63,4 @@ export const viewAnalytics = viewAnalyticsAction;
 
 // PLANS
 export const getPlanInfo = getPlanInfoAction;
+export const logConversation = logConversationAction;

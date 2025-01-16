@@ -40,7 +40,7 @@ export default async function LiveCoachPage() {
 	const { plan } = await getPlanInfo({ planId });
 
 	return (
-		<div suppressHydrationWarning className="flex flex-col justify-end min-h-[70dvh] pb-14">
+		<div className="flex flex-col justify-end min-h-[70dvh] pb-14">
 			<div className="-mx-4 px-4 pb-2 sticky top-16 z-10 bg-background shadow-sm">
 				<div className="flex gap-1 items-end">
 					<Header title="Live Coach" />
