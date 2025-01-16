@@ -33,14 +33,12 @@ const inputLabels: Record<LiveCoachConversationPhase, string> = {
 
 export default function MessageInput({ actions }: MessageInputProps) {
 	const {
-		conversation: { phase, isTyping, fulfillmentStarted },
+		conversation: { phase, isTyping, fulfillmentStarted, limited },
 	} = useConversation();
 	const { handleOutboundMessage, handleActionClick } = useLiveCoachController();
 	const [userMessage, setUserMessage] = React.useState("");
-	const disableSend =
-		isTyping || fulfillmentStarted || phase === LiveCoachConversationPhase.END_CONVERSATION;
-	const disableActions =
-		isTyping || fulfillmentStarted || phase !== LiveCoachConversationPhase.DETERMINE_INTENT;
+	const conversationClosed = limited || phase === LiveCoachConversationPhase.END_CONVERSATION;
+	const disabledInput = isTyping || fulfillmentStarted || conversationClosed;
 
 	const handleSend = async () => {
 		await handleOutboundMessage({ message: userMessage });
@@ -62,7 +60,7 @@ export default function MessageInput({ actions }: MessageInputProps) {
 						value={userMessage}
 						onChange={(e) => setUserMessage(e.target.value)}
 						onKeyDown={(e) => {
-							if (e.key === "Enter" && !disableSend) handleSend();
+							if (e.key === "Enter" && !disabledInput) handleSend();
 						}}
 					/>
 					<Label
@@ -73,7 +71,12 @@ export default function MessageInput({ actions }: MessageInputProps) {
 					</Label>
 				</div>
 				<div>
-					<Button size="icon" className="rounded-full" disabled={disableSend} onClick={handleSend}>
+					<Button
+						size="icon"
+						className="rounded-full"
+						disabled={disabledInput}
+						onClick={handleSend}
+					>
 						<Send />
 					</Button>
 				</div>
@@ -85,7 +88,7 @@ export default function MessageInput({ actions }: MessageInputProps) {
 						className="rounded-full border"
 						key={`action-${key}`}
 						onClick={() => onActionClick({ action: key })}
-						disabled={disableActions}
+						disabled={disabledInput}
 					>
 						{text}
 					</Button>
