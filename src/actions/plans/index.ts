@@ -1,16 +1,16 @@
 import { getPlanInfoById } from "@/db/plans";
 
-export async function getPlanInfo({ planId }: { planId: string | null | undefined }) {
-	const id = Number(planId);
-	if (!planId?.length || Number.isNaN(id)) {
-		return null;
+export async function getPlanInfo({ planId }: { planId: number | null | undefined }) {
+	const fallback = { plan: "free" };
+
+	if (!planId || !Number.isSafeInteger(planId)) {
+		return fallback;
 	}
 
-	const result = await getPlanInfoById(id);
-
+	const result = await getPlanInfoById(planId);
 	if (!result) {
-		return null;
+		return fallback;
 	}
 
-	return result;
+	return { plan: result.name };
 }
