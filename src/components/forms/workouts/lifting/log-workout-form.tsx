@@ -13,7 +13,7 @@ import useWorkoutStore from "@/hooks/stores/use-workout";
 import { useToast } from "@/hooks/use-toast";
 import { fromIso, timeStamp } from "@/lib/encoding";
 import type { ExercisesReturn, MuscleGroups } from "@/lib/types";
-import { Check, Edit3, HelpCircle, Loader2, Plus, ScanText, X } from "lucide-react";
+import { Check, Edit3, HelpCircle, Loader2, Minus, Plus, ScanText } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import MuscleGroupSelect from "../../controls/muscle-group-select";
@@ -136,19 +136,30 @@ export default function LogWorkoutLiftingForm({
 				/>
 				<Edit3 className="pointer-events-none absolute right-0 top-[25%] h-6 w-6 peer-focus:hidden" />
 			</div>
-			<Card>
+			<Card className="mt-4">
 				<CardHeader className="relative">
 					<div>
-						{hideAutoComplete && (
+						{hideAutoComplete ? (
 							<Button
 								size="sm"
-								variant="ghost"
-								className="absolute top-0 right-0"
+								variant="outline"
+								className="absolute -top-5 right-3"
 								onClick={() => setHideAutoComplete(false)}
 								type="button"
 							>
-								AutoComplete
+								Completions
 								<ScanText className="h-4 w-4" />
+							</Button>
+						) : (
+							<Button
+								size="sm"
+								variant="outline"
+								className="absolute -top-5 right-3"
+								onClick={() => setHideAutoComplete(true)}
+								type="button"
+							>
+								Hide
+								<Minus className="h-4 w-4" />
 							</Button>
 						)}
 					</div>
@@ -165,33 +176,26 @@ export default function LogWorkoutLiftingForm({
 						}}
 					/>
 					{!hideAutoComplete && autoCompleteList.length > 0 ? (
-						<Card className="absolute top-20 left-0 w-full p-4 bg-card h-fit z-10 pt-6">
-							<Button
-								size="icon"
-								variant="ghost"
-								className="absolute top-0 right-0"
-								onClick={() => setHideAutoComplete(true)}
-								type="button"
-							>
-								<X className="h-4 w-4" />
-							</Button>
-							{autoCompleteList.map(({ name, primaryTarget }) => (
-								<button
-									type="button"
-									key={name}
-									className="flex justify-between items-center w-full hover:bg-muted rounded-sm p-1"
-									onClick={() => {
-										setAutoCompleteList([]);
-										sethasClickedAutoComplete(true);
-										updateExerciseName(exerciseLast, name);
-										updateExercisePrimaryTarget(exerciseLast, primaryTarget as MuscleGroups);
-									}}
-								>
-									<p className="text-primary">{name}</p>
-									<p className="text-xs text-muted-foreground">{primaryTarget}</p>
-								</button>
-							))}
-						</Card>
+						<div className="absolute top-20 left-4 w-[calc(100%-2rem)] bg-card h-fit z-10">
+							<Card className="rounded-sm w-full p-1">
+								{autoCompleteList.map(({ name, primaryTarget }) => (
+									<button
+										type="button"
+										key={name}
+										className="flex justify-between items-center w-full hover:bg-muted rounded-sm p-1"
+										onClick={() => {
+											setAutoCompleteList([]);
+											sethasClickedAutoComplete(true);
+											updateExerciseName(exerciseLast, name);
+											updateExercisePrimaryTarget(exerciseLast, primaryTarget as MuscleGroups);
+										}}
+									>
+										<p className="text-sm text-primary">{name}</p>
+										<p className="text-xs text-muted-foreground">{primaryTarget}</p>
+									</button>
+								))}
+							</Card>
+						</div>
 					) : null}
 				</CardHeader>
 				<CardContent>
