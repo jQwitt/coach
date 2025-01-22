@@ -1,11 +1,11 @@
 "use client";
 
-import { heading } from "@/app/fonts";
+import HypertophyIndicator from "@/components/blocks/hypertophy-indicator";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Header, { HeaderLevel } from "@/components/ui/header";
 import type { ExerciseData } from "@/lib/types";
-import { ChevronsUp, Dumbbell, X } from "lucide-react";
+import { Dumbbell, X } from "lucide-react";
 
 export default function PreviousExerciseCard({
 	exercise,
@@ -13,9 +13,7 @@ export default function PreviousExerciseCard({
 	...props
 }: { exercise: ExerciseData; onRemove: () => void }) {
 	const { name, sets } = exercise;
-
 	const maxReps = sets.reduce((acc, { reps }) => Math.max(acc, reps), 0);
-	const isHypertrophic = maxReps > 5 && maxReps < 13;
 
 	return (
 		<Card {...props} className="w-[55%] md:w-[33%] inline-block overflow-hidden">
@@ -41,17 +39,8 @@ export default function PreviousExerciseCard({
 						</p>
 					))}
 				</div>
-				<div className="flex items-center justify-start absolute bottom-0">
-					<ChevronsUp
-						className={`-mt-3 text-${isHypertrophic ? "green-500" : "red-500"}`}
-						size={16}
-						strokeWidth={2}
-					/>
-					<p
-						className={`${heading.className} tracking-wider text-${isHypertrophic ? "green-500" : "red-500"}`}
-					>
-						{isHypertrophic ? "Hypertophy" : "Strength"}
-					</p>
+				<div className="justify-start absolute bottom-0">
+					<HypertophyIndicator reps={maxReps} />
 				</div>
 				<Dumbbell className="absolute -bottom-3 -right-4 h-20 w-20 opacity-10" />
 			</CardContent>
