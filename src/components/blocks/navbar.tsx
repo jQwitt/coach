@@ -46,6 +46,7 @@ export default function Navbar() {
 						<Image
 							src={DumbellLogo}
 							alt="dumbbell logo"
+							role="button"
 							height={24}
 							width={24}
 							onClick={() => redirect("/dashboard")}
