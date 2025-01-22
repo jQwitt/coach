@@ -54,7 +54,7 @@ export default async function LiveCoachPage() {
 			<div className="mt-6">
 				<LiveCoachConversation userFirstName={firstName} />
 			</div>
-			<div className="fixed bottom-0 w-full max-w-3xl bg-white -mx-4 p-4 pt-6">
+			<div className="fixed bottom-0 w-full max-w-3xl bg-white -mx-4 p-4 pt-6 self-center">
 				<MessageInput actions={quickActions} />
 			</div>
 		</div>
