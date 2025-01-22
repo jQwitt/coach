@@ -1,551 +1,516 @@
 {
-  "id": "79d8d88a-8bcc-48f4-b55a-635981893523",
-  "prevId": "00000000-0000-0000-0000-000000000000",
-  "version": "7",
-  "dialect": "postgresql",
-  "tables": {
-    "public.UserLiftingExercises": {
-      "name": "UserLiftingExercises",
-      "schema": "",
-      "columns": {
-        "userId": {
-          "name": "userId",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "exerciseId": {
-          "name": "exerciseId",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.LiftingExercises": {
-      "name": "LiftingExercises",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "userId": {
-          "name": "userId",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "name": {
-          "name": "name",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "primaryTarget": {
-          "name": "primaryTarget",
-          "type": "varchar(100)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "detailedTargets": {
-          "name": "detailedTargets",
-          "type": "varchar(100)[]",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "LiftingExercises_userId_Users_id_fk": {
-          "name": "LiftingExercises_userId_Users_id_fk",
-          "tableFrom": "LiftingExercises",
-          "tableTo": "Users",
-          "columnsFrom": [
-            "userId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.PlanTable": {
-      "name": "PlanTable",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": true,
-          "identity": {
-            "type": "always",
-            "name": "PlanTable_id_seq",
-            "schema": "public",
-            "increment": "1",
-            "startWith": "1",
-            "minValue": "1",
-            "maxValue": "2147483647",
-            "cache": "1",
-            "cycle": false
-          }
-        },
-        "name": {
-          "name": "name",
-          "type": "varchar(20)",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'free'"
-        },
-        "dailyConversationLimit": {
-          "name": "dailyConversationLimit",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 1
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.UserTags": {
-      "name": "UserTags",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": true,
-          "identity": {
-            "type": "always",
-            "name": "UserTags_id_seq",
-            "schema": "public",
-            "increment": "1",
-            "startWith": "1",
-            "minValue": "1",
-            "maxValue": "2147483647",
-            "cache": "1",
-            "cycle": false
-          }
-        },
-        "name": {
-          "name": "name",
-          "type": "varchar(100)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created": {
-          "name": "created",
-          "type": "date",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated": {
-          "name": "updated",
-          "type": "date",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.UsersLiveCoachConversations": {
-      "name": "UsersLiveCoachConversations",
-      "schema": "",
-      "columns": {
-        "conversationId": {
-          "name": "conversationId",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": true,
-          "identity": {
-            "type": "byDefault",
-            "name": "UsersLiveCoachConversations_conversationId_seq",
-            "schema": "public",
-            "increment": "1",
-            "startWith": "1",
-            "minValue": "1",
-            "maxValue": "2147483647",
-            "cache": "1",
-            "cycle": false
-          }
-        },
-        "userId": {
-          "name": "userId",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "date": {
-          "name": "date",
-          "type": "varchar(50)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "intent": {
-          "name": "intent",
-          "type": "varchar(50)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "fulfilled": {
-          "name": "fulfilled",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "default": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "UsersLiveCoachConversations_userId_Users_id_fk": {
-          "name": "UsersLiveCoachConversations_userId_Users_id_fk",
-          "tableFrom": "UsersLiveCoachConversations",
-          "tableTo": "Users",
-          "columnsFrom": [
-            "userId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.Users": {
-      "name": "Users",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": true,
-          "identity": {
-            "type": "always",
-            "name": "Users_id_seq",
-            "schema": "public",
-            "increment": "1",
-            "startWith": "1",
-            "minValue": "1",
-            "maxValue": "2147483647",
-            "cache": "1",
-            "cycle": false
-          }
-        },
-        "authId": {
-          "name": "authId",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "tags": {
-          "name": "tags",
-          "type": "integer[]",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "'{}'"
-        },
-        "firstName": {
-          "name": "firstName",
-          "type": "varchar(50)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "lastName": {
-          "name": "lastName",
-          "type": "varchar(50)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "email": {
-          "name": "email",
-          "type": "varchar(100)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "plan": {
-          "name": "plan",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "default": 1
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "Users_plan_PlanTable_id_fk": {
-          "name": "Users_plan_PlanTable_id_fk",
-          "tableFrom": "Users",
-          "tableTo": "PlanTable",
-          "columnsFrom": [
-            "plan"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "Users_authId_unique": {
-          "name": "Users_authId_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "authId"
-          ]
-        },
-        "Users_email_unique": {
-          "name": "Users_email_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "email"
-          ]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.WorkoutsLiftingExercises": {
-      "name": "WorkoutsLiftingExercises",
-      "schema": "",
-      "columns": {
-        "workoutId": {
-          "name": "workoutId",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "exerciseId": {
-          "name": "exerciseId",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "userId": {
-          "name": "userId",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "totalSets": {
-          "name": "totalSets",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "totalReps": {
-          "name": "totalReps",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "maxWeight": {
-          "name": "maxWeight",
-          "type": "varchar(10)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "serializedSetData": {
-          "name": "serializedSetData",
-          "type": "varchar(255)[]",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'{}'"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "WorkoutsLiftingExercises_workoutId_WorkoutsLifting_id_fk": {
-          "name": "WorkoutsLiftingExercises_workoutId_WorkoutsLifting_id_fk",
-          "tableFrom": "WorkoutsLiftingExercises",
-          "tableTo": "WorkoutsLifting",
-          "columnsFrom": [
-            "workoutId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "WorkoutsLiftingExercises_exerciseId_LiftingExercises_id_fk": {
-          "name": "WorkoutsLiftingExercises_exerciseId_LiftingExercises_id_fk",
-          "tableFrom": "WorkoutsLiftingExercises",
-          "tableTo": "LiftingExercises",
-          "columnsFrom": [
-            "exerciseId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "WorkoutsLiftingExercises_userId_Users_id_fk": {
-          "name": "WorkoutsLiftingExercises_userId_Users_id_fk",
-          "tableFrom": "WorkoutsLiftingExercises",
-          "tableTo": "Users",
-          "columnsFrom": [
-            "userId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "WorkoutsLiftingExercises_workoutId_exerciseId_pk": {
-          "name": "WorkoutsLiftingExercises_workoutId_exerciseId_pk",
-          "columns": [
-            "workoutId",
-            "exerciseId"
-          ]
-        }
-      },
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.WorkoutsLifting": {
-      "name": "WorkoutsLifting",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": true,
-          "identity": {
-            "type": "always",
-            "name": "WorkoutsLifting_id_seq",
-            "schema": "public",
-            "increment": "1",
-            "startWith": "1",
-            "minValue": "1",
-            "maxValue": "2147483647",
-            "cache": "1",
-            "cycle": false
-          }
-        },
-        "userId": {
-          "name": "userId",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "tags": {
-          "name": "tags",
-          "type": "integer[]",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'{}'"
-        },
-        "name": {
-          "name": "name",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "date": {
-          "name": "date",
-          "type": "varchar(12)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "timeStarted": {
-          "name": "timeStarted",
-          "type": "varchar(30)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "timeCompleted": {
-          "name": "timeCompleted",
-          "type": "varchar(30)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "duration": {
-          "name": "duration",
-          "type": "varchar(5)",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "WorkoutsLifting_userId_Users_id_fk": {
-          "name": "WorkoutsLifting_userId_Users_id_fk",
-          "tableFrom": "WorkoutsLifting",
-          "tableTo": "Users",
-          "columnsFrom": [
-            "userId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    }
-  },
-  "enums": {},
-  "schemas": {},
-  "sequences": {},
-  "roles": {},
-  "policies": {},
-  "views": {},
-  "_meta": {
-    "columns": {},
-    "schemas": {},
-    "tables": {}
-  }
+	"id": "79d8d88a-8bcc-48f4-b55a-635981893523",
+	"prevId": "00000000-0000-0000-0000-000000000000",
+	"version": "7",
+	"dialect": "postgresql",
+	"tables": {
+		"public.UserLiftingExercises": {
+			"name": "UserLiftingExercises",
+			"schema": "",
+			"columns": {
+				"userId": {
+					"name": "userId",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"exerciseId": {
+					"name": "exerciseId",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": false
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {},
+			"policies": {},
+			"checkConstraints": {},
+			"isRLSEnabled": false
+		},
+		"public.LiftingExercises": {
+			"name": "LiftingExercises",
+			"schema": "",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "serial",
+					"primaryKey": true,
+					"notNull": true
+				},
+				"userId": {
+					"name": "userId",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"name": {
+					"name": "name",
+					"type": "varchar(255)",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"primaryTarget": {
+					"name": "primaryTarget",
+					"type": "varchar(100)",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"detailedTargets": {
+					"name": "detailedTargets",
+					"type": "varchar(100)[]",
+					"primaryKey": false,
+					"notNull": true
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"LiftingExercises_userId_Users_id_fk": {
+					"name": "LiftingExercises_userId_Users_id_fk",
+					"tableFrom": "LiftingExercises",
+					"tableTo": "Users",
+					"columnsFrom": ["userId"],
+					"columnsTo": ["id"],
+					"onDelete": "cascade",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {},
+			"policies": {},
+			"checkConstraints": {},
+			"isRLSEnabled": false
+		},
+		"public.PlanTable": {
+			"name": "PlanTable",
+			"schema": "",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "integer",
+					"primaryKey": true,
+					"notNull": true,
+					"identity": {
+						"type": "always",
+						"name": "PlanTable_id_seq",
+						"schema": "public",
+						"increment": "1",
+						"startWith": "1",
+						"minValue": "1",
+						"maxValue": "2147483647",
+						"cache": "1",
+						"cycle": false
+					}
+				},
+				"name": {
+					"name": "name",
+					"type": "varchar(20)",
+					"primaryKey": false,
+					"notNull": true,
+					"default": "'free'"
+				},
+				"dailyConversationLimit": {
+					"name": "dailyConversationLimit",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"default": 1
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {},
+			"policies": {},
+			"checkConstraints": {},
+			"isRLSEnabled": false
+		},
+		"public.UserTags": {
+			"name": "UserTags",
+			"schema": "",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "integer",
+					"primaryKey": true,
+					"notNull": true,
+					"identity": {
+						"type": "always",
+						"name": "UserTags_id_seq",
+						"schema": "public",
+						"increment": "1",
+						"startWith": "1",
+						"minValue": "1",
+						"maxValue": "2147483647",
+						"cache": "1",
+						"cycle": false
+					}
+				},
+				"name": {
+					"name": "name",
+					"type": "varchar(100)",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"created": {
+					"name": "created",
+					"type": "date",
+					"primaryKey": false,
+					"notNull": true,
+					"default": "now()"
+				},
+				"updated": {
+					"name": "updated",
+					"type": "date",
+					"primaryKey": false,
+					"notNull": false
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {},
+			"policies": {},
+			"checkConstraints": {},
+			"isRLSEnabled": false
+		},
+		"public.UsersLiveCoachConversations": {
+			"name": "UsersLiveCoachConversations",
+			"schema": "",
+			"columns": {
+				"conversationId": {
+					"name": "conversationId",
+					"type": "integer",
+					"primaryKey": true,
+					"notNull": true,
+					"identity": {
+						"type": "byDefault",
+						"name": "UsersLiveCoachConversations_conversationId_seq",
+						"schema": "public",
+						"increment": "1",
+						"startWith": "1",
+						"minValue": "1",
+						"maxValue": "2147483647",
+						"cache": "1",
+						"cycle": false
+					}
+				},
+				"userId": {
+					"name": "userId",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"date": {
+					"name": "date",
+					"type": "varchar(50)",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"intent": {
+					"name": "intent",
+					"type": "varchar(50)",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"fulfilled": {
+					"name": "fulfilled",
+					"type": "boolean",
+					"primaryKey": false,
+					"notNull": false,
+					"default": false
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"UsersLiveCoachConversations_userId_Users_id_fk": {
+					"name": "UsersLiveCoachConversations_userId_Users_id_fk",
+					"tableFrom": "UsersLiveCoachConversations",
+					"tableTo": "Users",
+					"columnsFrom": ["userId"],
+					"columnsTo": ["id"],
+					"onDelete": "cascade",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {},
+			"policies": {},
+			"checkConstraints": {},
+			"isRLSEnabled": false
+		},
+		"public.Users": {
+			"name": "Users",
+			"schema": "",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "integer",
+					"primaryKey": true,
+					"notNull": true,
+					"identity": {
+						"type": "always",
+						"name": "Users_id_seq",
+						"schema": "public",
+						"increment": "1",
+						"startWith": "1",
+						"minValue": "1",
+						"maxValue": "2147483647",
+						"cache": "1",
+						"cycle": false
+					}
+				},
+				"authId": {
+					"name": "authId",
+					"type": "varchar(255)",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"tags": {
+					"name": "tags",
+					"type": "integer[]",
+					"primaryKey": false,
+					"notNull": false,
+					"default": "'{}'"
+				},
+				"firstName": {
+					"name": "firstName",
+					"type": "varchar(50)",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"lastName": {
+					"name": "lastName",
+					"type": "varchar(50)",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"email": {
+					"name": "email",
+					"type": "varchar(100)",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"plan": {
+					"name": "plan",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": false,
+					"default": 1
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"Users_plan_PlanTable_id_fk": {
+					"name": "Users_plan_PlanTable_id_fk",
+					"tableFrom": "Users",
+					"tableTo": "PlanTable",
+					"columnsFrom": ["plan"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {
+				"Users_authId_unique": {
+					"name": "Users_authId_unique",
+					"nullsNotDistinct": false,
+					"columns": ["authId"]
+				},
+				"Users_email_unique": {
+					"name": "Users_email_unique",
+					"nullsNotDistinct": false,
+					"columns": ["email"]
+				}
+			},
+			"policies": {},
+			"checkConstraints": {},
+			"isRLSEnabled": false
+		},
+		"public.WorkoutsLiftingExercises": {
+			"name": "WorkoutsLiftingExercises",
+			"schema": "",
+			"columns": {
+				"workoutId": {
+					"name": "workoutId",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"exerciseId": {
+					"name": "exerciseId",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"userId": {
+					"name": "userId",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"totalSets": {
+					"name": "totalSets",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"totalReps": {
+					"name": "totalReps",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"maxWeight": {
+					"name": "maxWeight",
+					"type": "varchar(10)",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"serializedSetData": {
+					"name": "serializedSetData",
+					"type": "varchar(255)[]",
+					"primaryKey": false,
+					"notNull": true,
+					"default": "'{}'"
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"WorkoutsLiftingExercises_workoutId_WorkoutsLifting_id_fk": {
+					"name": "WorkoutsLiftingExercises_workoutId_WorkoutsLifting_id_fk",
+					"tableFrom": "WorkoutsLiftingExercises",
+					"tableTo": "WorkoutsLifting",
+					"columnsFrom": ["workoutId"],
+					"columnsTo": ["id"],
+					"onDelete": "cascade",
+					"onUpdate": "no action"
+				},
+				"WorkoutsLiftingExercises_exerciseId_LiftingExercises_id_fk": {
+					"name": "WorkoutsLiftingExercises_exerciseId_LiftingExercises_id_fk",
+					"tableFrom": "WorkoutsLiftingExercises",
+					"tableTo": "LiftingExercises",
+					"columnsFrom": ["exerciseId"],
+					"columnsTo": ["id"],
+					"onDelete": "cascade",
+					"onUpdate": "no action"
+				},
+				"WorkoutsLiftingExercises_userId_Users_id_fk": {
+					"name": "WorkoutsLiftingExercises_userId_Users_id_fk",
+					"tableFrom": "WorkoutsLiftingExercises",
+					"tableTo": "Users",
+					"columnsFrom": ["userId"],
+					"columnsTo": ["id"],
+					"onDelete": "cascade",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {
+				"WorkoutsLiftingExercises_workoutId_exerciseId_pk": {
+					"name": "WorkoutsLiftingExercises_workoutId_exerciseId_pk",
+					"columns": ["workoutId", "exerciseId"]
+				}
+			},
+			"uniqueConstraints": {},
+			"policies": {},
+			"checkConstraints": {},
+			"isRLSEnabled": false
+		},
+		"public.WorkoutsLifting": {
+			"name": "WorkoutsLifting",
+			"schema": "",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "integer",
+					"primaryKey": true,
+					"notNull": true,
+					"identity": {
+						"type": "always",
+						"name": "WorkoutsLifting_id_seq",
+						"schema": "public",
+						"increment": "1",
+						"startWith": "1",
+						"minValue": "1",
+						"maxValue": "2147483647",
+						"cache": "1",
+						"cycle": false
+					}
+				},
+				"userId": {
+					"name": "userId",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"tags": {
+					"name": "tags",
+					"type": "integer[]",
+					"primaryKey": false,
+					"notNull": true,
+					"default": "'{}'"
+				},
+				"name": {
+					"name": "name",
+					"type": "varchar(255)",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"date": {
+					"name": "date",
+					"type": "varchar(12)",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"timeStarted": {
+					"name": "timeStarted",
+					"type": "varchar(30)",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"timeCompleted": {
+					"name": "timeCompleted",
+					"type": "varchar(30)",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"duration": {
+					"name": "duration",
+					"type": "varchar(5)",
+					"primaryKey": false,
+					"notNull": true
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"WorkoutsLifting_userId_Users_id_fk": {
+					"name": "WorkoutsLifting_userId_Users_id_fk",
+					"tableFrom": "WorkoutsLifting",
+					"tableTo": "Users",
+					"columnsFrom": ["userId"],
+					"columnsTo": ["id"],
+					"onDelete": "cascade",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {},
+			"policies": {},
+			"checkConstraints": {},
+			"isRLSEnabled": false
+		}
+	},
+	"enums": {},
+	"schemas": {},
+	"sequences": {},
+	"roles": {},
+	"policies": {},
+	"views": {},
+	"_meta": {
+		"columns": {},
+		"schemas": {},
+		"tables": {}
+	}
 }
