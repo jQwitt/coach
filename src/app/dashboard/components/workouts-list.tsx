@@ -1,5 +1,6 @@
 "use client";
 
+import { PlaceHolderCardEmpty } from "@/components/ui/cards/placeholder-empty";
 import Header, { HeaderLevel } from "@/components/ui/header";
 import {
 	Select,
@@ -10,6 +11,7 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import type { WorkoutLifting } from "@/lib/types";
+import { SearchSlash } from "lucide-react";
 import * as React from "react";
 import WorkoutCard from "./workout-card";
 
@@ -24,7 +26,10 @@ export default function WorkoutsList({ workouts }: { workouts: WorkoutLifting[] 
 	return (
 		<>
 			<Header title="Recent Workouts" level={HeaderLevel.SECTION} className="my-1" />
-			<Select onValueChange={(value) => setSortBy(value as SortMethods)}>
+			<Select
+				onValueChange={(value) => setSortBy(value as SortMethods)}
+				disabled={!workouts.length}
+			>
 				<SelectTrigger className="w-[120px]">
 					<SelectValue placeholder="Newest" defaultValue={"newest"} />
 				</SelectTrigger>
@@ -39,10 +44,10 @@ export default function WorkoutsList({ workouts }: { workouts: WorkoutLifting[] 
 				{workouts?.map((workout) => {
 					return <WorkoutCard data={workout} key={`${workout.name}-${workout.id}`} />;
 				})}
-				{workouts.length === 0 && (
-					<div className="my-5 w-full text-center">
-						<p className="text-sm text-muted-foreground">Future workouts will appear here!</p>
-					</div>
+				{!workouts?.length && (
+					<PlaceHolderCardEmpty text="No workouts yet" isBanner>
+						<SearchSlash className="h-8 w-8 text-muted-foreground my-2" />
+					</PlaceHolderCardEmpty>
 				)}
 			</div>
 		</>

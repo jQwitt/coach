@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardFooter, CardHeader } from "@/components/ui/card";
+import { PlaceHolderCardEmpty } from "@/components/ui/cards/placeholder-empty";
 import Header, { HeaderLevel } from "@/components/ui/header";
 import type { UserExerciseLifting } from "@/lib/types";
 import { ArrowRight, Dumbbell, Pencil } from "lucide-react";
@@ -14,6 +15,9 @@ export default function ExerciseList({ exercises }: { exercises: UserExerciseLif
 			<div
 				className={`w-full flex gap-2 ${exercises.length > 2 ? "overflow-x-scroll" : "overflow-hidden"}`}
 			>
+				{exercises.length === 0 && (
+					<PlaceHolderCardEmpty text="Your exercises will appear here as you log your workouts!" />
+				)}
 				{exercises.map(({ id, name, primaryTarget, detailedTargets }) => (
 					<Card key={name} className="relative min-w-[45%] min-h-[160px] overflow-hidden">
 						<CardHeader>
@@ -44,13 +48,6 @@ export default function ExerciseList({ exercises }: { exercises: UserExerciseLif
 					</Card>
 				))}
 			</div>
-			{exercises.length === 0 && (
-				<div className="flex justify-around items-center py-6">
-					<p className="text-sm text-muted-foreground">
-						Your exercises will appear here as you log workouts!
-					</p>
-				</div>
-			)}
 		</div>
 	);
 }

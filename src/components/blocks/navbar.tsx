@@ -8,13 +8,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { redirect, usePathname } from "next/navigation";
 import * as React from "react";
-import { useMediaQuery } from "react-responsive";
 import DumbellLogo from "../../../public/images/dumbbell_black.png";
 
 export default function Navbar() {
 	const path = usePathname();
 	const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
-	const isDesktop = useMediaQuery({ query: "(min-width: 640px)" });
 	const date = timeStamp().split("T")[0];
 
 	const navItems = [
@@ -54,20 +52,18 @@ export default function Navbar() {
 							className="rotate-45"
 						/>
 					</div>
-					{isDesktop && (
-						<div className="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
-							{navItems.map((item) => (
-								<Link
-									key={item.name}
-									href={item.href}
-									className={`inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-muted-foreground transition duration-150 ease-in-out hover:border-foreground hover:text-foreground ${item.selected ? "border-primary" : ""}`}
-								>
-									<item.icon className="mr-2 h-4 w-4" />
-									{item.name}
-								</Link>
-							))}
-						</div>
-					)}
+					<div className="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
+						{navItems.map((item) => (
+							<Link
+								key={item.name}
+								href={item.href}
+								className={`inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-muted-foreground transition duration-150 ease-in-out hover:border-foreground hover:text-foreground ${item.selected ? "border-primary" : ""}`}
+							>
+								<item.icon className="mr-2 h-4 w-4" />
+								{item.name}
+							</Link>
+						))}
+					</div>
 					<div className="-mr-2 flex items-center sm:hidden">
 						<Button
 							variant="ghost"
