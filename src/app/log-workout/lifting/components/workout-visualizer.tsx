@@ -57,9 +57,7 @@ export default function WorkoutVisualizer() {
 				: [];
 
 	return (
-		<div className="space-y-4">
-			<Header title="Your Workout in Data" level={HeaderLevel.SECTION} />
-
+		<div className="min-h-full md:mt-[5.125rem]">
 			<Card>
 				<CardHeader>
 					<CardTitle>
