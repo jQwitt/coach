@@ -1,4 +1,4 @@
-import { getDate, getEpoch } from "@/lib/dates";
+import { getDate, getEpoch } from "@/lib/dates/server";
 import { SupportedTimeSpans, type TimeSpan } from "@/lib/types";
 
 const RANGE_DELIMITER = "..";
