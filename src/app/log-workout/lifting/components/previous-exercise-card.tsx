@@ -1,9 +1,11 @@
+"use client";
+
 import { heading } from "@/app/fonts";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Header, { HeaderLevel } from "@/components/ui/header";
 import type { ExerciseData } from "@/lib/types";
-import { ChevronsUp, X } from "lucide-react";
+import { ChevronsUp, Dumbbell, X } from "lucide-react";
 
 export default function PreviousExerciseCard({
 	exercise,
@@ -16,8 +18,8 @@ export default function PreviousExerciseCard({
 	const isHypertrophic = maxReps > 5 && maxReps < 13;
 
 	return (
-		<Card {...props} className="w-[40%]">
-			<CardContent className="group flex flex-col justify-between gap-1 -m-2 mt-2 relative pr-16">
+		<Card {...props} className="w-[55%] md:w-[33%] inline-block overflow-hidden">
+			<CardContent className="group -ml-2 mt-2 relative pr-16 min-h-[120px]">
 				<Button
 					className="absolute -top-3 right-1 hidden group-hover:flex"
 					variant="secondary"
@@ -27,9 +29,11 @@ export default function PreviousExerciseCard({
 				>
 					<X />
 				</Button>
-				<div>
-					<Header title={name} level={HeaderLevel.SECTION} />
-				</div>
+				<Header
+					className="whitespace-nowrap truncate text-ellipsis"
+					title={name}
+					level={HeaderLevel.SUB_SECTION}
+				/>
 				<div className="p-1">
 					{sets.map(({ count, reps, weight }, index) => (
 						<p key={`set-${index}`} className="text-sm text-muted-foreground">
@@ -37,7 +41,7 @@ export default function PreviousExerciseCard({
 						</p>
 					))}
 				</div>
-				<div className="flex items-center justify-start">
+				<div className="flex items-center justify-start absolute bottom-0">
 					<ChevronsUp
 						className={`-mt-3 text-${isHypertrophic ? "green-500" : "red-500"}`}
 						size={16}
@@ -49,6 +53,7 @@ export default function PreviousExerciseCard({
 						{isHypertrophic ? "Hypertophy" : "Strength"}
 					</p>
 				</div>
+				<Dumbbell className="absolute -bottom-3 -right-4 h-20 w-20 opacity-10" />
 			</CardContent>
 		</Card>
 	);

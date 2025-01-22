@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 const { fontFamily } = require("tailwindcss/defaultTheme");
+const plugin = require("tailwindcss/plugin");
 import type { Config } from "tailwindcss";
+import { PluginAPI } from "tailwindcss/types/config";
 
 module.exports = {
 	darkMode: ["class"],
@@ -97,5 +99,22 @@ module.exports = {
 			},
 		},
 	},
-	plugins: [require("tailwindcss-animate")],
+	plugins: [
+		require("tailwindcss-animate"),
+		plugin(({ addUtilities }: PluginAPI) => {
+			addUtilities({
+				".side-scroll": {
+					"overflow-x": "scroll",
+					"overflow-y": "hidden",
+					"white-space": "nowrap",
+					"-webkit-overflow-scrolling": "touch",
+					"&::-webkit-scrollbar": {
+						display: "none",
+					},
+					"-ms-overflow-style": "none",
+					"scrollbar-width": "none",
+				},
+			});
+		}),
+	],
 } satisfies Config;

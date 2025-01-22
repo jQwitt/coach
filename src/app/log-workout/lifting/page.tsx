@@ -26,7 +26,7 @@ export default async function LogWorkoutLifting() {
 				<div className="md:col-span-5 col-span-1">
 					<LogWorkoutLiftingForm knownExercises={knownExercises} />
 				</div>
-				<div className="lg:col-span-4 md:col-span-3 col-span-1 sm:row-start-2">
+				<div className="md:col-span-9 col-span-1 sm:row-start-2">
 					<PreviousExcersises />
 				</div>
 				<div className="md:col-span-4 col-span-1">

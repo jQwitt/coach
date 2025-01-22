@@ -1,5 +1,6 @@
 "use client";
 
+import { PlaceHolderCardEmpty } from "@/components/ui/cards/placeholder-empty";
 import Header, { HeaderLevel } from "@/components/ui/header";
 import useWorkoutStore from "@/hooks/stores/use-workout";
 import PreviousExerciseCard from "./previous-exercise-card";
@@ -15,13 +16,9 @@ export default function PreviousExcersises() {
 		<div>
 			<Header title="Previous Exercises" level={HeaderLevel.SECTION} />
 			{previousExercises.length === 0 ? (
-				<div className="text-center my-6">
-					<p className="text-sm text-muted-foreground">
-						Exercises will appear here as you log them!
-					</p>
-				</div>
+				<PlaceHolderCardEmpty text="Exercises will appear here as you workout!" height="120px" />
 			) : (
-				<div className="flex gap-2 overflow-x-scroll py-4">
+				<div className="side-scroll space-x-2">
 					{previousExercises.map((exercise, index) => (
 						<PreviousExerciseCard
 							key={`previous-exercise-${exercise.name}`}

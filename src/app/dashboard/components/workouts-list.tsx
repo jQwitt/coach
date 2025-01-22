@@ -45,7 +45,7 @@ export default function WorkoutsList({ workouts }: { workouts: WorkoutLifting[] 
 					return <WorkoutCard data={workout} key={`${workout.name}-${workout.id}`} />;
 				})}
 				{!workouts?.length && (
-					<PlaceHolderCardEmpty text="No workouts yet" isBanner>
+					<PlaceHolderCardEmpty text="No workouts yet">
 						<SearchSlash className="h-8 w-8 text-muted-foreground my-2" />
 					</PlaceHolderCardEmpty>
 				)}
