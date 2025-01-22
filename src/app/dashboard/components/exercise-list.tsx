@@ -12,14 +12,15 @@ export default function ExerciseList({ exercises }: { exercises: UserExerciseLif
 	return (
 		<div>
 			<Header title="Your Exercises" level={HeaderLevel.SECTION} />
-			<div
-				className={`w-full flex gap-2 ${exercises.length > 2 ? "overflow-x-scroll" : "overflow-hidden"}`}
-			>
+			<div className="w-full side-scroll space-x-2">
 				{exercises.length === 0 && (
 					<PlaceHolderCardEmpty text="Your exercises will appear here as you log your workouts!" />
 				)}
 				{exercises.map(({ id, name, primaryTarget, detailedTargets }) => (
-					<Card key={name} className="relative min-w-[45%] min-h-[160px] overflow-hidden">
+					<Card
+						key={name}
+						className="relative inline-block min-w-[45%] min-h-[160px] overflow-hidden"
+					>
 						<CardHeader>
 							<Header title={name} level={HeaderLevel.SUB_SECTION} />
 							<div className="min-h-[36px]">
