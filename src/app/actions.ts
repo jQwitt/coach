@@ -17,6 +17,7 @@ import {
 } from "../actions/live-coach";
 import {
 	getPlanInfo as getPlanInfoAction,
+	getPlanInfoForCurrentUser as getPlanInfoForCurrentUserAction,
 	isConversationLimitReached as isConversationLimitReachedAction,
 	logConversation as logConversationAction,
 } from "../actions/plans";
@@ -64,5 +65,6 @@ export const viewAnalytics = viewAnalyticsAction;
 
 // PLANS
 export const getPlanInfo = getPlanInfoAction;
+export const getPlanInfoForCurrentUser = getPlanInfoForCurrentUserAction;
 export const logConversation = logConversationAction;
 export const isConversationLimitReached = isConversationLimitReachedAction;

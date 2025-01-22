@@ -1,95 +1,113 @@
-import { Button } from "@/components/ui/button";
+import Header from "@/components/ui/header";
 import { Check } from "lucide-react";
 
+enum HIGHLIGHT {
+	POPULAR = "popular",
+	VALUE = "value",
+	NONE = "none",
+}
+const coreFeatures = [
+	"Access to Live Coach AI",
+	"Unlimited Workout Tracking",
+	"Comprehensive Analytics",
+];
 const tiers = [
 	{
 		name: "Free",
 		price: "$0",
-		description: "Perfect for getting started",
-		features: ["Basic features", "1 project", "100 MB storage", "Community support"],
-		cta: "Get Started",
-		highlighted: false,
+		description: "Perfect for getting started.",
+		features: coreFeatures,
+		highlight: HIGHLIGHT.NONE,
 	},
 	{
 		name: "Builder",
-		price: "$19",
-		description: "Great for serious builders",
+		price: "$6",
+		description: "Increased access for dedicated athletes.",
 		features: [
-			"All Free features",
-			"Unlimited projects",
-			"1 GB storage",
-			"Priority support",
-			"Advanced analytics",
+			"Intelligent Exercise Suggestions",
+			"Personalized Workout Recommendations",
+			...coreFeatures,
 		],
 		cta: "Upgrade to Builder",
-		highlighted: true,
+		highlight: HIGHLIGHT.POPULAR,
 	},
 	{
 		name: "Olympian",
-		price: "$49",
-		description: "For power users and teams",
+		price: "$10",
+		description: "Unlimited access for serious fitness enthusiasts.",
 		features: [
-			"All Builder features",
-			"10 GB storage",
-			"24/7 phone support",
-			"Custom integrations",
-			"Dedicated account manager",
+			"Individualized Workout Plans",
+			"Intelligent Exercise Suggestions",
+			"Personalized Workout Recommendations",
+			...coreFeatures,
 		],
 		cta: "Upgrade to Olympian",
-		highlighted: false,
+		highlight: HIGHLIGHT.VALUE,
 	},
 ];
 
 export default function ProfilePlanPage() {
+	const highlights = {
+		[HIGHLIGHT.POPULAR]: {
+			border: "border-primary ring-2 ring-primary",
+			text: "Most Popular",
+		},
+		[HIGHLIGHT.VALUE]: {
+			border: "border-purple-500 ring-2 ring-purple-500",
+			text: "Best Value",
+		},
+		[HIGHLIGHT.NONE]: { border: "border-gray-200", text: "" },
+	};
+
 	return (
-		<div className="py-12 bg-gray-50">
-			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-				<div className="text-center">
-					<h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">Choose Your Plan</h2>
-					<p className="mt-4 text-xl text-gray-600">
-						Select the perfect tier to suit your needs and take your projects to the next level.
-					</p>
-				</div>
-				<div className="mt-16 space-y-12 lg:space-y-0 lg:grid lg:grid-cols-3 lg:gap-x-8">
-					{tiers.map((tier) => (
-						<div
-							key={tier.name}
-							className={`relative p-8 bg-white border rounded-2xl shadow-sm flex flex-col ${
-								tier.highlighted ? "border-primary ring-2 ring-primary" : "border-gray-200"
-							}`}
-						>
-							<div className="flex-1">
-								<h3 className="text-xl font-semibold text-gray-900">{tier.name}</h3>
-								{tier.highlighted && (
-									<p className="absolute top-0 py-1.5 px-4 bg-primary text-primary-foreground rounded-full text-xs font-semibold uppercase tracking-wide transform -translate-y-1/2">
-										Most popular
-									</p>
-								)}
-								<p className="mt-4 flex items-baseline text-gray-900">
-									<span className="text-5xl font-extrabold tracking-tight">{tier.price}</span>
-									<span className="ml-1 text-xl font-semibold">/month</span>
+		<div className="max-w-7xl sm:px-6 lg:px-8">
+			<div className="min-w-full text-center sticky top-10 pt-10 pb-2 z-10 bg-white shadow-lg -mx-12 px-12 lg:relative lg:z-0 lg:shadow-none lg:mx-0 lg:px-0">
+				<Header title="Choose Your Plan" />
+				<p className="text-primary mt-4 text-sm text-left mb-2">
+					Select the perfect tier to suit your needs and take your training to the next level.
+				</p>
+			</div>
+			<div className="mt-16 space-y-12 lg:space-y-0 lg:grid lg:grid-cols-3 lg:gap-x-8">
+				{tiers.map((tier) => (
+					<div
+						key={tier.name}
+						className={`relative p-8 bg-white border rounded-2xl shadow-sm flex flex-col ${highlights[tier.highlight].border}`}
+					>
+						<div className="flex-1">
+							<h3 className="text-xl font-semibold text-gray-900">{tier.name}</h3>
+							{highlights[tier.highlight].text.length ? (
+								<p
+									className={`absolute top-0 py-1.5 px-4 ${tier.highlight === HIGHLIGHT.VALUE ? "bg-purple-500" : "bg-primary"} text-primary-foreground rounded-full text-xs font-semibold uppercase tracking-wide transform -translate-y-1/2`}
+								>
+									{highlights[tier.highlight].text}
 								</p>
-								<p className="mt-6 text-gray-500">{tier.description}</p>
+							) : (
+								""
+							)}
+							<p className="mt-4 flex items-baseline text-gray-900">
+								<span className="text-5xl font-extrabold tracking-tight">{tier.price}</span>
+								<span className="ml-1 text-xl font-semibold">/month</span>
+							</p>
+							<p className="mt-6 text-gray-500">{tier.description}</p>
 
-								<ul className="mt-6 space-y-6">
-									{tier.features.map((feature) => (
-										<li key={feature} className="flex">
-											<Check className="flex-shrink-0 w-6 h-6 text-green-500" aria-hidden="true" />
-											<span className="ml-3 text-gray-500">{feature}</span>
-										</li>
-									))}
-								</ul>
-							</div>
+							<ul className="mt-6 space-y-2">
+								{tier.features.map((feature) => (
+									<li key={feature} className="flex items-center">
+										<Check className="flex-shrink-0 text-green-500" size={16} aria-hidden="true" />
+										<span className="ml-2 text-gray-500 text-xs">{feature}</span>
+									</li>
+								))}
+							</ul>
+						</div>
 
-							<Button
-								variant={tier.highlighted ? "default" : "outline"}
+						{/* <Button
+								variant={tier.highlight !== HIGHLIGHT.NONE ? "default" : "outline"}
 								className="mt-8 block w-full py-3 px-6 border border-transparent rounded-md text-center font-medium"
 							>
 								{tier.cta}
-							</Button>
-						</div>
-					))}
-				</div>
+							</Button> */}
+					</div>
+				))}
 			</div>
 		</div>
 	);

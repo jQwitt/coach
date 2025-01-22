@@ -1,6 +1,7 @@
 import {
 	createLiveCoachConversationForUser,
 	getPlanInfoById,
+	getPlanInfoByUserId,
 	isLiveCoachConversationLimitExceeded,
 } from "@/db/plans";
 import { getCurrentUser } from "../user";
@@ -19,6 +20,21 @@ export async function getPlanInfo({ planId }: { planId: number | null | undefine
 
 	const { name, dailyConversationLimit } = result;
 	return { plan: name, dailyConversationLimit };
+}
+
+export async function getPlanInfoForCurrentUser() {
+	const { id } = (await getCurrentUser()) || {};
+
+	if (!id) {
+		return null;
+	}
+
+	const result = await getPlanInfoByUserId(id);
+	if (!result?.length) {
+		return null;
+	}
+
+	return result[0];
 }
 
 export async function logConversation({ date, intent }: { date: string; intent: string }) {

@@ -8,6 +8,18 @@ export async function getPlanInfoById(id: number) {
 	});
 }
 
+export async function getPlanInfoByUserId(userId: number) {
+	return await db
+		.select({
+			name: schema.plans_table.name,
+			dailyConversationLimit: schema.plans_table.dailyConversationLimit,
+		})
+		.from(schema.users_table)
+		.where(eq(schema.users_table.id, userId))
+		.rightJoin(schema.plans_table, eq(schema.users_table.plan, schema.plans_table.id))
+		.limit(1);
+}
+
 export async function createLiveCoachConversationForUser({
 	id,
 	data: { date, intent },
