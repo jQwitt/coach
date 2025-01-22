@@ -5,7 +5,6 @@ import db from "@/db";
 import schema from "@/db/schema";
 import { encodeSets } from "@/lib/encoding";
 import type { WorkoutLifting, WorkoutLiftingData } from "@/lib/types";
-import { sql } from "drizzle-orm";
 
 export async function saveWorkoutLifting(
 	data: Pick<WorkoutLifting, "name" | "timeStarted" | "timeCompleted" | "date" | "duration"> &
@@ -60,12 +59,6 @@ export async function saveWorkoutLifting(
 					detailedTargets,
 				})),
 			)
-			.onConflictDoUpdate({
-				target: schema.user_lifting_exercises_table.name,
-				set: {
-					name: sql`excluded.name`,
-				},
-			})
 			.returning({
 				id: schema.user_lifting_exercises_table.id,
 				name: schema.user_lifting_exercises_table.name,
