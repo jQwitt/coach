@@ -22,29 +22,32 @@ export default function Header({
 	Icon,
 	iconClassName,
 }: HeaderProps) {
+	const outer = "flex items-center gap-2 w-full";
+	const inner = `${heading.className} text-primary whitespace-nowrap truncate text-ellipsis ${className}`;
+
 	if (level === HeaderLevel.PAGE) {
 		return (
-			<div className="flex items-center gap-2 my-4 text-ellipsis">
+			<div className={`${outer} my-4`}>
 				{Icon && <Icon className={`h-12 w-12 ${iconClassName}`} />}
-				<h2 className={`${heading.className} text-6xl text-primary ${className}`}>{title}</h2>
+				<h2 className={`${inner} text-6xl`}>{title}</h2>
 			</div>
 		);
 	}
 
 	if (level === HeaderLevel.SECTION) {
 		return (
-			<div className="flex items-center gap-2 my-1">
+			<div className={`${outer} my-1`}>
 				{Icon && <Icon className={`${iconClassName}`} />}
-				<h3 className={`${heading.className} text-3xl text-primary ${className}`}>{title}</h3>
+				<h3 className={`${inner} text-3xl`}>{title}</h3>
 			</div>
 		);
 	}
 
 	if (level === HeaderLevel.SUB_SECTION) {
 		return (
-			<div className="flex items-center gap-4 my-1">
+			<div className={`${outer} gap-4 my-1`}>
 				{Icon && <Icon className={`${iconClassName}`} />}
-				<h6 className={`${heading.className} text-xl text-primary ${className}`}>{title}</h6>
+				<h6 className={`${inner} text-xl`}>{title}</h6>
 			</div>
 		);
 	}
