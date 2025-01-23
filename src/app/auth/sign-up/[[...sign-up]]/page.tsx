@@ -2,7 +2,7 @@
 
 import { createUser, isRegistered } from "@/app/actions";
 import Alert from "@/components/blocks/error-alert";
-import SubmitButton from "@/components/ui/buttons/submit";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import Header from "@/components/ui/header";
 import { Input } from "@/components/ui/input";
@@ -10,6 +10,7 @@ import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp
 import { Label } from "@/components/ui/label";
 import { useSignUp } from "@clerk/nextjs";
 import type { ClerkAPIError } from "@clerk/types";
+import { ArrowRight, Loader2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import * as React from "react";
@@ -167,12 +168,19 @@ export default function SignUpPage() {
 							</InputOTPGroup>
 						</InputOTP>
 						<div className="my-5">
-							<SubmitButton
-								className="w-full"
-								type="submit"
-								text="Verify"
-								isSubmitting={isSubmitting}
-							/>
+							<Button className="w-full" type="submit" disabled={isSubmitting}>
+								{isSubmitting ? (
+									<Loader2 className="animate-spin" />
+								) : (
+									<>
+										{"Verify"}
+										<ArrowRight
+											size={16}
+											className="transition-all ease-in duration-100 group-hover:translate-x-2"
+										/>
+									</>
+								)}
+							</Button>
 						</div>
 					</form>
 				) : (
@@ -223,11 +231,23 @@ export default function SignUpPage() {
 							</div>
 						</div>
 						<div>
-							<SubmitButton
-								className="w-full"
-								text="Start Training!"
-								isSubmitting={pendingVerification || isSubmitting}
-							/>
+							<Button
+								className="w-full group"
+								type="submit"
+								disabled={pendingVerification || isSubmitting}
+							>
+								{isSubmitting ? (
+									<Loader2 className="animate-spin" />
+								) : (
+									<>
+										{"Start training!"}
+										<ArrowRight
+											size={16}
+											className="transition-all ease-in duration-100 group-hover:translate-x-2"
+										/>
+									</>
+								)}
+							</Button>
 							<div className="mt-5 flex justify-center">
 								<Link href="/auth/sign-in">
 									<p className="link text-xs">{"Already have an account?"}</p>
