@@ -1,12 +1,11 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import SubmitButton from "@/components/ui/buttons/submit";
 import { Card, CardHeader } from "@/components/ui/card";
 import Header, { HeaderLevel } from "@/components/ui/header";
 import { fromIso, getDateParts } from "@/lib/encoding";
 import type { WorkoutLifting } from "@/lib/types";
-import { ArrowRight, Calendar, Clock } from "lucide-react";
-import { redirect } from "next/navigation";
+import { Calendar, Clock } from "lucide-react";
 
 export default function WorkoutCard({
 	data,
@@ -29,14 +28,7 @@ export default function WorkoutCard({
 						<p className="text-sm text-muted-foreground">{hours}</p>
 					</div>
 				</div>
-				<Button
-					onClick={() => redirect(`/analytics/workout/${id}`)}
-					variant="secondary"
-					className="group"
-				>
-					Analytics
-					<ArrowRight className="group-hover:translate-x-1 transition-all ease-in duration-100" />
-				</Button>
+				<SubmitButton url={`/analytics/workout/${id}`} text="View" variant="secondary" />
 			</CardHeader>
 		</Card>
 	);

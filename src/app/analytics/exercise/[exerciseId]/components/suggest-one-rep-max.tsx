@@ -1,10 +1,11 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import SubmitButton from "@/components/ui/buttons/submit";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import Header, { HeaderLevel } from "@/components/ui/header";
 import type { ExerciseHistory } from "@/lib/types";
-import { ArrowRight, CircleHelp } from "lucide-react";
+import { CircleHelp } from "lucide-react";
 import Link from "next/link";
 
 export default function SuggestOneRepMax({ history }: { history: ExerciseHistory }) {
@@ -51,13 +52,10 @@ export default function SuggestOneRepMax({ history }: { history: ExerciseHistory
 						<p className="text-primary self-start">
 							Looks like you haven't logged this exercise for 10 or more reps yet.
 						</p>
-						<Button className="group self-end">
-							Determine your potential 1RM
-							<ArrowRight
-								size={16}
-								className="group-hover:translate-x-2 transition-all ease-in duration-100"
-							/>
-						</Button>
+						<SubmitButton
+							text="Determine your potential 1RM"
+							url="/live-coach?intent='determine exercise weight'"
+						/>
 					</div>
 				)}
 			</CardContent>

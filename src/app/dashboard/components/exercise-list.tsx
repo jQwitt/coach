@@ -1,11 +1,12 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import SubmitButton from "@/components/ui/buttons/submit";
 import { Card, CardFooter, CardHeader } from "@/components/ui/card";
 import { PlaceHolderCardEmpty } from "@/components/ui/cards/placeholder-empty";
 import Header, { HeaderLevel } from "@/components/ui/header";
 import type { UserExerciseLifting } from "@/lib/types";
-import { ArrowRight, Dumbbell, Pencil } from "lucide-react";
+import { Dumbbell, Pencil } from "lucide-react";
 import { redirect } from "next/navigation";
 
 export default function ExerciseList({ exercises }: { exercises: UserExerciseLifting[] }) {
@@ -16,9 +17,9 @@ export default function ExerciseList({ exercises }: { exercises: UserExerciseLif
 				{exercises.length === 0 && (
 					<PlaceHolderCardEmpty text="Your exercises will appear here as you log your workouts!" />
 				)}
-				{exercises.map(({ id, name, primaryTarget, detailedTargets }) => (
+				{exercises.map(({ id, name, primaryTarget, detailedTargets }, i) => (
 					<Card
-						key={name}
+						key={i + name}
 						className="relative inline-block min-w-[45%] min-h-[160px] overflow-hidden"
 					>
 						<CardHeader>
@@ -30,13 +31,7 @@ export default function ExerciseList({ exercises }: { exercises: UserExerciseLif
 						</CardHeader>
 						<Dumbbell className="absolute -bottom-3 -right-4 h-20 w-20 opacity-10" />
 						<CardFooter>
-							<Button className="group" onClick={() => redirect(`/analytics/exercise/${id}`)}>
-								See Progress
-								<ArrowRight
-									size={16}
-									className="transition-all ease-in duration-100 group-hover:translate-x-2"
-								/>
-							</Button>
+							<SubmitButton url={`/analytics/exercise/${id}`} text="See Progress" />
 						</CardFooter>
 						<Button
 							variant="ghost"

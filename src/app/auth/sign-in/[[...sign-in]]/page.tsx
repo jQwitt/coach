@@ -1,14 +1,13 @@
 "use client";
 
 import Alert from "@/components/blocks/error-alert";
-import { Button } from "@/components/ui/button";
+import SubmitButton from "@/components/ui/buttons/submit";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import Header from "@/components/ui/header";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useSignIn } from "@clerk/nextjs";
 import type { ClerkAPIError } from "@clerk/types";
-import { ArrowRight, Loader2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import * as React from "react";
@@ -110,24 +109,13 @@ export default function SignInPage() {
 						</div>
 					</div>
 					<div className="flex flex-col gap-2">
-						<Button
-							className="w-full group"
+						<SubmitButton
+							className="w-full"
 							type="submit"
+							text="Continue training"
 							disabled={submitDisabled}
-							variant={submitDisabled ? "secondary" : "default"}
-						>
-							{isSubmitting ? (
-								<Loader2 className="animate-spin" />
-							) : (
-								<>
-									{"Continue Training!"}
-									<ArrowRight
-										size={16}
-										className="transition-all ease-in duration-100 group-hover:translate-x-2"
-									/>
-								</>
-							)}
-						</Button>
+							isSubmitting={isSubmitting}
+						/>
 						<div className="flex flex-col items-center gap-2">
 							<Link href="/auth/reset-password">
 								<p className="link text-xs">{"Having trouble signing in?"}</p>

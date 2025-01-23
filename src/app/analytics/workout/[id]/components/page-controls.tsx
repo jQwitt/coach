@@ -1,7 +1,8 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import SubmitButton from "@/components/ui/buttons/submit";
+import { ArrowLeft } from "lucide-react";
 import { redirect } from "next/navigation";
 
 export default function PageHeader() {
@@ -14,13 +15,7 @@ export default function PageHeader() {
 				/>
 				Back
 			</Button>
-			<Button className="group" onClick={() => redirect("/analytics/range/")}>
-				All Analytics
-				<ArrowRight
-					size={16}
-					className="group-hover:translate-x-2 transition-all ease-in duration-100"
-				/>
-			</Button>
+			<SubmitButton url="/analytics/range/" text="All Analytics" />
 		</div>
 	);
 }

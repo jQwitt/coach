@@ -1,15 +1,14 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import SubmitButton from "@/components/ui/buttons/submit";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import type {
 	LiveCoachConversationMessageAction,
 	LiveCoachConversationMessageInfo,
 	MessageDirection,
 } from "@/lib/types/live-coach";
-import { ArrowRight, HelpCircle, Loader2 } from "lucide-react";
-import { redirect } from "next/navigation";
-import * as React from "react";
+import { HelpCircle } from "lucide-react";
+import type * as React from "react";
 
 export interface LiveCoachMessageProps {
 	text: string;
@@ -34,8 +33,6 @@ export function LiveCoachMessage({
 	Readonly<{
 		children?: React.ReactNode;
 	}>) {
-	const [isClicked, setIsClicked] = React.useState(false);
-
 	return (
 		<>
 			<div
@@ -66,24 +63,7 @@ export function LiveCoachMessage({
 				)}
 			</div>
 			{action?.text && (
-				<Button
-					disabled={isClicked}
-					className="group w-fit max-w-[30%]"
-					onClick={() => {
-						setIsClicked(true);
-						redirect(action.url);
-					}}
-				>
-					{action.text}
-					{isClicked ? (
-						<Loader2 size={16} className="animate-spin" />
-					) : (
-						<ArrowRight
-							size={16}
-							className="group-hover:translate-x-2 transition-all ease-in duration-100"
-						/>
-					)}
-				</Button>
+				<SubmitButton className="w-fit max-w-[30%]" url={action?.url} text={action.text} />
 			)}
 		</>
 	);
