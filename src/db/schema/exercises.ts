@@ -22,11 +22,12 @@ export const exercisesToUsers = pgTable(
 	{
 		userId: integer(),
 		exerciseId: integer(),
+		name: varchar({ length: 255 }),
 	},
 	(table) => {
 		return [
 			{
-				pk: primaryKey({ columns: [table.userId, table.exerciseId] }),
+				pk: primaryKey({ columns: [table.userId, table.exerciseId, table.name] }),
 			},
 		];
 	},

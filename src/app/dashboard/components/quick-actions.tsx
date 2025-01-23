@@ -9,7 +9,7 @@ export default function QuickActions() {
 			<Header title="Jump Back In" level={HeaderLevel.SECTION} />
 			<div className="flex flex-col gap-2 sm:flex-row">
 				<SubmitButton url="/live-coach" text="Chat with Live Coach" />
-				<SubmitButton url="/log-workout" text="Chat with Live Coach" variant="secondary" />
+				<SubmitButton url="/log-workout" text="Log a Workout" variant="secondary" />
 			</div>
 		</div>
 	);
