@@ -1,18 +1,15 @@
-import { boolean, integer, pgTable, varchar } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
+import { integer, pgTable, varchar } from "drizzle-orm/pg-core";
+import { live_coach_conversations_table } from "./conversations";
+import { lifting_exercises_table } from "./exercises";
 import { plans_table } from "./plans";
-import { user_tag_table } from "./tags";
+import { workouts_lifting_table } from "./workouts";
 
 export const users_table = pgTable("Users", {
 	id: integer().primaryKey().generatedAlwaysAsIdentity(),
 
 	// third party identifiers
 	authId: varchar({ length: 255 }).notNull().unique(),
-
-	// references
-	tags: integer()
-		.references(() => user_tag_table.id)
-		.array()
-		.default([]),
 
 	// data fields
 	firstName: varchar({ length: 50 }).notNull(),
@@ -25,13 +22,9 @@ export const users_table = pgTable("Users", {
 		.default(1),
 });
 
-export const users_conversation_table = pgTable("UsersLiveCoachConversations", {
-	conversationId: integer().generatedByDefaultAsIdentity().primaryKey(),
-	userId: integer()
-		.references(() => users_table.id, { onDelete: "cascade" })
-		.notNull(),
-
-	date: varchar({ length: 50 }).notNull(),
-	intent: varchar({ length: 50 }).notNull(),
-	fulfilled: boolean().default(false),
-});
+export const users_relations = relations(users_table, ({ many, one }) => ({
+	conversations: many(live_coach_conversations_table),
+	exercises: many(lifting_exercises_table),
+	workouts: many(workouts_lifting_table),
+	plan: one(plans_table),
+}));

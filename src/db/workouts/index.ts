@@ -25,8 +25,8 @@ export async function getWorkoutsWithExercisesByUserForDateRange({
 		.select({
 			workoutId: schema.workouts_lifting_table.id,
 			timeCompleted: schema.workouts_lifting_table.timeCompleted,
-			exerciseName: schema.user_lifting_exercises_table.name,
-			primaryTarget: schema.user_lifting_exercises_table.primaryTarget,
+			exerciseName: schema.lifting_exercises_table.name,
+			primaryTarget: schema.lifting_exercises_table.primaryTarget,
 			totalSets: schema.workouts_lifting_exercises_table.totalSets,
 			totalReps: schema.workouts_lifting_exercises_table.totalReps,
 			maxWeight: schema.workouts_lifting_exercises_table.maxWeight,
@@ -44,11 +44,8 @@ export async function getWorkoutsWithExercisesByUserForDateRange({
 			eq(schema.workouts_lifting_table.id, schema.workouts_lifting_exercises_table.workoutId),
 		)
 		.rightJoin(
-			schema.user_lifting_exercises_table,
-			eq(
-				schema.workouts_lifting_exercises_table.exerciseId,
-				schema.user_lifting_exercises_table.id,
-			),
+			schema.lifting_exercises_table,
+			eq(schema.workouts_lifting_exercises_table.exerciseId, schema.lifting_exercises_table.id),
 		);
 
 	if (!result) {

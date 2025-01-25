@@ -2,7 +2,7 @@ import "dotenv/config";
 import type { MuscleGroups, MusclesDetailed } from "@/lib/types";
 import { and, eq, gte } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/vercel-postgres";
-import { user_lifting_exercises_table } from "./schema/exercises";
+import { lifting_exercises_table } from "./schema/exercises";
 import { users_table } from "./schema/users";
 import { workouts_lifting_exercises_table, workouts_lifting_table } from "./schema/workouts";
 
@@ -34,13 +34,13 @@ async function main() {
 		.where(eq(users_table.email, user.email));
 	console.log("User info updated!");
 
-	const exerciseA: typeof user_lifting_exercises_table.$inferInsert = {
+	const exerciseA: typeof lifting_exercises_table.$inferInsert = {
 		name: "Lat Pull Down",
 		userId,
 		primaryTarget: "Back" satisfies MuscleGroups,
 		detailedTargets: ["Latissimus Dorsi"] satisfies MusclesDetailed[],
 	};
-	const exerciseB: typeof user_lifting_exercises_table.$inferInsert = {
+	const exerciseB: typeof lifting_exercises_table.$inferInsert = {
 		name: "Bench Press",
 		userId,
 		primaryTarget: "Chest" satisfies MuscleGroups,
@@ -48,7 +48,7 @@ async function main() {
 	};
 
 	const insertExercisesResult = await db
-		.insert(user_lifting_exercises_table)
+		.insert(lifting_exercises_table)
 		.values([exerciseA, exerciseB])
 		.returning();
 	const { id: exerciseAId } = insertExercisesResult[0];
@@ -113,14 +113,14 @@ async function main() {
 		.select({
 			workoutId: workouts_lifting_exercises_table.workoutId,
 			exerciseId: workouts_lifting_exercises_table.exerciseId,
-			exerciseName: user_lifting_exercises_table.name,
+			exerciseName: lifting_exercises_table.name,
 			data: workouts_lifting_exercises_table.serializedSetData,
 		})
 		.from(workouts_lifting_exercises_table)
 		.where(eq(workouts_lifting_exercises_table.workoutId, workoutId))
 		.leftJoin(
-			user_lifting_exercises_table,
-			eq(workouts_lifting_exercises_table.exerciseId, user_lifting_exercises_table.id),
+			lifting_exercises_table,
+			eq(workouts_lifting_exercises_table.exerciseId, lifting_exercises_table.id),
 		);
 
 	console.log("Here is a workout summary from the database:");
@@ -129,12 +129,9 @@ async function main() {
 
 	const exerciseAforUser = await db
 		.select()
-		.from(user_lifting_exercises_table)
+		.from(lifting_exercises_table)
 		.where(
-			and(
-				eq(user_lifting_exercises_table.userId, userId),
-				eq(user_lifting_exercises_table.id, exerciseAId),
-			),
+			and(eq(lifting_exercises_table.userId, userId), eq(lifting_exercises_table.id, exerciseAId)),
 		);
 	if (!exerciseAforUser.length) {
 		return;
@@ -147,7 +144,7 @@ async function main() {
 	const exercisesForUserByDate = await db
 		.select({
 			date: workouts_lifting_table.date,
-			name: user_lifting_exercises_table.name,
+			name: lifting_exercises_table.name,
 			maxWeight: workouts_lifting_exercises_table.maxWeight,
 			totalSets: workouts_lifting_exercises_table.totalSets,
 			totalReps: workouts_lifting_exercises_table.totalReps,
@@ -159,8 +156,8 @@ async function main() {
 			eq(workouts_lifting_table.id, workouts_lifting_exercises_table.workoutId),
 		)
 		.leftJoin(
-			user_lifting_exercises_table,
-			eq(workouts_lifting_exercises_table.exerciseId, user_lifting_exercises_table.id),
+			lifting_exercises_table,
+			eq(workouts_lifting_exercises_table.exerciseId, lifting_exercises_table.id),
 		);
 	if (!exercisesForUserByDate.length) {
 		return;
@@ -170,20 +167,20 @@ async function main() {
 
 	const backExercises = await db
 		.select({
-			name: user_lifting_exercises_table.name,
-			primaryTarget: user_lifting_exercises_table.primaryTarget,
+			name: lifting_exercises_table.name,
+			primaryTarget: lifting_exercises_table.primaryTarget,
 			maxWeight: workouts_lifting_exercises_table.maxWeight,
 		})
-		.from(user_lifting_exercises_table)
+		.from(lifting_exercises_table)
 		.where(
 			and(
-				eq(user_lifting_exercises_table.userId, userId),
-				eq(user_lifting_exercises_table.primaryTarget, "Back" satisfies MuscleGroups),
+				eq(lifting_exercises_table.userId, userId),
+				eq(lifting_exercises_table.primaryTarget, "Back" satisfies MuscleGroups),
 			),
 		)
 		.leftJoin(
 			workouts_lifting_exercises_table,
-			eq(user_lifting_exercises_table.id, workouts_lifting_exercises_table.exerciseId),
+			eq(lifting_exercises_table.id, workouts_lifting_exercises_table.exerciseId),
 		);
 
 	if (!backExercises.length) {

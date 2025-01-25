@@ -4,7 +4,7 @@ import db from "..";
 import schema from "../schema";
 
 export async function getExercisesByUser({ userId }: { userId: number }) {
-	const result = await db.query.user_lifting_exercises_table.findMany({
+	const result = await db.query.lifting_exercises_table.findMany({
 		where: (exercises, { eq }) => eq(exercises.userId, userId),
 	});
 
@@ -24,7 +24,7 @@ export async function createExerciseForUser({
 	data: Omit<UserExerciseLifting, "id" | "userId">;
 }) {
 	const result = await db
-		.insert(schema.user_lifting_exercises_table)
+		.insert(schema.lifting_exercises_table)
 		.values({
 			...data,
 			userId,
@@ -49,14 +49,14 @@ export async function updateExerciseForUser({
 	}
 
 	const result = await db
-		.update(schema.user_lifting_exercises_table)
+		.update(schema.lifting_exercises_table)
 		.set({
 			...data,
 		})
 		.where(
 			and(
-				eq(schema.user_lifting_exercises_table.userId, userId),
-				eq(schema.user_lifting_exercises_table.id, exerciseId),
+				eq(schema.lifting_exercises_table.userId, userId),
+				eq(schema.lifting_exercises_table.id, exerciseId),
 			),
 		)
 		.returning();
@@ -71,11 +71,11 @@ export async function updateExerciseForUser({
 
 export async function deleteExerciseForUser({ userId, id }: { userId: number; id: number }) {
 	const result = await db
-		.delete(schema.user_lifting_exercises_table)
+		.delete(schema.lifting_exercises_table)
 		.where(
 			and(
-				eq(schema.user_lifting_exercises_table.userId, userId),
-				eq(schema.user_lifting_exercises_table.id, id),
+				eq(schema.lifting_exercises_table.userId, userId),
+				eq(schema.lifting_exercises_table.id, id),
 			),
 		)
 		.returning();
@@ -94,7 +94,7 @@ export async function getExercisesByWorkoutId({
 }: { userId: number; workoutId: number }) {
 	const result = await db
 		.select({
-			name: schema.user_lifting_exercises_table.name,
+			name: schema.lifting_exercises_table.name,
 			totalSets: schema.workouts_lifting_exercises_table.totalSets,
 			totalReps: schema.workouts_lifting_exercises_table.totalReps,
 			maxWeight: schema.workouts_lifting_exercises_table.maxWeight,
@@ -108,11 +108,8 @@ export async function getExercisesByWorkoutId({
 			),
 		)
 		.leftJoin(
-			schema.user_lifting_exercises_table,
-			eq(
-				schema.workouts_lifting_exercises_table.exerciseId,
-				schema.user_lifting_exercises_table.id,
-			),
+			schema.lifting_exercises_table,
+			eq(schema.workouts_lifting_exercises_table.exerciseId, schema.lifting_exercises_table.id),
 		);
 
 	if (!result) {
@@ -158,7 +155,7 @@ export async function getExerciseForUser({
 	userId,
 	exerciseId,
 }: { userId: number; exerciseId: number }) {
-	const result = await db.query.user_lifting_exercises_table.findFirst({
+	const result = await db.query.lifting_exercises_table.findFirst({
 		where: (exercises, { and, eq }) =>
 			and(eq(exercises.userId, userId), eq(exercises.id, exerciseId)),
 	});
@@ -175,7 +172,7 @@ export async function findExerciseByName({
 	userId,
 	exerciseName,
 }: { userId: number; exerciseName: string }) {
-	return await db.query.user_lifting_exercises_table.findFirst({
+	return await db.query.lifting_exercises_table.findFirst({
 		where: (exercises, { and, eq, ilike }) =>
 			and(eq(exercises.userId, userId), ilike(exercises.name, exerciseName)),
 	});

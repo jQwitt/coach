@@ -24,7 +24,7 @@ export async function createLiveCoachConversationForUser({
 	id,
 	data: { date, intent },
 }: { id: number; data: { date: string; intent: string } }) {
-	return await db.insert(schema.users_conversation_table).values({
+	return await db.insert(schema.live_coach_conversations_table).values({
 		userId: id,
 		date,
 		intent,
@@ -35,11 +35,11 @@ export async function createLiveCoachConversationForUser({
 export async function isLiveCoachConversationLimitExceeded(id: number, offset: string) {
 	const foundConversations = await db
 		.select({ count: count() })
-		.from(schema.users_conversation_table)
+		.from(schema.live_coach_conversations_table)
 		.where(
 			and(
-				eq(schema.users_conversation_table.userId, id),
-				gte(schema.users_conversation_table.date, offset),
+				eq(schema.live_coach_conversations_table.userId, id),
+				gte(schema.live_coach_conversations_table.date, offset),
 			),
 		);
 	const conversationCount = foundConversations[0]?.count ?? 0;

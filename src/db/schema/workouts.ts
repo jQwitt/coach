@@ -1,7 +1,6 @@
 import { relations } from "drizzle-orm";
 import { integer, pgTable, primaryKey, varchar } from "drizzle-orm/pg-core";
-import { user_lifting_exercises_table } from "./exercises";
-import { user_tag_table } from "./tags";
+import { lifting_exercises_table } from "./exercises";
 import { users_table } from "./users";
 
 export const workouts_lifting_table = pgTable("WorkoutsLifting", {
@@ -11,11 +10,6 @@ export const workouts_lifting_table = pgTable("WorkoutsLifting", {
 	userId: integer()
 		.references(() => users_table.id, { onDelete: "cascade" })
 		.notNull(),
-	tags: integer()
-		.references(() => user_tag_table.id)
-		.array()
-		.notNull()
-		.default([]),
 
 	// data fields
 	name: varchar({ length: 255 }).notNull(),
@@ -25,22 +19,19 @@ export const workouts_lifting_table = pgTable("WorkoutsLifting", {
 	duration: varchar({ length: 5 }).notNull(),
 });
 
-export const workouts_lifting_relations = relations(workouts_lifting_table, ({ many }) => ({
-	workouts_lifting_to_exercises: many(workouts_lifting_exercises_table),
-}));
-
 export const workouts_lifting_exercises_table = pgTable(
-	"WorkoutsLiftingExercises",
+	"WorkoutsToLiftingExercises",
 	{
 		workoutId: integer()
 			.notNull()
 			.references(() => workouts_lifting_table.id, { onDelete: "cascade" }),
 		exerciseId: integer()
 			.notNull()
-			.references(() => user_lifting_exercises_table.id, { onDelete: "cascade" }),
+			.references(() => lifting_exercises_table.id, { onDelete: "cascade" }),
 		userId: integer()
 			.notNull()
 			.references(() => users_table.id, { onDelete: "cascade" }),
+
 		totalSets: integer().notNull(),
 		totalReps: integer().notNull(),
 		maxWeight: varchar({ length: 10 }).notNull(),
@@ -48,5 +39,12 @@ export const workouts_lifting_exercises_table = pgTable(
 	},
 	(t) => ({
 		pk: primaryKey({ columns: [t.workoutId, t.exerciseId] }),
+	}),
+);
+
+export const workouts_lifting_relations = relations(
+	workouts_lifting_exercises_table,
+	({ many }) => ({
+		exercises: many(workouts_lifting_exercises_table),
 	}),
 );
