@@ -23,6 +23,7 @@ export default function LogWorkoutLiftingForm({
 }: { knownExercises: ExercisesReturn }) {
 	const {
 		workout,
+		reset,
 		setWorkoutName,
 		addEmptyExercise,
 		updateExerciseSets,
@@ -120,7 +121,7 @@ export default function LogWorkoutLiftingForm({
 			return { ...e, name: fname };
 		});
 
-		await saveWorkoutLifting({
+		const result = await saveWorkoutLifting({
 			name,
 			exercises: formattedPreviousExercises, // only include exercises "added" manually
 			timeStarted,
@@ -129,8 +130,13 @@ export default function LogWorkoutLiftingForm({
 			duration,
 		});
 
+		if (result) {
+			reset();
+			redirect("/dashboard");
+		} else {
+			toastError("Something went wrong on our end, please try again.");
+		}
 		clearTimeout(retry);
-		redirect("/dashboard");
 	};
 
 	return (

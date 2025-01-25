@@ -5,6 +5,7 @@ import db from "@/db";
 import schema from "@/db/schema";
 import { encodeSets } from "@/lib/encoding";
 import type { WorkoutLifting, WorkoutLiftingData } from "@/lib/types";
+import { and, eq } from "drizzle-orm";
 
 export async function saveWorkoutLifting(
 	data: Pick<WorkoutLifting, "name" | "timeStarted" | "timeCompleted" | "date" | "duration"> &
@@ -31,7 +32,7 @@ export async function saveWorkoutLifting(
 		}
 	}
 
-	await db.transaction(async (tx) => {
+	return await db.transaction(async (tx) => {
 		// Create a new workout for the current user
 		const createWorkoutResult = await tx
 			.insert(schema.workouts_lifting_table)
@@ -46,23 +47,35 @@ export async function saveWorkoutLifting(
 
 		if (!createWorkoutResult.length) {
 			tx.rollback();
+			return false;
 		}
 
 		// Upsert exercises for the current user
-		const upsertExercisesResult = await tx
-			.insert(schema.user_lifting_exercises_table)
-			.values(
-				exercises.map(({ name, primaryTarget, detailedTargets }) => ({
-					userId,
-					name,
-					primaryTarget,
-					detailedTargets,
-				})),
-			)
-			.returning({
-				id: schema.user_lifting_exercises_table.id,
-				name: schema.user_lifting_exercises_table.name,
+		const upsertExercisesResult = [];
+		for (const exercise of exercises) {
+			const exerciseExists = await tx.query.lifting_exercises_table.findFirst({
+				where: and(
+					eq(schema.lifting_exercises_table.name, exercise.name),
+					eq(schema.lifting_exercises_table.userId, userId),
+				),
 			});
+
+			if (exerciseExists) {
+				upsertExercisesResult.push({ id: exerciseExists.id, name: exercise.name });
+			} else {
+				const insertExerciseResult = await tx
+					.insert(schema.lifting_exercises_table)
+					.values({
+						...exercise,
+						userId,
+					})
+					.returning({
+						id: schema.lifting_exercises_table.id,
+						name: schema.lifting_exercises_table.name,
+					});
+				upsertExercisesResult.push(insertExerciseResult[0]);
+			}
+		}
 
 		// Add all link table entires
 		const { id: workoutId } = createWorkoutResult[0];
@@ -83,10 +96,11 @@ export async function saveWorkoutLifting(
 
 		if (!insertWorkoutExercisesResult.length) {
 			tx.rollback();
+			return false;
 		}
-	});
 
-	return true;
+		return true;
+	});
 }
 
 function formatExerciseInfo(exercises: WorkoutLiftingData["exercises"]) {
