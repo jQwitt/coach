@@ -109,9 +109,20 @@ export default function LogWorkoutLiftingForm({
 			(1000 * 60)
 		).toPrecision(2);
 
+		const formattedPreviousExercises = previousExercises.map((e) => {
+			const { name } = e;
+			const fname = name
+				.toLowerCase()
+				.split(" ")
+				.map((w) => (w.length ? w[0].toUpperCase() + w.slice(1) : w))
+				.join(" ");
+
+			return { ...e, name: fname };
+		});
+
 		await saveWorkoutLifting({
 			name,
-			exercises: previousExercises, // only include exercises "added" manually
+			exercises: formattedPreviousExercises, // only include exercises "added" manually
 			timeStarted,
 			timeCompleted,
 			date,

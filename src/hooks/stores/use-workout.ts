@@ -106,7 +106,13 @@ const useWorkoutStore = create<WorkoutState>()(
 						return state;
 					}
 
-					exercises[index].name = name;
+					const fname = name
+						.toLowerCase()
+						.split(" ")
+						.map((w) => (w.length ? w[0].toUpperCase() + w.slice(1) : w))
+						.join(" ");
+
+					exercises[index].name = fname;
 
 					return {
 						workout: {
