@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import SubmitButton from "@/components/ui/buttons/submit";
+import ActionButton from "@/components/ui/buttons/action-button";
 import { Card, CardFooter, CardHeader } from "@/components/ui/card";
 import { PlaceHolderCardEmpty } from "@/components/ui/cards/placeholder-empty";
 import Header, { HeaderLevel } from "@/components/ui/header";
@@ -31,7 +31,7 @@ export default function ExerciseList({ exercises }: { exercises: UserExerciseLif
 						</CardHeader>
 						<Dumbbell className="absolute -bottom-3 -right-4 h-20 w-20 opacity-10" />
 						<CardFooter>
-							<SubmitButton url={`/analytics/exercise/${id}`} text="See Progress" />
+							<ActionButton url={`/analytics/exercise/${id}`} text="See Progress" />
 						</CardFooter>
 						<Button
 							variant="ghost"

@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import SubmitButton from "@/components/ui/buttons/submit";
+import ActionButton from "@/components/ui/buttons/action-button";
 import { ArrowLeft } from "lucide-react";
 import { redirect } from "next/navigation";
 
@@ -15,7 +15,7 @@ export default function PageHeader() {
 				/>
 				Back
 			</Button>
-			<SubmitButton url="/analytics/range/" text="All Analytics" />
+			<ActionButton url="/analytics/range/" text="All Analytics" />
 		</div>
 	);
 }

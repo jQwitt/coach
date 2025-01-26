@@ -1,6 +1,6 @@
 "use client";
 
-import SubmitButton from "@/components/ui/buttons/submit";
+import ActionButton from "@/components/ui/buttons/action-button";
 import { Card, CardHeader } from "@/components/ui/card";
 import Header, { HeaderLevel } from "@/components/ui/header";
 import { fromIso, getDateParts } from "@/lib/encoding";
@@ -28,7 +28,7 @@ export default function WorkoutCard({
 						<p className="text-sm text-muted-foreground">{hours}</p>
 					</div>
 				</div>
-				<SubmitButton url={`/analytics/workout/${id}`} text="View" variant="secondary" />
+				<ActionButton url={`/analytics/workout/${id}`} text="View" variant="secondary" />
 			</CardHeader>
 		</Card>
 	);

@@ -5,19 +5,21 @@ import { redirect } from "next/navigation";
 import * as React from "react";
 import { Button, type ButtonProps } from "../button";
 
-interface SubmitButtonProps extends ButtonProps {
+interface ActionButtonProps extends ButtonProps {
 	url?: string;
 	text: string;
 	isSubmitting?: boolean;
+	onClick?: () => void;
 }
 
-export default function SubmitButton({
+export default function ActionButton({
 	isSubmitting = false,
 	url = "",
+	onClick,
 	text,
 	className,
 	...props
-}: SubmitButtonProps) {
+}: ActionButtonProps) {
 	const [submitting, setSubmitting] = React.useState(isSubmitting);
 
 	const handleClick = React.useCallback(() => {
@@ -26,11 +28,17 @@ export default function SubmitButton({
 			setSubmitting(false);
 		}, 1000);
 
+		if (onClick) {
+			onClick();
+			clearTimeout(timeout);
+			return;
+		}
+
 		if (url.length) {
 			clearTimeout(timeout);
 			redirect(url);
 		}
-	}, [url]);
+	}, [url, onClick]);
 
 	return (
 		<Button className={`group ${className}`} onClick={handleClick} disabled={submitting} {...props}>

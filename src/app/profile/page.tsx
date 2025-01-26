@@ -1,6 +1,6 @@
 import { getCurrentUser, getExercises, getPlanInfoForCurrentUser } from "@/app/actions";
 import UserControls from "@/components/blocks/user-controls";
-import SubmitButton from "@/components/ui/buttons/submit";
+import ActionButton from "@/components/ui/buttons/action-button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import Header, { HeaderLevel } from "@/components/ui/header";
 import { Crown, Mail } from "lucide-react";
@@ -39,7 +39,7 @@ export default async function Profile() {
 							Your plan allows {plan?.dailyConversationLimit} daily conversations with the live
 							coach, as well as full access to date ranged analytics, workout tracking, and more!
 						</p>
-						<SubmitButton url="/profile/plan" text="Upgrade your plan" />
+						<ActionButton url="/profile/plan" text="Upgrade your plan" />
 					</div>
 				</CardContent>
 			</Card>

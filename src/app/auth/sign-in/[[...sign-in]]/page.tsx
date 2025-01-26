@@ -1,7 +1,7 @@
 "use client";
 
 import Alert from "@/components/blocks/error-alert";
-import SubmitButton from "@/components/ui/buttons/submit";
+import ActionButton from "@/components/ui/buttons/action-button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import Header from "@/components/ui/header";
 import { Input } from "@/components/ui/input";
@@ -109,7 +109,7 @@ export default function SignInPage() {
 						</div>
 					</div>
 					<div className="flex flex-col gap-2">
-						<SubmitButton
+						<ActionButton
 							className="w-full"
 							type="submit"
 							text="Continue training"

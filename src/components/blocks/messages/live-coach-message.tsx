@@ -1,6 +1,6 @@
 "use client";
 
-import SubmitButton from "@/components/ui/buttons/submit";
+import ActionButton from "@/components/ui/buttons/action-button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import type {
 	LiveCoachConversationMessageAction,
@@ -63,7 +63,7 @@ export function LiveCoachMessage({
 				)}
 			</div>
 			{action?.text && (
-				<SubmitButton className="w-fit max-w-[30%]" url={action?.url} text={action.text} />
+				<ActionButton className="w-fit max-w-[30%]" url={action?.url} text={action.text} />
 			)}
 		</>
 	);

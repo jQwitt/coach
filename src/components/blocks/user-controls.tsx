@@ -9,15 +9,20 @@ import { useClerk } from "@clerk/nextjs";
 import { X } from "lucide-react";
 import { redirect } from "next/navigation";
 import React from "react";
+import ActionButton from "../ui/buttons/action-button";
 
 export default function UserControls() {
 	const { signOut } = useClerk();
 	const [showDelete, setShowDelete] = React.useState(false);
 	const [deleteConfirm, setDeleteConfirm] = React.useState("");
 
+	const handleSignOut = () => {
+		signOut({ redirectUrl: "/auth/sign-in" });
+	};
+
 	return (
 		<div className="flex flex-col items-start gap-2">
-			<Button onClick={() => signOut({ redirectUrl: "/auth/sign-in" })}>Sign out</Button>
+			<ActionButton text="Sign Out" onClick={handleSignOut} />
 			<Header title="Danger Zone" level={HeaderLevel.SUB_SECTION} />
 			<Button variant="outline" onClick={() => setShowDelete(!showDelete)}>
 				Delete my account

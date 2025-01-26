@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import SubmitButton from "@/components/ui/buttons/submit";
+import ActionButton from "@/components/ui/buttons/action-button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import Header, { HeaderLevel } from "@/components/ui/header";
 import type { ExerciseHistory } from "@/lib/types";
@@ -52,7 +52,7 @@ export default function SuggestOneRepMax({ history }: { history: ExerciseHistory
 						<p className="text-primary self-start">
 							Looks like you haven't logged this exercise for 10 or more reps yet.
 						</p>
-						<SubmitButton
+						<ActionButton
 							text="Determine your potential 1RM"
 							url="/live-coach?intent='determine exercise weight'"
 						/>
