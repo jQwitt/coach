@@ -29,8 +29,7 @@ export default function ActionButton({
 		}, 1000);
 
 		if (onClick) {
-			onClick();
-			clearTimeout(timeout);
+			(async () => onClick())().then(() => clearTimeout(timeout));
 			return;
 		}
 
