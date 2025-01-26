@@ -7,17 +7,19 @@ import Header, { HeaderLevel } from "@/components/ui/header";
 import { Input } from "@/components/ui/input";
 import { useClerk } from "@clerk/nextjs";
 import { X } from "lucide-react";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import React from "react";
 import ActionButton from "../ui/buttons/action-button";
 
 export default function UserControls() {
 	const { signOut } = useClerk();
+	const router = useRouter();
+
 	const [showDelete, setShowDelete] = React.useState(false);
 	const [deleteConfirm, setDeleteConfirm] = React.useState("");
 
-	const handleSignOut = () => {
-		signOut();
+	const handleSignOut = async () => {
+		await signOut().then(() => router.push("/auth/sign-in"));
 	};
 
 	return (
