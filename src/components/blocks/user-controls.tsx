@@ -17,7 +17,7 @@ export default function UserControls() {
 	const [deleteConfirm, setDeleteConfirm] = React.useState("");
 
 	const handleSignOut = () => {
-		signOut({ redirectUrl: "/" });
+		signOut();
 	};
 
 	return (

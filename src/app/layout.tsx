@@ -33,7 +33,7 @@ export default async function RootLayout({
 	return (
 		<html lang="en">
 			<SpeedInsights />
-			<ClerkProvider>
+			<ClerkProvider afterSignOutUrl="/auth/sign-in">
 				<body className={`${base.className} bg-background`}>
 					<LiveCoachController />
 					{children}
