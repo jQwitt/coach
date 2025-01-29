@@ -24,7 +24,7 @@ export default function MuscleGroupSelect({
 	value,
 	disabled,
 	onChange,
-}: { value: MuscleGroups; disabled: boolean; onChange: (value: MuscleGroups) => void }) {
+}: { value: MuscleGroups; disabled?: boolean; onChange: (value: MuscleGroups) => void }) {
 	return (
 		<Select value={value} onValueChange={onChange} disabled={disabled}>
 			<SelectTrigger>

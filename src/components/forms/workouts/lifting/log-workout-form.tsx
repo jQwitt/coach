@@ -10,10 +10,11 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import Header, { HeaderLevel } from "@/components/ui/header";
 import useWorkoutStore from "@/hooks/stores/use-workout";
+import { useObjectFilter } from "@/hooks/use-object-filter";
 import { useToast } from "@/hooks/use-toast";
 import { fromIso, timeStamp } from "@/lib/encoding";
 import type { ExercisesReturn, MuscleGroups } from "@/lib/types";
-import { Check, Edit3, HelpCircle, Loader2, Minus, Plus, ScanText } from "lucide-react";
+import { Check, Edit3, HelpCircle, History, Loader2, Minus, Plus } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import MuscleGroupSelect from "../../controls/muscle-group-select";
@@ -45,9 +46,14 @@ export default function LogWorkoutLiftingForm({
 
 	const [timeStarted] = React.useState(timeStamp());
 	const [submitting, setSubmitting] = React.useState(false);
-	const [autoCompleteList, setAutoCompleteList] = React.useState<ExercisesReturn>([]);
-	const [hideAutoComplete, setHideAutoComplete] = React.useState(false);
-	const [hasClickedAutoComplete, sethasClickedAutoComplete] = React.useState(false);
+
+	const { visible, isEmpty, noMatches, results, filterByQuery, show, hide } = useObjectFilter(
+		{
+			list: knownExercises,
+			key: "name",
+		},
+		{ defaultToHidden: true },
+	);
 
 	const { name, exercises } = workout;
 	const exerciseLast = exercises.length - 1;
@@ -80,15 +86,13 @@ export default function LogWorkoutLiftingForm({
 		addEmptyExercise();
 	};
 
-	const updateAutoCompleteList = (query: string) => {
-		setAutoCompleteList(
-			knownExercises.filter(({ name }) => name.toLowerCase().includes(query.toLowerCase())),
-		);
-	};
-
 	const handleSubmitStart = (e: React.MouseEvent<HTMLButtonElement>) => {
 		if (!name.length) {
 			toastError("Please add a name to your workout before finishing!");
+			e.preventDefault();
+		}
+		if (!previousExercises.length) {
+			toastError("Please add at least one exercise to your workout before finishing!");
 			e.preventDefault();
 		}
 	};
@@ -146,8 +150,8 @@ export default function LogWorkoutLiftingForm({
 					type="text"
 					className={`${heading.className} peer w-full border-b-2 border-gray-200 pb-1 pt-3 text-2xl text-primary placeholder-primary transition-colors focus:border-primary focus:text-gray-400 focus:placeholder-gray-400 focus:outline-none`}
 					placeholder="Add a Workout Name"
-					onChange={(e) => {
-						setWorkoutName(e.target.value);
+					onChange={({ target: { value } }) => {
+						setWorkoutName(value);
 					}}
 					value={name ?? ""}
 				/>
@@ -155,31 +159,33 @@ export default function LogWorkoutLiftingForm({
 			</div>
 			<Card className="mt-4">
 				<CardHeader className="relative">
-					<div>
-						{hideAutoComplete ? (
-							<Button
-								size="sm"
-								variant="outline"
-								className="absolute -top-5 right-3"
-								onClick={() => setHideAutoComplete(false)}
-								type="button"
-							>
-								Completions
-								<ScanText className="h-4 w-4" />
-							</Button>
-						) : (
-							<Button
-								size="sm"
-								variant="outline"
-								className="absolute -top-5 right-3"
-								onClick={() => setHideAutoComplete(true)}
-								type="button"
-							>
-								Hide
-								<Minus className="h-4 w-4" />
-							</Button>
-						)}
-					</div>
+					{knownExercises.length > 0 && (
+						<div>
+							{!visible ? (
+								<Button
+									size="sm"
+									variant="outline"
+									className="absolute -top-5 right-3"
+									onClick={show}
+									type="button"
+								>
+									Past Exercises
+									<History className="h-4 w-4" />
+								</Button>
+							) : (
+								<Button
+									size="sm"
+									variant="outline"
+									className="absolute -top-5 right-3"
+									onClick={hide}
+									type="button"
+								>
+									Close
+									<Minus className="h-4 w-4" />
+								</Button>
+							)}
+						</div>
+					)}
 					<input
 						name="name"
 						type="text"
@@ -187,24 +193,34 @@ export default function LogWorkoutLiftingForm({
 						value={exerciseName}
 						placeholder="Add an Exercise Name"
 						onChange={({ target: { value } }) => {
-							sethasClickedAutoComplete(false);
-							updateAutoCompleteList(value);
 							updateExerciseName(exerciseLast, value);
+							filterByQuery(value);
 						}}
 					/>
-					{!hideAutoComplete && autoCompleteList.length > 0 ? (
+					{visible ? (
 						<div className="absolute top-20 left-4 w-[calc(100%-2rem)] bg-card h-fit z-10">
 							<Card className="rounded-sm w-full p-1">
-								{autoCompleteList.map(({ name, primaryTarget }) => (
+								<div className="flex justify-center items-center my-2 opacity-65">
+									{noMatches ? (
+										<p className="text-sm text-muted-foreground">
+											No matching previously logged exercises found
+										</p>
+									) : null}
+									{isEmpty ? (
+										<p className="text-sm text-muted-foreground">
+											No previously logged exercises found
+										</p>
+									) : null}
+								</div>
+								{results.map(({ name, primaryTarget }) => (
 									<button
 										type="button"
 										key={name}
 										className="flex justify-between items-center w-full hover:bg-muted rounded-sm p-1"
 										onClick={() => {
-											setAutoCompleteList([]);
-											sethasClickedAutoComplete(true);
 											updateExerciseName(exerciseLast, name);
 											updateExercisePrimaryTarget(exerciseLast, primaryTarget as MuscleGroups);
+											hide();
 										}}
 									>
 										<p className="text-sm text-primary">{name}</p>
@@ -265,21 +281,21 @@ export default function LogWorkoutLiftingForm({
 							Primary Muscle Group
 						</label>
 						<MuscleGroupSelect
-							disabled={hasClickedAutoComplete || autoCompleteList.length > 0}
 							value={currentExercise.primaryTarget}
 							onChange={(primaryTarget) => updateExercisePrimaryTarget(exerciseLast, primaryTarget)}
 						/>
-						{hasClickedAutoComplete && (
+
+						{knownExercises.length > 0 ? (
 							<div className="mt-4 text-xs text-muted-foreground flex gap-1 opacity-65">
 								<div className="flex gap-1 group">
-									<p>You can edit previously logged exercises on </p>
+									<p>You can also edit previously logged exercises on </p>
 									<Link href={"/profile"} className="group-hover:underline">
 										your profile
 									</Link>
 								</div>
 								<HelpCircle className="h-4 w-4" />
 							</div>
-						)}
+						) : null}
 					</div>
 					<div>
 						{sets.slice(0, -1).map(({ count, reps, weight }, index) => (
@@ -301,16 +317,19 @@ export default function LogWorkoutLiftingForm({
 					<Plus className="h-4 w-4" />
 					Add to Workout
 				</Button>
-
 				<Dialog>
 					<DialogTrigger asChild>
-						<Button type="button" className="w-full" onClick={handleSubmitStart}>
+						<Button
+							type="button"
+							className="fixed bottom-2 right-4 z-10 w-[calc(100%-2rem)] sm:w-auto"
+							onClick={handleSubmitStart}
+						>
 							<Check className="h-4 w-4" />
 							Finish Workout
 						</Button>
 					</DialogTrigger>
 					<DialogTitle className="hidden">Workout Summary</DialogTitle>
-					<DialogContent className="max-w-[80%] sm:max-w-[50%] rounded-lg">
+					<DialogContent className=" relativemax-w-[80%] sm:max-w-[50%] rounded-lg">
 						<Header title="Workout Summary" level={HeaderLevel.SECTION} />
 						<div>
 							{previousExercises.map(({ name, sets }, index) => (
