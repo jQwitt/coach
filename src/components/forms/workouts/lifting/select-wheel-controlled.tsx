@@ -44,7 +44,6 @@ export function VerticalScrollWheelControlled({
 			<input
 				className="w-full h-12 bg-white rounded-md text-center font-bold font-2xl flex items-center justify-center cursor-grab active:cursor-grabbing select-none transition-all border-2 border-transparent hover:border-black focus:border-black"
 				tabIndex={0}
-				role="slider"
 				aria-valuemin={min}
 				aria-valuemax={max}
 				aria-valuenow={value}

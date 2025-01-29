@@ -238,7 +238,7 @@ export default function LogWorkoutLiftingForm({
 								className={`${heading.className} tracking-widest text-2xl`}
 								htmlFor="set-count"
 							>
-								Count
+								Sets
 							</label>
 							<VerticalScrollWheelControlled
 								id="set-count"
