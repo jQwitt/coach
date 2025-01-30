@@ -16,8 +16,8 @@ const quickActions = [
 function formatPlan(plan: string) {
 	if (plan === "olympian") {
 		return (
-			<div className="mb-6 flex gap-1 items-center">
-				<p className="text-sm font-medium tracking-wide text-indigo-500">Olympian</p>
+			<div className="mb-2 flex gap-1 items-center">
+				<p className="text-sm font-medium tracking-wide text-indigo-500">Olympian Tier</p>
 				<Sparkles size={16} className="fill-indigo-500 text-indigo-500" />
 			</div>
 		);
@@ -25,14 +25,14 @@ function formatPlan(plan: string) {
 
 	if (plan === "builder") {
 		return (
-			<div className="mb-6 flex gap-0 items-center">
-				<p className="text-sm font-medium tracking-wide text-blue-500">Builder</p>
+			<div className="mb-2 flex gap-0 items-center">
+				<p className="text-sm font-medium tracking-wide text-blue-500">Builder Tier</p>
 				<Sparkle size={16} className="fill-blue-500 text-blue-500" />
 			</div>
 		);
 	}
 
-	return <p className="mb-6 text-sm font-medium tracking-wide text-muted-foreground">Free</p>;
+	return <p className="mb-2 text-sm font-medium tracking-wide text-muted-foreground">Free Tier</p>;
 }
 
 export default async function LiveCoachPage() {
@@ -42,10 +42,10 @@ export default async function LiveCoachPage() {
 	return (
 		<div className="flex flex-col justify-end min-h-[70dvh] pb-14">
 			<div className="-mx-4 px-4 pb-2 sticky top-16 z-10 bg-background shadow-sm">
-				<div className="flex gap-1 items-end">
-					<Header title="Live Coach" />
+				<Header title="Live Coach" className="items-end">
 					{formatPlan(plan)}
-				</div>
+				</Header>
+
 				<p className="-mt-4 text-xs text-muted-foreground">
 					Live Coach is an AI fitness companion and personal trainer. You can ask it questions about
 					your fitness goals, workouts, and progress to optimize your training.

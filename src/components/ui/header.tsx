@@ -21,8 +21,9 @@ export default function Header({
 	className = "",
 	Icon,
 	iconClassName,
-}: HeaderProps) {
-	const outer = "flex items-center gap-2 w-full";
+	children,
+}: HeaderProps & { children?: React.ReactNode }) {
+	const outer = "flex items-end gap-2 w-full";
 	const inner = `${heading.className} text-primary whitespace-nowrap truncate text-ellipsis ${className}`;
 
 	if (level === HeaderLevel.PAGE) {
@@ -30,6 +31,7 @@ export default function Header({
 			<div className={`${outer} my-4`}>
 				{Icon && <Icon className={`h-12 w-12 ${iconClassName}`} />}
 				<h2 className={`${inner} text-6xl`}>{title}</h2>
+				{children}
 			</div>
 		);
 	}
@@ -39,6 +41,7 @@ export default function Header({
 			<div className={`${outer} my-1`}>
 				{Icon && <Icon className={`${iconClassName}`} />}
 				<h3 className={`${inner} text-3xl`}>{title}</h3>
+				{children}
 			</div>
 		);
 	}
@@ -48,6 +51,7 @@ export default function Header({
 			<div className={`${outer} gap-4 my-1`}>
 				{Icon && <Icon className={`${iconClassName}`} />}
 				<h6 className={`${inner} text-xl`}>{title}</h6>
+				{children}
 			</div>
 		);
 	}
