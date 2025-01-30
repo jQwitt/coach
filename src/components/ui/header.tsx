@@ -7,6 +7,7 @@ interface HeaderProps {
 	className?: string;
 	Icon?: LucideIcon;
 	iconClassName?: string;
+	itemsEnd?: boolean;
 }
 
 export enum HeaderLevel {
@@ -19,11 +20,12 @@ export default function Header({
 	title,
 	level = HeaderLevel.PAGE,
 	className = "",
+	itemsEnd = false,
 	Icon,
 	iconClassName,
 	children,
 }: HeaderProps & { children?: React.ReactNode }) {
-	const outer = "flex items-end gap-2 w-full";
+	const outer = `flex ${itemsEnd ? "items-end" : "items-center"} gap-2 w-full`;
 	const inner = `${heading.className} text-primary whitespace-nowrap truncate text-ellipsis ${className}`;
 
 	if (level === HeaderLevel.PAGE) {

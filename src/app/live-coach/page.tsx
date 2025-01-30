@@ -42,7 +42,7 @@ export default async function LiveCoachPage() {
 	return (
 		<div className="flex flex-col justify-end min-h-[70dvh] pb-14">
 			<div className="-mx-4 px-4 pb-2 sticky top-16 z-10 bg-background shadow-sm">
-				<Header title="Live Coach" className="items-end">
+				<Header title="Live Coach" className="items-end" itemsEnd>
 					{formatPlan(plan)}
 				</Header>
 
