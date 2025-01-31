@@ -1,1 +1,0 @@
-ALTER TABLE "UserLiftingExercises" ADD COLUMN "name" varchar(255);
