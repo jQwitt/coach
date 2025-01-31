@@ -1,4 +1,4 @@
-import { getCurrentUser, getExercises, getSubscriptionPlanForCurrentUser } from "@/app/actions";
+import { getUserProfile } from "@/app/actions";
 import UserControls from "@/components/blocks/user-controls";
 import ActionButton from "@/components/ui/buttons/action-button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -7,9 +7,11 @@ import { Crown, Mail } from "lucide-react";
 import UserExercises from "./components/user-exercises";
 
 export default async function Profile() {
-	const { firstName, lastName, email } = (await getCurrentUser()) || {};
-	const exercises = await getExercises();
-	const subscriptionPlan = await getSubscriptionPlanForCurrentUser();
+	const { firstName, lastName, email, exercises, subscription } = (await getUserProfile()) || {
+		exercises: [],
+		subscription: {},
+	};
+	const { name: subscriptionName, dailyConversationLimit } = subscription || {};
 
 	return (
 		<div className="flex flex-col gap-4">
@@ -33,12 +35,11 @@ export default async function Profile() {
 						<Header title="Subscription Plan" level={HeaderLevel.SUB_SECTION} />
 						<div className="flex items-center gap-2 font-semibold">
 							<Crown className="text-muted-foreground" size={16} />
-							<p className="text-muted-foreground text-sm">{subscriptionPlan?.name} Tier</p>
+							<p className="text-muted-foreground text-sm">{subscriptionName} Tier</p>
 						</div>
 						<p className="text-muted-foreground text-xs">
-							Your plan allows {subscriptionPlan?.dailyConversationLimit} daily conversations with
-							the live coach, as well as full access to date ranged analytics, workout tracking, and
-							more!
+							Your plan allows {dailyConversationLimit} daily conversations with the live coach, as
+							well as full access to date ranged analytics, workout tracking, and more!
 						</p>
 						<ActionButton url="/profile/plan" text="Upgrade your plan" />
 					</div>

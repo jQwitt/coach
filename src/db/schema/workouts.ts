@@ -48,3 +48,17 @@ export const workouts_lifting_relations = relations(
 		exercises: many(workouts_lifting_exercises_table),
 	}),
 );
+
+export const workouts_lifting_exercises_relations = relations(
+	workouts_lifting_exercises_table,
+	({ one }) => ({
+		workouts: one(workouts_lifting_table, {
+			fields: [workouts_lifting_exercises_table.workoutId],
+			references: [workouts_lifting_table.id],
+		}),
+		exercises: one(lifting_exercises_table, {
+			fields: [workouts_lifting_exercises_table.exerciseId],
+			references: [lifting_exercises_table.id],
+		}),
+	}),
+);

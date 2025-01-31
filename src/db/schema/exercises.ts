@@ -17,9 +17,10 @@ export const lifting_exercises_table = pgTable("LiftingExercises", {
 	detailedTargets: varchar({ length: 100 }).array().notNull(),
 });
 
-export const user_lifting_exercises_relations = relations(
-	workouts_lifting_exercises_table,
-	({ many }) => ({
-		workouts: many(workouts_lifting_exercises_table),
+export const lifting_exercises_relations = relations(lifting_exercises_table, ({ many, one }) => ({
+	workouts: many(workouts_lifting_exercises_table),
+	exercises: one(users_table, {
+		fields: [lifting_exercises_table.userId],
+		references: [users_table.id],
 	}),
-);
+}));

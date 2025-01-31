@@ -16,8 +16,6 @@ import {
 	viewAnalytics as viewAnalyticsAction,
 } from "../actions/live-coach";
 import {
-	getSubscriptionPlan as getSubscriptionPlanAction,
-	getSubscriptionPlanForCurrentUser as getSubscriptionPlanForCurrentUserAction,
 	isConversationLimitReached as isConversationLimitReachedAction,
 	logConversation as logConversationAction,
 } from "../actions/subscription-plans";
@@ -26,6 +24,7 @@ import {
 	deleteCurrentUser as deleteCurrentUserAction,
 	emailExists as emailExistsAction,
 	getCurrentUser as getCurrentUserAction,
+	getUserProfile as getUserProfileAction,
 } from "../actions/user";
 import {
 	getDetailedWorkoutsForDates as getDetailedWorkoutsForDatesAction,
@@ -40,6 +39,7 @@ export const createUser = createUserAction;
 export const getCurrentUser = getCurrentUserAction;
 export const deleteCurrentUser = deleteCurrentUserAction;
 export const isRegistered = emailExistsAction;
+export const getUserProfile = getUserProfileAction;
 
 // EXERCISE ACTIONS
 export const getExercises = getExercisesAction;
@@ -62,9 +62,5 @@ export const designWorkout = designWorkoutAction;
 export const determineExerciseWeight = determineExerciseWeightAction;
 export const suggestExercise = suggestExerciseAction;
 export const viewAnalytics = viewAnalyticsAction;
-
-// PLANS
-export const getSubscriptionPlan = getSubscriptionPlanAction;
-export const getSubscriptionPlanForCurrentUser = getSubscriptionPlanForCurrentUserAction;
 export const logConversation = logConversationAction;
 export const isConversationLimitReached = isConversationLimitReachedAction;

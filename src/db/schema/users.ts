@@ -27,6 +27,9 @@ export const users_relations = relations(users_table, ({ many, one }) => ({
 	conversations: many(live_coach_conversations_table),
 	exercises: many(lifting_exercises_table),
 	workouts: many(workouts_lifting_table),
-	subscription: one(subscription_plan_table),
+	subscription: one(subscription_plan_table, {
+		fields: [users_table.subscriptionPlan],
+		references: [subscription_plan_table.id],
+	}),
 	fitnessTracks: many(fitness_tracks_table),
 }));

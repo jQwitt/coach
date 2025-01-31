@@ -2,27 +2,6 @@ import { and, count, eq, gte } from "drizzle-orm";
 import db from "..";
 import schema from "../schema";
 
-export async function getSubscriptionPlanById(id: number) {
-	return await db.query.subscription_plan_table.findFirst({
-		where: (plans, { eq }) => eq(plans.id, id),
-	});
-}
-
-export async function getSubscriptionPlanByUserId(userId: number) {
-	return await db
-		.select({
-			name: schema.subscription_plan_table.name,
-			dailyConversationLimit: schema.subscription_plan_table.dailyConversationLimit,
-		})
-		.from(schema.users_table)
-		.where(eq(schema.users_table.id, userId))
-		.rightJoin(
-			schema.subscription_plan_table,
-			eq(schema.users_table.subscriptionPlan, schema.subscription_plan_table.id),
-		)
-		.limit(1);
-}
-
 export async function createLiveCoachConversationForUser({
 	id,
 	data: { date, intent },

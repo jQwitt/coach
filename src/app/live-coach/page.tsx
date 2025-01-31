@@ -1,4 +1,4 @@
-import { getCurrentUser, getSubscriptionPlan } from "@/app/actions";
+import { getUserProfile } from "@/app/actions";
 import LiveCoachConversation from "@/components/blocks/messages/live-coach-conversation";
 import MessageInput from "@/components/blocks/messages/message-input";
 import Header from "@/components/ui/header";
@@ -13,7 +13,7 @@ const quickActions = [
 	},
 ];
 
-function formatPlan(subscriptionPlan: string) {
+function formatPlan(subscriptionPlan?: string) {
 	if (subscriptionPlan === "olympian") {
 		return (
 			<div className="mb-2 flex gap-1 items-center">
@@ -36,14 +36,17 @@ function formatPlan(subscriptionPlan: string) {
 }
 
 export default async function LiveCoachPage() {
-	const { firstName, subscriptionPlan: planId } = (await getCurrentUser()) || {};
-	const { subscriptionPlan } = await getSubscriptionPlan({ planId });
+	const { firstName, subscription } = (await getUserProfile()) || {
+		exercises: [],
+		subscription: {},
+	};
+	const { name: subscriptionName } = subscription || {};
 
 	return (
 		<div className="flex flex-col justify-end min-h-[70dvh] pb-14">
 			<div className="-mx-4 px-4 pb-2 sticky top-16 z-10 bg-background shadow-sm">
 				<Header title="Live Coach" className="items-end" itemsEnd>
-					{formatPlan(subscriptionPlan)}
+					{formatPlan(subscriptionName)}
 				</Header>
 
 				<p className="-mt-4 text-xs text-muted-foreground">

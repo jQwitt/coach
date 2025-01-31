@@ -1,6 +1,12 @@
 "use server";
 
-import { deleteUser, emailIsRegistered, getUserByAuthId, insertUser } from "@/db/users";
+import {
+	deleteUser,
+	emailIsRegistered,
+	getUserByAuthId,
+	getUserProfileByAuthId,
+	insertUser,
+} from "@/db/users";
 import type { User } from "@/lib/types";
 import { clerkClient, currentUser } from "@clerk/nextjs/server";
 
@@ -70,4 +76,25 @@ export const deleteCurrentUser = async () => {
 
 export const emailExists = async (email: string) => {
 	return await emailIsRegistered({ email });
+};
+
+export const getUserProfile = async () => {
+	try {
+		const clerkUser = await currentUser();
+		if (!clerkUser) {
+			throw new Error("Clerk user not found");
+		}
+		const { id } = clerkUser;
+
+		const user = await getUserProfileByAuthId({ authId: id });
+		if (!user) {
+			throw new Error(`User with authId ${id} not found`);
+		}
+
+		return user;
+	} catch (error) {
+		console.log(error);
+	}
+
+	return null;
 };

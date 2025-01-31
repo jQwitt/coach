@@ -16,6 +16,23 @@ export const getUserByAuthId = async ({ authId }: { authId: string }) => {
 	return foundUser;
 };
 
+export const getUserProfileByAuthId = async ({ authId }: { authId: string }) => {
+	const found = db.query.users_table.findFirst({
+		where: (users, { eq }) => eq(users.authId, authId),
+		with: {
+			exercises: true,
+			subscription: true,
+		},
+	});
+
+	if (!found) {
+		console.log("user not found!");
+		return null;
+	}
+
+	return found;
+};
+
 export const emailIsRegistered = async ({ email }: { email: string }) => {
 	const foundUser = await db.query.users_table.findFirst({
 		where: (users, { eq }) => eq(users.email, email),
