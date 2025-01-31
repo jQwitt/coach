@@ -13,8 +13,8 @@ const quickActions = [
 	},
 ];
 
-function formatPlan(plan: string) {
-	if (plan === "olympian") {
+function formatPlan(subscriptionPlan: string) {
+	if (subscriptionPlan === "olympian") {
 		return (
 			<div className="mb-2 flex gap-1 items-center">
 				<p className="text-sm font-medium tracking-wide text-indigo-500">Olympian Tier</p>
@@ -23,7 +23,7 @@ function formatPlan(plan: string) {
 		);
 	}
 
-	if (plan === "builder") {
+	if (subscriptionPlan === "builder") {
 		return (
 			<div className="mb-2 flex gap-0 items-center">
 				<p className="text-sm font-medium tracking-wide text-blue-500">Builder Tier</p>
@@ -36,14 +36,14 @@ function formatPlan(plan: string) {
 }
 
 export default async function LiveCoachPage() {
-	const { firstName, plan: planId } = (await getCurrentUser()) || {};
-	const { plan } = await getSubscriptionPlan({ planId });
+	const { firstName, subscriptionPlan: planId } = (await getCurrentUser()) || {};
+	const { subscriptionPlan } = await getSubscriptionPlan({ planId });
 
 	return (
 		<div className="flex flex-col justify-end min-h-[70dvh] pb-14">
 			<div className="-mx-4 px-4 pb-2 sticky top-16 z-10 bg-background shadow-sm">
 				<Header title="Live Coach" className="items-end" itemsEnd>
-					{formatPlan(plan)}
+					{formatPlan(subscriptionPlan)}
 				</Header>
 
 				<p className="-mt-4 text-xs text-muted-foreground">

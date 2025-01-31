@@ -18,7 +18,7 @@ export async function getSubscriptionPlanByUserId(userId: number) {
 		.where(eq(schema.users_table.id, userId))
 		.rightJoin(
 			schema.subscription_plan_table,
-			eq(schema.users_table.plan, schema.subscription_plan_table.id),
+			eq(schema.users_table.subscriptionPlan, schema.subscription_plan_table.id),
 		)
 		.limit(1);
 }
@@ -53,7 +53,7 @@ export async function isLiveCoachConversationLimitExceeded(id: number, offset: s
 		.where(eq(schema.users_table.id, id))
 		.rightJoin(
 			schema.subscription_plan_table,
-			eq(schema.users_table.plan, schema.subscription_plan_table.id),
+			eq(schema.users_table.subscriptionPlan, schema.subscription_plan_table.id),
 		);
 	const limit = foundDailyLimit[0]?.limit ?? 0;
 

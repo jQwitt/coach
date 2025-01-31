@@ -7,7 +7,7 @@ import {
 import { getCurrentUser } from "../user";
 
 export async function getSubscriptionPlan({ planId }: { planId: number | null | undefined }) {
-	const fallback = { plan: "free", dailyConversationLimit: 1 };
+	const fallback = { subscriptionPlan: "free", dailyConversationLimit: 1 };
 
 	if (!planId || !Number.isSafeInteger(planId)) {
 		return fallback;
@@ -19,7 +19,7 @@ export async function getSubscriptionPlan({ planId }: { planId: number | null | 
 	}
 
 	const { name, dailyConversationLimit } = result;
-	return { plan: name, dailyConversationLimit };
+	return { subscriptionPlan: name, dailyConversationLimit };
 }
 
 export async function getSubscriptionPlanForCurrentUser() {
