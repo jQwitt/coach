@@ -16,11 +16,11 @@ import {
 	viewAnalytics as viewAnalyticsAction,
 } from "../actions/live-coach";
 import {
-	getPlanInfo as getPlanInfoAction,
-	getPlanInfoForCurrentUser as getPlanInfoForCurrentUserAction,
+	getSubscriptionPlan as getSubscriptionPlanAction,
+	getSubscriptionPlanForCurrentUser as getSubscriptionPlanForCurrentUserAction,
 	isConversationLimitReached as isConversationLimitReachedAction,
 	logConversation as logConversationAction,
-} from "../actions/plans";
+} from "../actions/subscription-plans";
 import {
 	createUser as createUserAction,
 	deleteCurrentUser as deleteCurrentUserAction,
@@ -64,7 +64,7 @@ export const suggestExercise = suggestExerciseAction;
 export const viewAnalytics = viewAnalyticsAction;
 
 // PLANS
-export const getPlanInfo = getPlanInfoAction;
-export const getPlanInfoForCurrentUser = getPlanInfoForCurrentUserAction;
+export const getSubscriptionPlan = getSubscriptionPlanAction;
+export const getSubscriptionPlanForCurrentUser = getSubscriptionPlanForCurrentUserAction;
 export const logConversation = logConversationAction;
 export const isConversationLimitReached = isConversationLimitReachedAction;

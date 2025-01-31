@@ -1,4 +1,4 @@
-import { getCurrentUser, getPlanInfo } from "@/app/actions";
+import { getCurrentUser, getSubscriptionPlan } from "@/app/actions";
 import LiveCoachConversation from "@/components/blocks/messages/live-coach-conversation";
 import MessageInput from "@/components/blocks/messages/message-input";
 import Header from "@/components/ui/header";
@@ -37,7 +37,7 @@ function formatPlan(plan: string) {
 
 export default async function LiveCoachPage() {
 	const { firstName, plan: planId } = (await getCurrentUser()) || {};
-	const { plan } = await getPlanInfo({ planId });
+	const { plan } = await getSubscriptionPlan({ planId });
 
 	return (
 		<div className="flex flex-col justify-end min-h-[70dvh] pb-14">

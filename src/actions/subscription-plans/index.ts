@@ -1,19 +1,19 @@
 import {
 	createLiveCoachConversationForUser,
-	getPlanInfoById,
-	getPlanInfoByUserId,
+	getSubscriptionPlanById,
+	getSubscriptionPlanByUserId,
 	isLiveCoachConversationLimitExceeded,
-} from "@/db/plans";
+} from "@/db/subscription-plans";
 import { getCurrentUser } from "../user";
 
-export async function getPlanInfo({ planId }: { planId: number | null | undefined }) {
+export async function getSubscriptionPlan({ planId }: { planId: number | null | undefined }) {
 	const fallback = { plan: "free", dailyConversationLimit: 1 };
 
 	if (!planId || !Number.isSafeInteger(planId)) {
 		return fallback;
 	}
 
-	const result = await getPlanInfoById(planId);
+	const result = await getSubscriptionPlanById(planId);
 	if (!result) {
 		return fallback;
 	}
@@ -22,14 +22,14 @@ export async function getPlanInfo({ planId }: { planId: number | null | undefine
 	return { plan: name, dailyConversationLimit };
 }
 
-export async function getPlanInfoForCurrentUser() {
+export async function getSubscriptionPlanForCurrentUser() {
 	const { id } = (await getCurrentUser()) || {};
 
 	if (!id) {
 		return null;
 	}
 
-	const result = await getPlanInfoByUserId(id);
+	const result = await getSubscriptionPlanByUserId(id);
 	if (!result?.length) {
 		return null;
 	}

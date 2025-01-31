@@ -1,4 +1,4 @@
-import { getCurrentUser, getExercises, getPlanInfoForCurrentUser } from "@/app/actions";
+import { getCurrentUser, getExercises, getSubscriptionPlanForCurrentUser } from "@/app/actions";
 import UserControls from "@/components/blocks/user-controls";
 import ActionButton from "@/components/ui/buttons/action-button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -9,7 +9,7 @@ import UserExercises from "./components/user-exercises";
 export default async function Profile() {
 	const { firstName, lastName, email } = (await getCurrentUser()) || {};
 	const exercises = await getExercises();
-	const plan = await getPlanInfoForCurrentUser();
+	const plan = await getSubscriptionPlanForCurrentUser();
 
 	return (
 		<div className="flex flex-col gap-4">

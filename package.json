@@ -12,6 +12,8 @@
     "lint": "biome lint --write",
     "check": "npx @biomejs/biome check",
     "schema:push": "pnpm drizzle-kit push",
+    "schema:generate": "pnpm drizzle-kit generate",
+    "schema:migrate": "pnpm drizzle-kit migrate",
     "cy:component": "cypress open --component"
   },
   "dependencies": {

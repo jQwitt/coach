@@ -2,21 +2,24 @@ import { and, count, eq, gte } from "drizzle-orm";
 import db from "..";
 import schema from "../schema";
 
-export async function getPlanInfoById(id: number) {
-	return await db.query.plans_table.findFirst({
+export async function getSubscriptionPlanById(id: number) {
+	return await db.query.subscription_plan_table.findFirst({
 		where: (plans, { eq }) => eq(plans.id, id),
 	});
 }
 
-export async function getPlanInfoByUserId(userId: number) {
+export async function getSubscriptionPlanByUserId(userId: number) {
 	return await db
 		.select({
-			name: schema.plans_table.name,
-			dailyConversationLimit: schema.plans_table.dailyConversationLimit,
+			name: schema.subscription_plan_table.name,
+			dailyConversationLimit: schema.subscription_plan_table.dailyConversationLimit,
 		})
 		.from(schema.users_table)
 		.where(eq(schema.users_table.id, userId))
-		.rightJoin(schema.plans_table, eq(schema.users_table.plan, schema.plans_table.id))
+		.rightJoin(
+			schema.subscription_plan_table,
+			eq(schema.users_table.plan, schema.subscription_plan_table.id),
+		)
 		.limit(1);
 }
 
@@ -45,10 +48,13 @@ export async function isLiveCoachConversationLimitExceeded(id: number, offset: s
 	const conversationCount = foundConversations[0]?.count ?? 0;
 
 	const foundDailyLimit = await db
-		.select({ limit: schema.plans_table.dailyConversationLimit })
+		.select({ limit: schema.subscription_plan_table.dailyConversationLimit })
 		.from(schema.users_table)
 		.where(eq(schema.users_table.id, id))
-		.rightJoin(schema.plans_table, eq(schema.users_table.plan, schema.plans_table.id));
+		.rightJoin(
+			schema.subscription_plan_table,
+			eq(schema.users_table.plan, schema.subscription_plan_table.id),
+		);
 	const limit = foundDailyLimit[0]?.limit ?? 0;
 
 	return conversationCount >= limit;
