@@ -1,6 +1,6 @@
 import { integer, pgTable, varchar } from "drizzle-orm/pg-core";
 
-export const subscription_plan_table = pgTable("SubscriptionPlanTable", {
+export const subscription_plan_table = pgTable("SubscriptionPlans", {
 	id: integer().primaryKey().generatedAlwaysAsIdentity(),
 
 	// data fields
