@@ -16,3 +16,24 @@ export const format = (exercises: ExerciseData[]) => {
 
 	return result;
 };
+
+export const getVolumeFor = (data: ReturnType<typeof format>) => {
+	const result = {
+		totalSets: 0,
+		totalReps: 0,
+		max: {
+			sets: 0,
+			reps: 0,
+		},
+	};
+
+	for (const { sets, reps } of data) {
+		result.totalSets += sets;
+		result.totalReps += reps;
+
+		result.max.sets = Math.max(sets, result.max.sets);
+		result.max.reps = Math.max(reps, result.max.reps);
+	}
+
+	return result;
+};

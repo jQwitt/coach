@@ -1,10 +1,10 @@
 "use client";
 
 import { heading } from "@/app/fonts";
-import { format } from "@/components/charts/helpers";
+import { format, getVolumeFor } from "@/components/charts/helpers";
 import type { WorkoutLiftingData } from "@/lib/types";
 import * as React from "react";
-import { Line, LineChart, type TooltipProps } from "recharts";
+import { Legend, Line, LineChart, ReferenceLine, type TooltipProps } from "recharts";
 import type { NameType, ValueType } from "recharts/types/component/DefaultTooltipContent";
 import { ChartContainer, ChartTooltip } from "../ui/chart";
 
@@ -14,9 +14,14 @@ interface VolumeChartProps {
 
 export default function VolumeChart({ workout: { exercises } }: VolumeChartProps) {
 	const data = React.useMemo(() => format(exercises.slice(0, -1)), [exercises]);
+	const {
+		totalSets,
+		totalReps,
+		max: { sets, reps },
+	} = React.useMemo(() => getVolumeFor(data), [data]);
 
 	return (
-		<>
+		<div className="relative">
 			<ChartContainer
 				config={{
 					rate: {
@@ -27,16 +32,48 @@ export default function VolumeChart({ workout: { exercises } }: VolumeChartProps
 				className="h-1/2 w-full"
 			>
 				<LineChart data={data}>
-					<Line type="monotone" dataKey={"sets"} stroke="hsl(var(--chart-2))" strokeWidth={2} />
-					<Line type="monotone" dataKey={"reps"} stroke="hsl(var(--chart-1))" strokeWidth={2} />
+					<ReferenceLine
+						y={sets}
+						stroke="hsl(var(--chart-2))"
+						strokeWidth={1}
+						strokeDasharray="3 3"
+					/>
+					<Line
+						type="monotone"
+						dataKey={"sets"}
+						stroke="hsl(var(--chart-2))"
+						strokeWidth={2}
+						label="Sets"
+					/>
+					<ReferenceLine
+						y={reps}
+						stroke="hsl(var(--chart-1))"
+						strokeWidth={1}
+						strokeDasharray="3 3"
+					/>
+					<Line
+						type="monotone"
+						dataKey={"reps"}
+						stroke="hsl(var(--chart-1))"
+						strokeWidth={2}
+						label="Reps"
+					/>
 					<ChartTooltip content={(props) => <VolumeChartToolTip {...props} />} />
+					<Legend />
 				</LineChart>
 			</ChartContainer>
-		</>
+			<div className="absolute -bottom-6 w-full font-semibold text-sm">
+				<div className="flex justify-center gap-3">
+					<p>{totalSets} Sets</p>
+					<p>|</p>
+					<p>{totalReps} Reps</p>
+				</div>
+			</div>
+		</div>
 	);
 }
 
-function VolumeChartToolTip({ active, payload }: TooltipProps<ValueType, NameType>) {
+const VolumeChartToolTip = ({ active, payload }: TooltipProps<ValueType, NameType>) => {
 	if (active && payload && payload.length) {
 		const { name, reps, maxWeight, sets } = payload[0].payload;
 
@@ -52,4 +89,4 @@ function VolumeChartToolTip({ active, payload }: TooltipProps<ValueType, NameTyp
 	}
 
 	return null;
-}
+};
