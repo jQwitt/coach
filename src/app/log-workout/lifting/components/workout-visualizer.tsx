@@ -2,46 +2,21 @@
 
 import * as React from "react";
 
-import { HypertrophyRangeChart } from "@/components/charts";
+import { HypertrophyRangeChart, VolumeChart } from "@/components/charts";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import Header, { HeaderLevel } from "@/components/ui/header";
 import useWorkoutStore from "@/hooks/stores/use-workout";
-import { Line, LineChart } from "recharts";
-import { getRepsPerExercise, getSetsPerExercise } from "../helpers";
 
 enum Views {
 	HYPERTROPHY_RANGE = "hypertrophy-range",
-	TOTAL_REPS_PER_EXERCISE = "total-reps-per-exercise",
-	SETS_PER_EXERCISE = "sets-per-exercise",
+	VOLUME = "volume",
 }
 
-type ChartViews = {
-	[view in Views]: {
-		label: string;
-		dataKey: string;
-		buttonLabel: string;
-	};
+const Labels: Record<Views, string> = {
+	[Views.HYPERTROPHY_RANGE]: "Hypertrophy Range",
+	[Views.VOLUME]: "Volume",
 };
-
-const charts = {
-	[Views.HYPERTROPHY_RANGE]: {
-		label: "Hypertrophy Range",
-		dataKey: "reps",
-		buttonLabel: "Hypertrophy Range",
-	},
-	[Views.TOTAL_REPS_PER_EXERCISE]: {
-		label: "Total Reps per Exercise",
-		dataKey: "reps",
-		buttonLabel: "Total Reps / Exercise",
-	},
-	[Views.SETS_PER_EXERCISE]: {
-		label: "Sets per Exercise",
-		dataKey: "sets",
-		buttonLabel: "Sets / Exercise",
-	},
-} satisfies ChartViews;
 
 export default function WorkoutVisualizer() {
 	const { workout } = useWorkoutStore();
@@ -49,19 +24,12 @@ export default function WorkoutVisualizer() {
 
 	const previousExercises = workout.exercises.slice(0, -1);
 
-	const data =
-		view === Views.TOTAL_REPS_PER_EXERCISE
-			? getRepsPerExercise(previousExercises)
-			: view === Views.SETS_PER_EXERCISE
-				? getSetsPerExercise(previousExercises)
-				: [];
-
 	return (
 		<div className="min-h-full md:mt-[5.125rem]">
 			<Card>
 				<CardHeader>
 					<CardTitle>
-						<Header title={charts[view].label} level={HeaderLevel.SUB_SECTION} />
+						<Header title={Labels[view]} level={HeaderLevel.SUB_SECTION} />
 					</CardTitle>
 				</CardHeader>
 				<CardContent>
@@ -70,25 +38,7 @@ export default function WorkoutVisualizer() {
 							{view === Views.HYPERTROPHY_RANGE ? (
 								<HypertrophyRangeChart workout={workout} />
 							) : (
-								<ChartContainer
-									config={{
-										rate: {
-											label: charts[view]?.label,
-											color: "hsl(var(--chart-1))",
-										},
-									}}
-									className="h-1/2 w-full"
-								>
-									<LineChart data={data}>
-										<Line
-											type="monotone"
-											dataKey={charts[view].dataKey}
-											stroke="var(--color-rate)"
-											strokeWidth={2}
-										/>
-										<ChartTooltip content={<ChartTooltipContent />} />
-									</LineChart>
-								</ChartContainer>
+								<VolumeChart workout={workout} />
 							)}
 						</>
 					) : (
@@ -101,7 +51,7 @@ export default function WorkoutVisualizer() {
 					<div className="my-4 w-full">
 						<Header title="Views" level={HeaderLevel.SUB_SECTION} />
 						<div className="flex flex-wrap gap-4">
-							{Object.entries(charts).map(([key, { buttonLabel }]) => {
+							{Object.entries(Labels).map(([key, label]) => {
 								return (
 									<Button
 										key={`view-${key}`}
@@ -111,7 +61,7 @@ export default function WorkoutVisualizer() {
 										disabled={view === key}
 										onClick={() => setView(key as Views)}
 									>
-										{buttonLabel}
+										{label}
 									</Button>
 								);
 							})}
