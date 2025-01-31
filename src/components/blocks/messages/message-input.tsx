@@ -11,7 +11,7 @@ import {
 import { Send } from "lucide-react";
 import * as React from "react";
 
-export interface MessageInputProps {
+interface MessageInputProps {
 	actions?: Array<{
 		key: LiveCoachSupportedActionsEnum;
 		text: string;

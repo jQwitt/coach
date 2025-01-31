@@ -1,11 +1,8 @@
-import type { LucideProps } from "lucide-react";
-import type { ForwardRefExoticComponent, RefAttributes } from "react";
-
 export type MessageDirection = "inbound" | "outbound";
 
 export type LiveCoachConversationMessageAction = LiveCoachConversationMessageURLAction;
 
-export type LiveCoachConversationMessageURLAction = {
+type LiveCoachConversationMessageURLAction = {
 	text: string;
 	url: string;
 };
@@ -91,17 +88,3 @@ export enum LiveCoachSupportedActionsEnum {
 	SUGGEST_EXERCISE = "suggest an exercise",
 	DETERMINE_EXERCISE_WEIGHT = "determine exercise weight",
 }
-
-export const LiveCoachSupportedActions = (
-	Object.keys(LiveCoachSupportedActionsEnum) as Array<keyof typeof LiveCoachSupportedActionsEnum>
-).map((key) => ({ value: key, key: LiveCoachSupportedActionsEnum[key] }));
-
-export enum SubscriptionPlan {
-	FREE = "free",
-	BUILDER = "builder",
-	OLYMPIAN = "olympian",
-}
-
-export type Icon = ForwardRefExoticComponent<
-	Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
->;

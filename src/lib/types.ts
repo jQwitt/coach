@@ -3,7 +3,7 @@ import type schema from "@/db/schema";
 
 export type User = typeof schema.users_table.$inferSelect;
 export type UserExerciseLifting = typeof schema.lifting_exercises_table.$inferSelect;
-export type WorkoutLiftingExercise = typeof schema.workouts_lifting_exercises_table.$inferSelect;
+type WorkoutLiftingExercise = typeof schema.workouts_lifting_exercises_table.$inferSelect;
 export type WorkoutLifting = typeof schema.workouts_lifting_table.$inferSelect;
 export type MuscleGroups = "Arms" | "Shoulders" | "Chest" | "Back" | "Legs" | "Core" | "FullBody";
 export type MusclesDetailed =
@@ -43,7 +43,8 @@ export type ExerciseSetData = {
 	weight: number;
 	metadata: ExerciseSetMetadata;
 };
-export type ExerciseSetMetadata = {
+
+type ExerciseSetMetadata = {
 	toFailure?: boolean;
 	unilateral?: boolean;
 };

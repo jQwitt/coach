@@ -1,0 +1,11 @@
+{
+	"ignore": [
+		"src/app/actions.ts",
+		"src/components/ui/chart.tsx",
+		"src/components/ui/dialog.tsx",
+		"src/components/ui/select.tsx",
+		"src/components/ui/popover.tsx",
+		"src/components/ui/toast.tsx",
+		"src/hooks/use-toast.ts"
+	]
+}

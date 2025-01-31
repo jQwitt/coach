@@ -69,25 +69,6 @@ export async function updateExerciseForUser({
 	return true;
 }
 
-export async function deleteExerciseForUser({ userId, id }: { userId: number; id: number }) {
-	const result = await db
-		.delete(schema.lifting_exercises_table)
-		.where(
-			and(
-				eq(schema.lifting_exercises_table.userId, userId),
-				eq(schema.lifting_exercises_table.id, id),
-			),
-		)
-		.returning();
-
-	if (!result) {
-		console.log(`error deleting exercise for user ${userId}`);
-		return false;
-	}
-
-	return true;
-}
-
 export async function getExercisesByWorkoutId({
 	userId,
 	workoutId,

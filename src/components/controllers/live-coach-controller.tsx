@@ -5,7 +5,6 @@ import * as React from "react";
 
 export const LIVE_COACH_DELAY_MIME = 200;
 export const SCROLL_TO_LAST_ID = "coach-live-message-last";
-export const MESSAGE_LIMIT = 5;
 
 export function LiveCoachController() {
 	const {
