@@ -17,6 +17,7 @@ export interface LiveCoachMessageProps {
 	className?: string;
 	info?: LiveCoachConversationMessageInfo;
 	action?: LiveCoachConversationMessageAction;
+	cards?: React.ReactNode[];
 	id?: string;
 }
 
@@ -24,6 +25,7 @@ export function LiveCoachMessage({
 	text,
 	direction = "inbound",
 	action,
+	cards,
 	ear = false,
 	info = undefined,
 	children,
@@ -62,6 +64,7 @@ export function LiveCoachMessage({
 					</div>
 				)}
 			</div>
+			{cards ? <div className="flex gap-2 grow-0 side-scroll">{cards}</div> : null}
 			{action?.text && (
 				<ActionButton className="w-fit max-w-[30%]" url={action?.url} text={action.text} />
 			)}

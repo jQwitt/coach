@@ -1,6 +1,11 @@
 import { create } from "zustand";
 
-import type { ExerciseData, ExerciseSetData, MuscleGroupString, WorkoutLiftingData } from "@/lib/types";
+import type {
+	ExerciseData,
+	ExerciseSetData,
+	MuscleGroupString,
+	WorkoutLiftingData,
+} from "@/lib/types";
 import { hasForbiddenCharacters } from "@/lib/utils";
 
 interface WorkoutState {

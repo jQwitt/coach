@@ -33,6 +33,7 @@ interface LiveCoachConversationState {
 		text: string;
 		info?: LiveCoachConversationMessageInfo;
 		action?: LiveCoachConversationMessageAction;
+		cards?: React.ReactNode[];
 	}) => void;
 	setPhase: (phase: LiveCoachConversationPhase) => void;
 }
@@ -144,7 +145,7 @@ export const useConversation = create<LiveCoachConversationState>()((set) => ({
 			};
 		});
 	},
-	addInboundMessage({ text, info, action }) {
+	addInboundMessage({ text, info, action, cards = null }) {
 		set((state) => {
 			const toSet: LiveCoachConversationMessageInfo = {
 				title: "",
@@ -158,7 +159,7 @@ export const useConversation = create<LiveCoachConversationState>()((set) => ({
 					...state.conversation,
 					messages: [
 						...state.conversation.messages,
-						{ direction: "inbound", text, info: toSet, action },
+						{ direction: "inbound", text, info: toSet, action, cards },
 					],
 				},
 			};

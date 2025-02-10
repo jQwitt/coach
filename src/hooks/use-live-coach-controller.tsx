@@ -18,6 +18,8 @@ import {
 	LiveCoachConversationPhase,
 	LiveCoachSupportedActionsEnum,
 } from "@/lib/types/live-coach";
+import { generateExerciseCards } from "@/lib/utils";
+import { set } from "node_modules/cypress/types/lodash";
 import * as React from "react";
 
 export function useLiveCoachController() {
@@ -79,9 +81,10 @@ export function useLiveCoachController() {
 
 	const fulfill = React.useCallback(async () => {
 		if (!fulfillmentStarted) {
-			mimeTyping("Working on it...");
+			addInboundMessage({ text: "Working on it..." });
+			setIsTyping(true);
 			setFullfillmentStarted(true);
-			const { intent, exercise, muscleGroup } = intentContext;
+			const { intent, exercise } = intentContext;
 
 			if (intent === LiveCoachSupportedActionsEnum.VIEW_ANALYTICS) {
 				const res = await viewAnalytics(intentContext);
@@ -95,6 +98,7 @@ export function useLiveCoachController() {
 						action: { text: "Log a Workout", url: "/log-workout/lifting" },
 					});
 				}
+				setIsTyping(false);
 			} else if (intent === LiveCoachSupportedActionsEnum.DETERMINE_EXERCISE_WEIGHT) {
 				const res = await determineExerciseWeight(intentContext);
 
@@ -136,22 +140,64 @@ export function useLiveCoachController() {
 						action: { text: "Log a Workout", url: "/log-workout/lifting" },
 					});
 				}
+				setIsTyping(false);
 
 				// } else if (intent === LiveCoachSupportedActionsEnum.DESIGN_WORKOUT) {
 				// 	const res = await designWorkout(intentContext);
 			} else if (intent === LiveCoachSupportedActionsEnum.SUGGEST_EXERCISE) {
+				const { muscleGroup } = intentContext;
+				const res = await suggestExercise(intentContext);
 
-				// TODO: fulfill suggest exercise
-				const res = suggestExercise(intentContext);
-
+				if (!res?.exercises?.length) {
+					setIsTyping(false);
+					mimeTyping(
+						"The coach isn't familiar with that muscle group yet, let's try something else!",
+					);
+					return;
+				}
+				const cards = generateExerciseCards(res.exercises);
+				if (!cards.length) {
+					addInboundMessage({
+						text: `To target ${muscleGroup}, I'd suggest the following exercises:`,
+						info: {
+							title: "AI Info",
+							description: "OpenAI's model returned the following insights based on your message:",
+							data: res.exercises.toString(),
+						},
+						cards,
+					});
+				} else {
+					addInboundMessage({
+						text: `To target ${muscleGroup}, I'd suggest the following exercises:`,
+						info: {
+							title: "AI Info",
+							description: "OpenAI's model returned the following insights based on your message:",
+							data: res.exercises
+								.map(({ name, description }) => ({ name, description }))
+								.toString(),
+						},
+						action: { text: "Log a Workout", url: "/log-workout/lifting" },
+						cards,
+					});
+				}
+				setIsTyping(false);
 			} else {
+				setIsTyping(false);
 				mimeTyping("I'm sorry, I can't currently do this, but I'll keep learning :)");
 			}
 
 			setPhase(LiveCoachConversationPhase.END_CONVERSATION);
 			await logConversation({ date: timeStamp(), intent });
 		}
-	}, [mimeTyping, fulfillmentStarted, intentContext, setFullfillmentStarted, setPhase]);
+	}, [
+		setIsTyping,
+		mimeTyping,
+		fulfillmentStarted,
+		intentContext,
+		setFullfillmentStarted,
+		setPhase,
+		addInboundMessage,
+	]);
 
 	React.useLayoutEffect(() => {
 		if (phase === LiveCoachConversationPhase.FULFILL_INTENT) {
@@ -228,19 +274,14 @@ export function useLiveCoachController() {
 				}
 
 				setPhase(LiveCoachConversationPhase.FULFILL_INTENT);
-					
 			} else if (phase === LiveCoachConversationPhase.PROMPT_MISSING_INTENT_EXERCISE) {
-
-				// TODO: verify contains exercise 
+				// TODO: verify contains exercise
 				setIntentContext({ ...intentContext, exercise: message });
 				setPhase(LiveCoachConversationPhase.FULFILL_INTENT);
-
 			} else if (phase === LiveCoachConversationPhase.PROMPT_MISSING_INTENT_MUSCLE_GROUP) {
-
-				// TODO: verify contains exercise 
+				// TODO: verify contains exercise
 				setIntentContext({ ...intentContext, muscleGroup: message });
 				setPhase(LiveCoachConversationPhase.FULFILL_INTENT);
-
 			} else if (phase === LiveCoachConversationPhase.PROMPT_URL_INTENT) {
 				const userConfirmed = message.match(/yes/gi);
 
@@ -261,11 +302,9 @@ export function useLiveCoachController() {
 				setPhase(LiveCoachConversationPhase.PROMPT_MISSING_INTENT_MUSCLE_GROUP);
 				mimeTyping("What muscle group do you want to suggest an exercise for?");
 			} else if (phase === LiveCoachConversationPhase.CONFIRM_URL_INTENT) {
-
-				// TODO: verify contains exercise 
+				// TODO: verify contains exercise
 				setIntentContext({ ...intentContext, exercise: message });
 				setPhase(LiveCoachConversationPhase.FULFILL_INTENT);
-				
 			}
 		},
 		[

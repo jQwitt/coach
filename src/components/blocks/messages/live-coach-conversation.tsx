@@ -5,7 +5,7 @@ import {
 	SCROLL_TO_LAST_ID,
 } from "@/components/controllers/live-coach-controller";
 import { useConversation } from "@/hooks/stores/use-live-coach-conversation";
-import { getNamedSearchParams } from "@/lib/client-utils";
+import { getNamedSearchParams } from "@/lib/utils";
 import { Dot } from "lucide-react";
 import * as React from "react";
 import { LiveCoachMessage, type LiveCoachMessageProps } from "./live-coach-message";
