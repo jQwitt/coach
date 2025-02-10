@@ -21,14 +21,18 @@ interface MessageInputProps {
 const inputLabels: Record<LiveCoachConversationPhase, string> = {
 	[LiveCoachConversationPhase.DETERMINE_INTENT]: "Put your coach to work!",
 	[LiveCoachConversationPhase.CONFIRM_INTENT]: "Yes or No",
-	[LiveCoachConversationPhase.PROMPT_ACTION_INTENT]: "Try an exercise you've logged, i.e. 'Bench Press'",
+	[LiveCoachConversationPhase.PROMPT_ACTION_INTENT]:
+		"Try an exercise you've logged, i.e. 'Bench Press'",
 	[LiveCoachConversationPhase.FULFILL_INTENT]: "Working on it...",
 	[LiveCoachConversationPhase.PROMPT_FULFILLMENT_SUCCESS]: "How'd it go?",
 	[LiveCoachConversationPhase.END_CONVERSATION]: "Thanks for talking with coach!",
 	[LiveCoachConversationPhase.PROMPT_URL_INTENT]: "Yes or No",
-	[LiveCoachConversationPhase.CONFIRM_URL_INTENT]: "Try an exercise you've logged, i.e. 'Bench Press'",
-	[LiveCoachConversationPhase.PROMPT_MISSING_INTENT_EXERCISE]: "Try an exercise you've logged, i.e. 'Bench Press'",
-	[LiveCoachConversationPhase.PROMPT_MISSING_INTENT_MUSCLE_GROUP]: "Try a muscle group, i.e. 'Chest' or 'Legs'",
+	[LiveCoachConversationPhase.CONFIRM_URL_INTENT]:
+		"Try an exercise you've logged, i.e. 'Bench Press'",
+	[LiveCoachConversationPhase.PROMPT_MISSING_INTENT_EXERCISE]:
+		"Try an exercise you've logged, i.e. 'Bench Press'",
+	[LiveCoachConversationPhase.PROMPT_MISSING_INTENT_MUSCLE_GROUP]:
+		"Try a muscle group, i.e. 'Chest' or 'Legs'",
 };
 
 export default function MessageInput({ actions }: MessageInputProps) {
