@@ -6,12 +6,10 @@ import { CalendarDays, Clock, Hash, Hourglass } from "lucide-react";
 import PageControls from "./components/page-controls";
 import WorkoutExerciseList from "./components/workout-exercise-list";
 
-export default async function WorkoutAnalyticsPage({
-	params,
-}: {
-	params: { id: string };
-}) {
-	const { id } = params;
+type Params = Promise<{ id: string }>;
+
+export default async function WorkoutAnalyticsPage(props: { params: Params }) {
+	const { id } = await props.params;
 	const workout = await getWorkout({ workoutId: id });
 	const workoutExercises = await getExercisesForWorkout({ workoutId: id });
 
