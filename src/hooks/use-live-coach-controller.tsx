@@ -81,8 +81,8 @@ export function useLiveCoachController() {
 	const fulfill = React.useCallback(async () => {
 		if (!fulfillmentStarted) {
 			addInboundMessage({ text: "Working on it..." });
-			setIsTyping(true);
 			setFullfillmentStarted(true);
+			setIsTyping(true);
 			const { intent, exercise } = intentContext;
 
 			if (intent === LiveCoachSupportedActionsEnum.VIEW_ANALYTICS) {
