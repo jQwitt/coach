@@ -7,12 +7,12 @@ import WeightOverTimeGraph from "./components/weight-over-time";
 export default async function AnalyticsExerciseLiftingPage({
 	params,
 }: {
-	params: { exerciseId: string };
+	params: { exerciseId: string[] };
 }) {
 	const { exerciseId } = params;
 
-	const exercise = await getExercise({ exerciseId });
-	const history = await getExerciseHistory({ exerciseId });
+	const exercise = await getExercise({ exerciseId: exerciseId[0] });
+	const history = await getExerciseHistory({ exerciseId: exerciseId[0] });
 
 	if (!exercise?.name) {
 		return null;
