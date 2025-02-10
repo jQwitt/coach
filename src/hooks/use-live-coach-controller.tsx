@@ -5,6 +5,7 @@ import {
 	determineTrainingIntent,
 	isConversationLimitReached,
 	logConversation,
+	suggestExercise,
 	viewAnalytics,
 } from "@/app/actions";
 import { LIVE_COACH_DELAY_MIME } from "@/components/controllers/live-coach-controller";
@@ -80,7 +81,7 @@ export function useLiveCoachController() {
 		if (!fulfillmentStarted) {
 			mimeTyping("Working on it...");
 			setFullfillmentStarted(true);
-			const { intent, exercise } = intentContext;
+			const { intent, exercise, muscleGroup } = intentContext;
 
 			if (intent === LiveCoachSupportedActionsEnum.VIEW_ANALYTICS) {
 				const res = await viewAnalytics(intentContext);
@@ -138,8 +139,11 @@ export function useLiveCoachController() {
 
 				// } else if (intent === LiveCoachSupportedActionsEnum.DESIGN_WORKOUT) {
 				// 	const res = await designWorkout(intentContext);
-				// } else if (intent === LiveCoachSupportedActionsEnum.SUGGEST_EXERCISE) {
-				// 	const res = suggestExercise(intentContext);
+			} else if (intent === LiveCoachSupportedActionsEnum.SUGGEST_EXERCISE) {
+
+				// TODO: fulfill suggest exercise
+				const res = suggestExercise(intentContext);
+
 			} else {
 				mimeTyping("I'm sorry, I can't currently do this, but I'll keep learning :)");
 			}
@@ -207,11 +211,18 @@ export function useLiveCoachController() {
 					return;
 				}
 
-				const { exercise } = intentContext;
+				const { exercise, muscleGroup } = intentContext;
 				if (intentContext.intent === LiveCoachSupportedActionsEnum.VIEW_ANALYTICS) {
 					if (!exercise) {
 						setPhase(LiveCoachConversationPhase.PROMPT_MISSING_INTENT_EXERCISE);
 						mimeTyping("What exercise would you like to view analytics for?");
+						return;
+					}
+				}
+				if (intentContext.intent === LiveCoachSupportedActionsEnum.SUGGEST_EXERCISE) {
+					if (!muscleGroup) {
+						setPhase(LiveCoachConversationPhase.PROMPT_MISSING_INTENT_EXERCISE);
+						mimeTyping("What muscle group would you like me to suggest an exercise for?");
 						return;
 					}
 				}
@@ -231,18 +242,30 @@ export function useLiveCoachController() {
 				setPhase(LiveCoachConversationPhase.FULFILL_INTENT);
 
 			} else if (phase === LiveCoachConversationPhase.PROMPT_URL_INTENT) {
-				if (message.match(/yes/gi)) {
+				const userConfirmed = message.match(/yes/gi);
+
+				if (!userConfirmed) {
+					setPhase(LiveCoachConversationPhase.DETERMINE_INTENT);
+					resetIntentContext();
+					mimeTyping("Sorry about that, what can I assist you with?");
+					return;
+				}
+
+				const { intent } = intentContext;
+				if (intent !== LiveCoachSupportedActionsEnum.SUGGEST_EXERCISE) {
 					setPhase(LiveCoachConversationPhase.CONFIRM_URL_INTENT);
 					mimeTyping(`What exercise do you want to ${intentContext.intent} for?`);
 					return;
 				}
 
-				setPhase(LiveCoachConversationPhase.DETERMINE_INTENT);
-				resetIntentContext();
-				mimeTyping("What can I assist you with?");
+				setPhase(LiveCoachConversationPhase.PROMPT_MISSING_INTENT_MUSCLE_GROUP);
+				mimeTyping("What muscle group do you want to suggest an exercise for?");
 			} else if (phase === LiveCoachConversationPhase.CONFIRM_URL_INTENT) {
+
+				// TODO: verify contains exercise 
 				setIntentContext({ ...intentContext, exercise: message });
 				setPhase(LiveCoachConversationPhase.FULFILL_INTENT);
+				
 			}
 		},
 		[
@@ -300,9 +323,9 @@ export function useLiveCoachController() {
 						...intentContext,
 						intent: LiveCoachSupportedActionsEnum.SUGGEST_EXERCISE,
 					});
-					mimeTyping("What exercise would you like calculate?");
+					mimeTyping("What muscle group would you like me to suggest an exercise for?");
 				}, LIVE_COACH_DELAY_MIME);
-				setPhase(LiveCoachConversationPhase.PROMPT_ACTION_INTENT);
+				setPhase(LiveCoachConversationPhase.PROMPT_MISSING_INTENT_MUSCLE_GROUP);
 			}
 		},
 		[setPhase, addOutboundMessage, mimeTyping, intentContext, setIntentContext, limited],

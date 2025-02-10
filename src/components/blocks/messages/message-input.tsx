@@ -27,8 +27,8 @@ const inputLabels: Record<LiveCoachConversationPhase, string> = {
 	[LiveCoachConversationPhase.END_CONVERSATION]: "Thanks for talking with coach!",
 	[LiveCoachConversationPhase.PROMPT_URL_INTENT]: "Yes or No",
 	[LiveCoachConversationPhase.CONFIRM_URL_INTENT]: "Try an exercise you've logged, i.e. 'Bench Press'",
-	[LiveCoachConversationPhase.PROMPT_MISSING_INTENT_EXERCISE]: "",
-	[LiveCoachConversationPhase.PROMPT_MISSING_INTENT_MUSCLE_GROUP]: ""
+	[LiveCoachConversationPhase.PROMPT_MISSING_INTENT_EXERCISE]: "Try an exercise you've logged, i.e. 'Bench Press'",
+	[LiveCoachConversationPhase.PROMPT_MISSING_INTENT_MUSCLE_GROUP]: "Try a muscle group, i.e. 'Chest' or 'Legs'",
 };
 
 export default function MessageInput({ actions }: MessageInputProps) {
