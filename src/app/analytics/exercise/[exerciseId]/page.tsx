@@ -4,12 +4,12 @@ import ExerciseHistory from "./components/exercise-history";
 import SuggestOneRepMax from "./components/suggest-one-rep-max";
 import WeightOverTimeGraph from "./components/weight-over-time";
 
-export default async function AnalyticsExerciseLiftingPage({
-	params,
-}: {
-	params: Promise<{ exerciseId: string }>;
-}) {
-	const { exerciseId } = await params;
+export default async function AnalyticsExerciseLiftingPage(
+	props: Promise<{
+		params: { exerciseId: string };
+	}>,
+) {
+	const { exerciseId } = await props.then(({ params }) => params);
 
 	const exercise = await getExercise({ exerciseId });
 	const history = await getExerciseHistory({ exerciseId });
