@@ -201,16 +201,35 @@ export function useLiveCoachController() {
 					},
 				});
 			} else if (phase === LiveCoachConversationPhase.CONFIRM_INTENT) {
-				if (message.match(/yes/gi)) {
-					setPhase(LiveCoachConversationPhase.FULFILL_INTENT);
+				if (!message.match(/yes/gi)) {
+					setPhase(LiveCoachConversationPhase.DETERMINE_INTENT);
+					mimeTyping("Sorry, I didn't get that, what can I help you with?");
 					return;
 				}
 
-				setPhase(LiveCoachConversationPhase.DETERMINE_INTENT);
-				mimeTyping("Sorry, I didn't get that, what can I help you with?");
-			} else if (phase === LiveCoachConversationPhase.PROMPT_ACTION_INTENT) {
+				const { exercise } = intentContext;
+				if (intentContext.intent === LiveCoachSupportedActionsEnum.VIEW_ANALYTICS) {
+					if (!exercise) {
+						setPhase(LiveCoachConversationPhase.PROMPT_MISSING_INTENT_EXERCISE);
+						mimeTyping("What exercise would you like to view analytics for?");
+						return;
+					}
+				}
+
+				setPhase(LiveCoachConversationPhase.FULFILL_INTENT);
+					
+			} else if (phase === LiveCoachConversationPhase.PROMPT_MISSING_INTENT_EXERCISE) {
+
+				// TODO: verify contains exercise 
 				setIntentContext({ ...intentContext, exercise: message });
 				setPhase(LiveCoachConversationPhase.FULFILL_INTENT);
+
+			} else if (phase === LiveCoachConversationPhase.PROMPT_MISSING_INTENT_MUSCLE_GROUP) {
+
+				// TODO: verify contains exercise 
+				setIntentContext({ ...intentContext, muscleGroup: message });
+				setPhase(LiveCoachConversationPhase.FULFILL_INTENT);
+
 			} else if (phase === LiveCoachConversationPhase.PROMPT_URL_INTENT) {
 				if (message.match(/yes/gi)) {
 					setPhase(LiveCoachConversationPhase.CONFIRM_URL_INTENT);
@@ -242,7 +261,6 @@ export function useLiveCoachController() {
 
 	const handleActionClick = React.useCallback(
 		({ action }: { action: LiveCoachSupportedActionsEnum }) => {
-			setPhase(LiveCoachConversationPhase.PROMPT_ACTION_INTENT);
 			addOutboundMessage(action);
 
 			if (limited) {
@@ -266,6 +284,7 @@ export function useLiveCoachController() {
 					});
 					mimeTyping("What exercise would you like to view analytics for?");
 				}, LIVE_COACH_DELAY_MIME);
+				setPhase(LiveCoachConversationPhase.CONFIRM_URL_INTENT);
 			} else if (action === LiveCoachSupportedActionsEnum.DETERMINE_EXERCISE_WEIGHT) {
 				setTimeout(() => {
 					setIntentContext({
@@ -274,6 +293,16 @@ export function useLiveCoachController() {
 					});
 					mimeTyping("What exercise would you like calculate?");
 				}, LIVE_COACH_DELAY_MIME);
+				setPhase(LiveCoachConversationPhase.PROMPT_MISSING_INTENT_EXERCISE);
+			} else if (action === LiveCoachSupportedActionsEnum.SUGGEST_EXERCISE) {
+				setTimeout(() => {
+					setIntentContext({
+						...intentContext,
+						intent: LiveCoachSupportedActionsEnum.SUGGEST_EXERCISE,
+					});
+					mimeTyping("What exercise would you like calculate?");
+				}, LIVE_COACH_DELAY_MIME);
+				setPhase(LiveCoachConversationPhase.PROMPT_ACTION_INTENT);
 			}
 		},
 		[setPhase, addOutboundMessage, mimeTyping, intentContext, setIntentContext, limited],
