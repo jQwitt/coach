@@ -14,9 +14,9 @@ const quickActions = [
 		key: LiveCoachSupportedActionsEnum.SUGGEST_EXERCISE,
 		text: "Suggest an Exercise",
 	},
-	{ 
-		key: LiveCoachSupportedActionsEnum.VIEW_ANALYTICS, 
-		text: "View Analytics" 
+	{
+		key: LiveCoachSupportedActionsEnum.VIEW_ANALYTICS,
+		text: "View Analytics",
 	},
 ];
 

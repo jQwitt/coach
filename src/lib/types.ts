@@ -6,7 +6,14 @@ export type UserExerciseLifting = typeof schema.lifting_exercises_table.$inferSe
 type WorkoutLiftingExercise = typeof schema.workouts_lifting_exercises_table.$inferSelect;
 export type WorkoutLifting = typeof schema.workouts_lifting_table.$inferSelect;
 
-export type MuscleGroupString = "Arms" | "Shoulders" | "Chest" | "Back" | "Legs" | "Core" | "FullBody";
+export type MuscleGroupString =
+	| "Arms"
+	| "Shoulders"
+	| "Chest"
+	| "Back"
+	| "Legs"
+	| "Core"
+	| "FullBody";
 
 export type MusclesDetailedString =
 	| "Biceps Long"
