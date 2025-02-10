@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-import type { ExerciseData, ExerciseSetData, MuscleGroups, WorkoutLiftingData } from "@/lib/types";
+import type { ExerciseData, ExerciseSetData, MuscleGroupString, WorkoutLiftingData } from "@/lib/types";
 import { hasForbiddenCharacters } from "@/lib/utils";
 
 interface WorkoutState {
@@ -10,7 +10,7 @@ interface WorkoutState {
 	addEmptyExercise: () => void;
 	removeExercise: (index: number) => void;
 	updateExerciseName: (index: number, name: string) => void;
-	updateExercisePrimaryTarget: (index: number, target: MuscleGroups) => void;
+	updateExercisePrimaryTarget: (index: number, target: MuscleGroupString) => void;
 	addSetToExercise: (index: number) => void;
 	removeSetFromExercise: (index: number) => void;
 	updateExerciseSets: (index: number, setIndex: number, values: Partial<ExerciseSetData>) => void;

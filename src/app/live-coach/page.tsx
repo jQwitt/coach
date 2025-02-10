@@ -6,10 +6,17 @@ import { LiveCoachSupportedActionsEnum } from "@/lib/types/live-coach";
 import { Sparkle, Sparkles } from "lucide-react";
 
 const quickActions = [
-	{ key: LiveCoachSupportedActionsEnum.VIEW_ANALYTICS, text: "View Analytics" },
 	{
 		key: LiveCoachSupportedActionsEnum.DETERMINE_EXERCISE_WEIGHT,
-		text: "Determine Exercise Weight",
+		text: "How heavy should I be lifting?",
+	},
+	{
+		key: LiveCoachSupportedActionsEnum.SUGGEST_EXERCISE,
+		text: "Suggest an Exercise",
+	},
+	{ 
+		key: LiveCoachSupportedActionsEnum.VIEW_ANALYTICS, 
+		text: "View Analytics" 
 	},
 ];
 

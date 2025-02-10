@@ -8,7 +8,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import type { MuscleGroups } from "@/lib/types";
+import type { MuscleGroupString } from "@/lib/types";
 
 const MuscleGroup = {
 	Arms: "Arms",
@@ -18,13 +18,13 @@ const MuscleGroup = {
 	Shoulders: "Shoulders",
 	Core: "Core",
 	FullBody: "Full Body",
-} satisfies Record<MuscleGroups, string>;
+} satisfies Record<MuscleGroupString, string>;
 
 export default function MuscleGroupSelect({
 	value,
 	disabled,
 	onChange,
-}: { value: MuscleGroups; disabled?: boolean; onChange: (value: MuscleGroups) => void }) {
+}: { value: MuscleGroupString; disabled?: boolean; onChange: (value: MuscleGroupString) => void }) {
 	return (
 		<Select value={value} onValueChange={onChange} disabled={disabled}>
 			<SelectTrigger>

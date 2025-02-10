@@ -19,16 +19,15 @@ interface MessageInputProps {
 }
 
 const inputLabels: Record<LiveCoachConversationPhase, string> = {
-	[LiveCoachConversationPhase.DETERMINE_INTENT]: "Try 'View analytics for bench press'",
+	[LiveCoachConversationPhase.DETERMINE_INTENT]: "Put your coach to work!",
 	[LiveCoachConversationPhase.CONFIRM_INTENT]: "Yes or No",
-	[LiveCoachConversationPhase.PROMPT_ACTION_INTENT]:
-		"Try an exercise you've logged, i.e. 'Bench Press'",
+	[LiveCoachConversationPhase.PROMPT_ACTION_INTENT]: "Try an exercise you've logged, i.e. 'Bench Press'",
 	[LiveCoachConversationPhase.FULFILL_INTENT]: "Working on it...",
 	[LiveCoachConversationPhase.PROMPT_FULFILLMENT_SUCCESS]: "How'd it go?",
 	[LiveCoachConversationPhase.END_CONVERSATION]: "Thanks for talking with coach!",
 	[LiveCoachConversationPhase.PROMPT_URL_INTENT]: "Yes or No",
-	[LiveCoachConversationPhase.CONFIRM_URL_INTENT]:
-		"Try an exercise you've logged, i.e. 'Bench Press'",
+	[LiveCoachConversationPhase.CONFIRM_URL_INTENT]: "Try an exercise you've logged, i.e. 'Bench Press'",
+	[LiveCoachConversationPhase.INCOMPLETE_INTENT_OBJECT]: "Pick a muscle group, i.e. 'Chest'",
 };
 
 export default function MessageInput({ actions }: MessageInputProps) {

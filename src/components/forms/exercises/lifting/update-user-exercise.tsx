@@ -12,7 +12,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import type { MuscleGroups, MusclesDetailed, UserExerciseLifting } from "@/lib/types";
+import type { MuscleGroupString, MusclesDetailedString, UserExerciseLifting } from "@/lib/types";
 import { Check, Loader2 } from "lucide-react";
 import * as React from "react";
 
@@ -24,7 +24,7 @@ const MuscleGroup = {
 	Shoulders: "Shoulders",
 	Core: "Core",
 	FullBody: "Full Body",
-} satisfies Record<MuscleGroups, string>;
+} satisfies Record<MuscleGroupString, string>;
 
 const MuscleGroupDetailed = {
 	Arms: [
@@ -41,18 +41,18 @@ const MuscleGroupDetailed = {
 	Shoulders: ["Anterior Deltoid", "Medial Deltoid", "Posterior Deltoid"],
 	Core: ["Abdominal", "Obliques"],
 	FullBody: [],
-} satisfies Record<MuscleGroups, MusclesDetailed[]>;
+} satisfies Record<MuscleGroupString, MusclesDetailedString[]>;
 
 export default function UpdateUserExerciseForm({ data }: { data?: UserExerciseLifting }) {
 	const { id, name, primaryTarget, detailedTargets } = data ?? {};
 	const isNew = !name;
 
 	const [exerciseName, setExerciseName] = React.useState(name ?? "");
-	const [muscleGroup, setMuscleGroup] = React.useState<MuscleGroups | null>(
-		(primaryTarget as MuscleGroups) ?? null,
+	const [muscleGroup, setMuscleGroup] = React.useState<MuscleGroupString | null>(
+		(primaryTarget as MuscleGroupString) ?? null,
 	);
-	const [detailedMuscles, setDetailedMuscles] = React.useState<MusclesDetailed | null>(
-		(detailedTargets as unknown as MusclesDetailed) ?? null,
+	const [detailedMuscles, setDetailedMuscles] = React.useState<MusclesDetailedString | null>(
+		(detailedTargets as unknown as MusclesDetailedString) ?? null,
 	);
 
 	const [submitting, setSubmitting] = React.useState(false);
@@ -110,7 +110,7 @@ export default function UpdateUserExerciseForm({ data }: { data?: UserExerciseLi
 					<label htmlFor="primaryTarget" className="text-sm tracking-wide">
 						Primary Target
 					</label>
-					<Select onValueChange={(value) => setMuscleGroup(value as MuscleGroups)} required>
+					<Select onValueChange={(value) => setMuscleGroup(value as MuscleGroupString)} required>
 						<SelectTrigger>
 							<SelectValue placeholder="Select..." />
 						</SelectTrigger>
@@ -136,7 +136,7 @@ export default function UpdateUserExerciseForm({ data }: { data?: UserExerciseLi
 					<Select
 						name="muscleGroupDetailed"
 						disabled={!muscleGroup}
-						onValueChange={(value) => setDetailedMuscles(value as MusclesDetailed)}
+						onValueChange={(value) => setDetailedMuscles(value as MusclesDetailedString)}
 					>
 						<SelectTrigger>
 							<SelectValue placeholder="" />

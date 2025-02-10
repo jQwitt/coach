@@ -13,7 +13,7 @@ import useWorkoutStore from "@/hooks/stores/use-workout";
 import { useObjectFilter } from "@/hooks/use-object-filter";
 import { useToast } from "@/hooks/use-toast";
 import { fromIso, timeStamp } from "@/lib/encoding";
-import type { ExercisesReturn, MuscleGroups } from "@/lib/types";
+import type { ExercisesReturn, MuscleGroupString } from "@/lib/types";
 import { Check, Edit3, HelpCircle, History, Loader2, Minus, Plus } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -219,7 +219,7 @@ export default function LogWorkoutLiftingForm({
 										className="flex justify-between items-center w-full hover:bg-muted rounded-sm p-1"
 										onClick={() => {
 											updateExerciseName(exerciseLast, name);
-											updateExercisePrimaryTarget(exerciseLast, primaryTarget as MuscleGroups);
+											updateExercisePrimaryTarget(exerciseLast, primaryTarget as MuscleGroupString);
 											hide();
 										}}
 									>

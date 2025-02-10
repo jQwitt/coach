@@ -5,8 +5,10 @@ export type User = typeof schema.users_table.$inferSelect;
 export type UserExerciseLifting = typeof schema.lifting_exercises_table.$inferSelect;
 type WorkoutLiftingExercise = typeof schema.workouts_lifting_exercises_table.$inferSelect;
 export type WorkoutLifting = typeof schema.workouts_lifting_table.$inferSelect;
-export type MuscleGroups = "Arms" | "Shoulders" | "Chest" | "Back" | "Legs" | "Core" | "FullBody";
-export type MusclesDetailed =
+
+export type MuscleGroupString = "Arms" | "Shoulders" | "Chest" | "Back" | "Legs" | "Core" | "FullBody";
+
+export type MusclesDetailedString =
 	| "Biceps Long"
 	| "Biceps Short"
 	| "Biceps Brachii"
@@ -34,8 +36,8 @@ export type WorkoutLiftingData = {
 export type ExerciseData = {
 	name: string;
 	sets: ExerciseSetData[];
-	primaryTarget: MuscleGroups;
-	detailedTargets: MusclesDetailed[];
+	primaryTarget: MuscleGroupString;
+	detailedTargets: MusclesDetailedString[];
 };
 export type ExerciseSetData = {
 	count: number;

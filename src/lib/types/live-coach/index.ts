@@ -48,6 +48,13 @@ export enum LiveCoachConversationPhase {
 	PROMPT_ACTION_INTENT = "prompt_action_intent",
 
 	/**
+	 * INCOMPLETE_INTENT_OBJECT
+	 *
+	 * Indicates that some part of our intent object is missing, and need to prompt user to complete the missing parts
+	 */
+	INCOMPLETE_INTENT_OBJECT = "INCOMPLETE_INTENT_OBJECT",
+
+	/**
 	 * PROMPT_URL_INTENT
 	 *
 	 * Indicates that the user is being prompted to complete the missing data that wasn't supplied in the URL
