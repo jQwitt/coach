@@ -6,10 +6,12 @@ import AnalyticsVolumePerMuscleGroup from "../../components/analytics-volume-per
 import { getVolume } from "../../helpers";
 import { parse } from "../../helpers/date-ranges";
 
-export default async function AnalyticsDateRagePage({
-	params,
-}: { params: { dateRange: string[] } }) {
-	const { dateRange } = params;
+type Params = Promise<{ dateRange: string[] }>;
+
+export default async function AnalyticsDateRagePage(props: {
+	params: Params;
+}) {
+	const { dateRange } = await props.params;
 	const { startDate, endDate, increment } = parse(dateRange);
 
 	const workouts = await getDetailedWorkoutsForDates({ startDate, endDate });
