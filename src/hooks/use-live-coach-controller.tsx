@@ -19,7 +19,6 @@ import {
 	LiveCoachSupportedActionsEnum,
 } from "@/lib/types/live-coach";
 import { generateExerciseCards } from "@/lib/utils";
-import { set } from "node_modules/cypress/types/lodash";
 import * as React from "react";
 
 export function useLiveCoachController() {
