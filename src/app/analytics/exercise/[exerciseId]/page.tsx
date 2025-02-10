@@ -5,14 +5,14 @@ import SuggestOneRepMax from "./components/suggest-one-rep-max";
 import WeightOverTimeGraph from "./components/weight-over-time";
 
 export default async function AnalyticsExerciseLiftingPage({
-	params,
+	searchParams,
 }: {
-	params: { exerciseId: string[] };
+	searchParams: { exerciseId: string };
 }) {
-	const { exerciseId } = params;
+	const { exerciseId } = searchParams;
 
-	const exercise = await getExercise({ exerciseId: exerciseId[0] });
-	const history = await getExerciseHistory({ exerciseId: exerciseId[0] });
+	const exercise = await getExercise({ exerciseId });
+	const history = await getExerciseHistory({ exerciseId });
 
 	if (!exercise?.name) {
 		return null;
