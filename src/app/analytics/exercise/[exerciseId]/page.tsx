@@ -5,11 +5,11 @@ import SuggestOneRepMax from "./components/suggest-one-rep-max";
 import WeightOverTimeGraph from "./components/weight-over-time";
 
 export default async function AnalyticsExerciseLiftingPage({
-	searchParams,
+	params,
 }: {
-	searchParams: { exerciseId: string };
+	params: Promise<{ exerciseId: string }>;
 }) {
-	const { exerciseId } = searchParams;
+	const { exerciseId } = await params;
 
 	const exercise = await getExercise({ exerciseId });
 	const history = await getExerciseHistory({ exerciseId });
