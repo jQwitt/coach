@@ -3,14 +3,13 @@ import Header from "@/components/ui/header";
 import ExerciseHistory from "./components/exercise-history";
 import SuggestOneRepMax from "./components/suggest-one-rep-max";
 import WeightOverTimeGraph from "./components/weight-over-time";
-import type { PageProps } from ".next/types/app/page";
 
 export default async function AnalyticsExerciseLiftingPage({
 	params,
 }: {
 	params: { exerciseId: string };
-} & PageProps) {
-	const { exerciseId } = await params;
+}) {
+	const { exerciseId } = params;
 
 	const exercise = await getExercise({ exerciseId });
 	const history = await getExerciseHistory({ exerciseId });

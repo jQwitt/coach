@@ -1,6 +1,6 @@
 import { MODEL, openai } from "@/lib/open-ai";
 
-export type CreateExerciseListResult = {
+type CreateExerciseListResult = {
 	exercises: Exercise[];
 };
 

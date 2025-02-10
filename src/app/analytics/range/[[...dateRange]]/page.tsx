@@ -5,12 +5,11 @@ import AnalyticsQuickStats from "../../components/analytics-quick-stats";
 import AnalyticsVolumePerMuscleGroup from "../../components/analytics-volume-per-muscle-group";
 import { getVolume } from "../../helpers";
 import { parse } from "../../helpers/date-ranges";
-import type { PageProps } from ".next/types/app/page";
 
 export default async function AnalyticsDateRagePage({
 	params,
-}: { params: { dateRange: string } } & PageProps) {
-	const { dateRange } = await params;
+}: { params: { dateRange: string[] } }) {
+	const { dateRange } = params;
 	const { startDate, endDate, increment } = parse(dateRange);
 
 	const workouts = await getDetailedWorkoutsForDates({ startDate, endDate });

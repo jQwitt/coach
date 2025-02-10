@@ -5,14 +5,13 @@ import { formatDuration, formatHours, fromIso, getDateParts, getLongWeekday } fr
 import { CalendarDays, Clock, Hash, Hourglass } from "lucide-react";
 import PageControls from "./components/page-controls";
 import WorkoutExerciseList from "./components/workout-exercise-list";
-import type { PageProps } from ".next/types/app/page";
 
 export default async function WorkoutAnalyticsPage({
 	params,
 }: {
 	params: { id: string };
-} & PageProps) {
-	const { id } = await params;
+}) {
+	const { id } = params;
 	const workout = await getWorkout({ workoutId: id });
 	const workoutExercises = await getExercisesForWorkout({ workoutId: id });
 
